@@ -1,0 +1,18 @@
+/*** Spoilers ***/
+/*.hw-blue-border .spoiler {*/
+* > .spoiler {
+    color: transparent;
+    text-shadow: 0px 0px 10px rgba(239,186,0,0.5), 0px 0px 10px rgba(239,186,0,0.5), 0px 0px 10px rgba(239,186,0,0.5), 0px 0px 10px rgba(239,186,0,0.5), 0px 0px 10px rgba(239,186,0,0.5), 0px 0px 10px rgba(239,186,0,0.5);
+    text-align: justify;
+    text-justify: inter-word;
+}
+/*.hw-blue-border:hover .spoiler {*/
+*:hover > .spoiler {
+    text-shadow: none;
+    color: #EFBA00;
+    color: inherit;
+}
+
+.no-margin {
+    margin: 0;
+}

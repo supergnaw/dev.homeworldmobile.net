@@ -1,0 +1,2289 @@
+[
+  {
+    "Lazarus":{
+      "1":[
+        "Cangacian Signal Beta",
+        "Cangacian Signal Alpha",
+        "Relic Signature"
+      ],
+      "2":[
+        "Progenitor Signal Alpha",
+        "Cangacian Signal Gamma",
+        "Progenitor Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Ariitar":{
+      "1":[
+        "Progenitor Signal",
+        "Relic Signature"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Niirea Paas":{
+      "1":[
+        "Relic Signature",
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Progenitor Signal Beta",
+        "Cangacian Signal Gamma",
+        "Cangacian Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Devadaasi":{
+      "1":[
+        "Relic Signature",
+        "Cangacian Signal",
+        "Progenitor Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Estraiir":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Alpha",
+        "Relic Signature"
+      ],
+      "2":[
+        "Progenitor Signal Beta",
+        "Progenitor Signal Gamma",
+        "Progenitor Signal Delta",
+        "Cangacian Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Inayat":{
+      "1":[
+        "Relic Signature",
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Alpha",
+        "Progenitor Signal Beta"
+      ],
+      "2":[
+        "Cangacian Signal Beta",
+        "Cangacian Signal Gamma",
+        "Progenitor Signal Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Jishun":{
+      "1":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Naredra":{
+      "1":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Ekaam Nar":{
+      "1":[
+        "Cangacian Signal",
+        "Relic Signature Beta",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tela Diim":{
+      "1":[
+        "Progenitor Signal Alpha",
+        "Cangacian Signal Alpha"
+      ],
+      "2":[
+        "Cangacian Signal Beta",
+        "Progenitor Signal Beta",
+        "Progenitor Signal Gamma",
+        "Relic Signature Alpha"
+      ],
+      "3":[
+        "Progenitor Signal Delta",
+        "Progenitor Signal Epsilon"
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Saraal":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Progenitor Signal Alpha",
+        "Cangacian Signal Beta",
+        "Relic Signature Beta",
+        "Relic Signature Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tecoalte":{
+      "1":[
+        "Safe Passage Alpha",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Progenitor Signal Alpha",
+        "Yaot Signal Alpha"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tanochetlan":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Tanoch Signal"
+      ],
+      "2":[
+        "Progenitor Signal",
+        "Yaot Signal Alpha",
+        "Yaot Signal Beta",
+        "Safe Passage Alpha"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tochtepe":{
+      "1":[
+        "Safe Passage Alpha",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Relic Signature Beta",
+        "Relic Signature Gamma",
+        "Yaot Signal"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Bishaan Tel":{
+      "1":[
+        "Relic Signature Alpha",
+        "Progenitor Activities Alpha"
+      ],
+      "2":[
+        "Relic Signature Beta",
+        "Cangacian Signal",
+        "Progenitor Activities Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Sobel Rem":{
+      "1":[
+        "Progenitor Signal Alpha",
+        "Relic Signature Alpha",
+        "Cangacian Signal Alpha",
+        "Cangacian Signal Beta"
+      ],
+      "2":[
+        "Progenitor Signal Beta",
+        "Relic Signature Beta",
+        "Relic Signature Gamma"
+      ],
+      "3":[
+        "Progenitor Signal Gamma",
+        "Progenitor Signal Delta",
+        "Cangacian Signal Gamma",
+        "Relic Signature Delta"
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Kisho Re":{
+      "1":[
+        "Relic Signature Beta",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Progenitor Activities Alpha",
+        "Relic Signature Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Marat Kan":{
+      "1":[
+        "Progenitor Activities",
+        "Cangacian Signal Alpha",
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Keid":{
+      "1":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta",
+        "Cangacian Signal"
+      ],
+      "2":[
+        "Progenitor Signal Alpha",
+        "Progenitor Signal Beta",
+        "Progenitor Signal Gamma",
+        "Relic Signature Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Mituul":{
+      "1":[
+        "Relic Signature Beta",
+        "Cangacian Signal",
+        "Progenitor Signal",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Chihuat":{
+      "1":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Progenitor Signal Beta",
+        "Safe Passage",
+        "Relic Signature Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Xocotila":{
+      "1":[
+        "Safe Passage Alpha",
+        "Safe Passage Beta"
+      ],
+      "2":[
+        "Yaot Signal Alpha",
+        "Progenitor Activities",
+        "Tanoch Signal"
+      ],
+      "3":[
+        "Relic Signature",
+        "Safe Passage Gamma"
+      ],
+      "4":[
+        "Yaot Signal Beta"
+      ]
+    }
+  },
+  {
+    "Cempoalt":{
+      "1":[
+        "Relic Signature Alpha",
+        "Tanoch Signal Alpha",
+        "Tanoch Signal Beta"
+      ],
+      "2":[
+        "Safe Passage",
+        "Tanoch Signal Gamma",
+        "Yaot Signal"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tuxpante":{
+      "1":[
+        "Cangacian Signal",
+        "Safe Passage Alpha",
+        "Safe Passage Beta",
+        "Safe Passage Gamma"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tecpan":{
+      "1":[
+        "Tanoch Signal",
+        "Progenitor Signal",
+        "Relic Signature",
+        "Yaot Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Malinalc":{
+      "1":[
+        "Relic Signature Alpha",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Cangacian Signal",
+        "Tanoch Signal Alpha",
+        "Relic Signature Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Xalapan":{
+      "1":[
+        "Relic Signature",
+        "Tanoch Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tlacozau":{
+      "1":[
+        "Yaot Signal",
+        "Safe Passage Alpha",
+        "Safe Passage Beta"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Cuernava":{
+      "1":[
+        "Relic Signature Alpha",
+        "Safe Passage"
+      ],
+      "2":[
+        "Tanoch Signal",
+        "Relic Signature Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Saami Ra":{
+      "1":[
+        "Yaot Signal Alpha",
+        "Progenitor Signal Alpha",
+        "Yaot Signal Beta"
+      ],
+      "2":[
+        "Progenitor Signal Beta",
+        "Relic Signature Alpha",
+        "Progenitor Signal Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tunda Miraan":{
+      "1":[
+        "Relic Signature Alpha",
+        "Civilian Rescue",
+        "Relic Signature Beta",
+        "Relic Signature Gamma"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tibata":{
+      "1":[
+        "Relic Signature Alpha",
+        "Civilian Rescue Alpha"
+      ],
+      "2":[
+        "Relic Signature Beta",
+        "Yaot Signal Alpha",
+        "Yaot Signal Beta",
+        "Relic Signature Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Zaatas":{
+      "1":[
+        "Relic Signature Alpha",
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Relic Signature Beta",
+        "Relic Signature Gamma",
+        "Progenitor Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Vaal":{
+      "1":[
+        "Progenitor Signal Alpha",
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "2":[
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Briuun":{
+      "1":[
+        "Progenitor Signal",
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Ixtepec":{
+      "1":[
+        "Relic Signature Alpha",
+        "Yaot Signal Beta",
+        "Progenitor Signal",
+        "Yaot Signal Alpha"
+      ],
+      "2":[
+        "Safe Passage Beta",
+        "Safe Passage Alpha",
+        "Safe Passage Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Ayotla":{
+      "1":[
+        "Progenitor Signal Alpha",
+        "Relic Signature Alpha",
+        "Yaot Signal Alpha"
+      ],
+      "2":[
+        "Relic Signature Beta",
+        "Cangacian Signal"
+      ],
+      "3":[
+        "Safe Passage",
+        "Tanoch Signal Alpha",
+        "Yaot Signal Beta",
+        "Progenitor Signal Beta"
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tepecoma":{
+      "1":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta",
+        "Yaot Signal Alpha",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Safe Passage Alpha",
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Beta"
+      ],
+      "3":[
+        "Tanoch Signal Beta",
+        "Tanoch Signal Alpha"
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Cuilan":{
+      "1":[
+        "Relic Signature Beta",
+        "Progenitor Signal",
+        "Relic Signature Alpha",
+        "Safe Passage Alpha"
+      ],
+      "2":[
+        "Safe Passage Beta",
+        "Yaot Signal Alpha",
+        "Safe Passage Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Teozaan":{
+      "1":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta",
+        "Cangacian Signal Alpha",
+        "Progenitor Activities"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Misantep":{
+      "1":[
+        "Relic Signature Alpha",
+        "Yaot Signal Alpha",
+        "Tanoch Signal Alpha"
+      ],
+      "2":[
+        "Yaot Signal Beta",
+        "Relic Signature Beta",
+        "Tanoch Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Axocotil":{
+      "1":[
+        "Relic Signature Beta",
+        "Tanoch Signal",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Yaot Signal",
+        "Relic Signature Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Subaca":{
+      "1":[
+        "Civilian Rescue Alpha",
+        "Yaot Signal Alpha"
+      ],
+      "2":[
+        "Tanoch Signal Alpha",
+        "Yaot Signal Beta",
+        "Yaot Signal Gamma",
+        "Civilian Rescue Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tocon":{
+      "1":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta",
+        "Relic Signature Gamma"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Ytep":{
+      "1":[
+        "Tanoch Signal Beta",
+        "Relic Signature Alpha",
+        "Civilian Rescue Alpha",
+        "Tanoch Signal Alpha"
+      ],
+      "2":[
+        "Cangacian Signal",
+        "Tanoch Signal Delta",
+        "Tanoch Signal Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Yaotl":{
+      "1":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "2":[
+        "Progenitor Signal Alpha",
+        "Relic Signature Delta",
+        "Progenitor Signal Beta",
+        "Relic Signature Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Sijin":{
+      "1":[
+        "Tanoch Signal Alpha",
+        "Yaot Signal Alpha",
+        "Progenitor Activities Alpha",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Progenitor Signal",
+        "Progenitor Activities Beta",
+        "Relic Signature Beta",
+        "Tanoch Signal Beta"
+      ],
+      "3":[
+        "Safe Passage",
+        "Relic Signature Delta",
+        "Relic Signature Gamma",
+        "Yaot Signal Beta"
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Edowana":{
+      "1":[
+        "Progenitor Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Chiapa":{
+      "1":[
+        "Progenitor Activities",
+        "Tanoch Signal",
+        "Relic Signature"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Charatl":{
+      "1":[
+        "Tanoch Signal",
+        "Yaot Signal",
+        "Progenitor Signal"
+      ],
+      "2":[
+        "Progenitor Activities",
+        "Cangacian Signal Alpha"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Nokuuna":{
+      "1":[
+        "Cangacian Signal Beta",
+        "Progenitor Signal Alpha",
+        "Cangacian Signal Alpha",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Relic Signature Beta",
+        "Progenitor Signal Beta",
+        "Cangacian Signal Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Sumaar":{
+      "1":[
+        "Cangacian Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Iniim":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Cangacian Signal Beta"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Saaret":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Cangacian Signal Beta",
+        "Cangacian Signal Gamma",
+        "Progenitor Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Mitorai":{
+      "1":[
+        "Cangacian Signal Beta",
+        "Cangacian Signal Gamma",
+        "Cangacian Signal Alpha",
+        "Relic Signature"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Roa Tisaad":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Cangacian Signal Beta",
+        "Progenitor Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Fer Lamaan":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Cangacian Signal Beta"
+      ],
+      "2":[
+        "Progenitor Signal Alpha",
+        "Progenitor Signal Beta",
+        "Progenitor Signal Delta",
+        "Progenitor Signal Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Toasiim":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Cangacian Signal Beta",
+        "Cangacian Signal Gamma"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Jonalli":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Cangacian Signal Beta"
+      ],
+      "2":[
+        "Cangacian Signal Gamma",
+        "Cangacian Signal Delta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tri Tussali":{
+      "1":[
+        "Progenitor Signal Alpha",
+        "Cangacian Signal Alpha"
+      ],
+      "2":[
+        "Cangacian Signal Beta",
+        "Progenitor Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Faaleas":{
+      "1":[
+        "Cangacian Signal Beta",
+        "Relic Signature Alpha",
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Progenitor Signal Beta",
+        "Relic Signature Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Xaleraat":{
+      "1":[
+        "Progenitor Signal Alpha",
+        "Relic Signature Beta",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Progenitor Signal Beta",
+        "Relic Signature Gamma",
+        "Cangacian Signal Alpha"
+      ],
+      "3":[
+        "Relic Signature Delta",
+        "Relic Signature Epsilon",
+        "Cangacian Signal Beta"
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Talessur":{
+      "1":[
+        "Relic Signature Alpha",
+        "Cangacian Signal",
+        "Progenitor Signal",
+        "Relic Signature Beta"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Veraatlan":{
+      "1":[
+        "Progenitor Signal Alpha",
+        "Relic Signature Alpha",
+        "Relic Signature Beta",
+        "Progenitor Signal Beta"
+      ],
+      "2":[
+        "Relic Signature Delta",
+        "Relic Signature Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Jinvalla":{
+      "1":[
+        "Progenitor Signal Alpha",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Cangacian Signal Alpha",
+        "Cangacian Signal Beta",
+        "Progenitor Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Ulant Ti Saar":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Alpha",
+        "Cangacian Signal Beta",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Liusata":{
+      "1":[
+        "Progenitor Signal",
+        "Cangacian Signal Alpha",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Visaan Ki":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Cangacian Signal Beta",
+        "Progenitor Signal Gamma",
+        "Progenitor Signal Beta"
+      ],
+      "3":[
+        "Cangacian Signal Gamma",
+        "Progenitor Signal Delta",
+        "Relic Signature Alpha"
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Bescava":{
+      "1":[
+        "Progenitor Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Larcava":{
+      "1":[
+        "Cangacian Signal Beta",
+        "Cangacian Signal Alpha (Epic)"
+      ],
+      "2":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Cancava":{
+      "1":[
+        "Cangacian Signal Gamma (Epic)",
+        "Cangacian Signal Alpha (Epic)",
+        "Cangacian Signal Beta",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Progenitor Signal Beta",
+        "Progenitor Signal Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Lura":{
+      "1":[
+        "Cangacian Signal Beta",
+        "Relic Signature",
+        "Cangacian Signal Alpha",
+        "Progenitor Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Kaluari":{
+      "1":[
+        "Progenitor Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Larinca":{
+      "1":[
+        "Relic Signature Beta",
+        "Relic Signature Alpha",
+        "Relic Signature Gamma"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Ixtlan":{
+      "1":[
+        "Tanoch Signal Alpha (Epic)",
+        "Tanoch Signal Beta",
+        "Yaot Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Teozauhq":{
+      "1":[
+        "Tanoch Signal Alpha",
+        "Progenitor Activities",
+        "Relic Signature",
+        "Tanoch Signal Beta"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Cuilco":{
+      "1":[
+        "Safe Passage Alpha",
+        "Progenitor Activities Alpha",
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "2":[
+        "Progenitor Activities Beta",
+        "Yaot Signal"
+      ],
+      "3":[
+        "Cangacian Signal (Epic)",
+        "Relic Signature Gamma"
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Chuua":{
+      "1":[
+        "Yaot Signal Alpha",
+        "Cangacian Signal Alpha"
+      ],
+      "2":[
+        "Relic Signature Alpha",
+        "Safe Passage"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tixpan":{
+      "1":[
+        "Yaot Signal",
+        "Relic Signature",
+        "Tanoch Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tepecoal":{
+      "1":[
+        "Yaot Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tlatlan":{
+      "1":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "2":[
+        "Relic Signature Gamma",
+        "Yaot Signal Alpha",
+        "Tanoch Signal Alpha",
+        "Cangacian Signal"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Yoalco":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Tanoch Signal Alpha"
+      ],
+      "2":[
+        "Tanoch Signal Delta",
+        "Tanoch Signal Gamma",
+        "Tanoch Signal Beta",
+        "Relic Signature"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tepec":{
+      "1":[
+        "Yaot Signal Beta",
+        "Yaot Signal Gamma",
+        "Yaot Signal Alpha"
+      ],
+      "2":[
+        "Relic Signature Alpha",
+        "Progenitor Signal"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Ocuitepe":{
+      "1":[
+        "Progenitor Activities",
+        "Tanoch Signal Alpha (Epic)",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Relic Signature Alpha",
+        "Safe Passage Alpha",
+        "Tanoch Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Oaxtepex":{
+      "1":[
+        "Relic Signature",
+        "Progenitor Activities"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Zempoalt":{
+      "1":[
+        "Progenitor Activities",
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "2":[
+        "Yaot Signal Alpha",
+        "Progenitor Signal Alpha",
+        "Tanoch Signal Alpha",
+        "Tanoch Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tecoacui":{
+      "1":[
+        "Yaot Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Telapente":{
+      "1":[
+        "Progenitor Activities",
+        "Tanoch Signal",
+        "Safe Passage"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tlapan":{
+      "1":[
+        "Tanoch Signal",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Progenitor Signal",
+        "Relic Signature Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tetelad":{
+      "1":[
+        "Relic Signature Alpha",
+        "Relic Signature Beta",
+        "Yaot Signal"
+      ],
+      "2":[
+        "Tanoch Signal Alpha",
+        "Cangacian Signal (Epic)"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Cempoalc":{
+      "1":[
+        "Relic Signature"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Xala":{
+      "1":[
+        "Yaot Signal Alpha",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Yaot Signal Beta",
+        "Safe Passage",
+        "Progenitor Signal Beta",
+        "Relic Signature Alpha"
+      ],
+      "3":[
+        "Cangacian Signal Alpha",
+        "Cangacian Signal Gamma (Epic)",
+        "Relic Signature Beta",
+        "Cangacian Signal Beta"
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Acatlahu":{
+      "1":[
+        "Progenitor Activities",
+        "Yaot Signal Alpha",
+        "Yaot Signal Beta"
+      ],
+      "2":[
+        "Progenitor Signal Alpha",
+        "Relic Signature Alpha"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Zempoala":{
+      "1":[
+        "Progenitor Activities",
+        "Tanoch Signal",
+        "Progenitor Signal Alpha"
+      ],
+      "2":[
+        "Relic Signature Alpha",
+        "Progenitor Signal Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Coixl":{
+      "1":[
+        "Relic Signature Alpha",
+        "Tanoch Signal Alpha (Epic)"
+      ],
+      "2":[
+        "Cangacian Signal Alpha",
+        "Cangacian Signal Beta",
+        "Yaot Signal Alpha"
+      ],
+      "3":[
+        "Cangacian Signal Gamma",
+        "Cangacian Signal Delta",
+        "Tanoch Signal Beta"
+      ],
+      "4":[
+        "Relic Signature Beta",
+        "Tanoch Signal Gamma",
+        "Relic Signature Gamma",
+        "Yaot Signal Beta"
+      ]
+    }
+  },
+  {
+    "Acatla":{
+      "1":[
+        "Progenitor Activities",
+        "Tanoch Signal (Epic)"
+      ],
+      "2":[
+        "Relic Signature",
+        "Yaot Signal"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Teozacoz":{
+      "1":[
+        "Relic Signature Beta",
+        "Yaot Signal",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tochteop":{
+      "1":[
+        "Relic Signature Alpha",
+        "Yaot Signal Alpha",
+        "Cangacian Signal Alpha",
+        "Yaot Signal Beta (Epic)"
+      ],
+      "2":[
+        "Progenitor Signal Alpha",
+        "Safe Passage Alpha"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Xilotepe":{
+      "1":[
+        "Cangacian Signal Alpha (Epic)",
+        "Cangacian Signal Beta",
+        "Yaot Signal"
+      ],
+      "2":[
+        "Tanoch Signal",
+        "Relic Signal"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Subacuy":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Civilian Rescue Alpha",
+        "Yaot Signal Alpha"
+      ],
+      "2":[
+        "Progenitor Signal",
+        "Relic Signature Alpha",
+        "Yaot Signal Beta",
+        "Civilian Rescue Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Chocata":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Progenitor Signal Alpha",
+        "Progenitor Signal Beta",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+        "Relic Signature Gamma",
+        "Cangacian Signal Beta (Epic)",
+        "Relic Signature Beta",
+        "Civilian Rescue"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Ziipaga":{
+      "1":[
+        "Cangacian Signal",
+        "Tanoch Signal Beta",
+        "Tanoch Signal Alpha",
+        "Tanoch Signal Gamma"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Oica":{
+      "1":[
+        "Progenitor Signal"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Teuascate":{
+      "1":[
+        "Progenitor Activities",
+        "Yaot Signal Alpha",
+        "Tanoch Signal",
+        "Yaot Signal Beta"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Paipaga":{
+      "1":[
+        "Relic Signature Alpha",
+        "Tanoch Signal Alpha"
+      ],
+      "2":[
+        "Relic Signature Beta",
+        "Cangacian Signal"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Topaconta":{
+      "1":[
+        "Cangacian Signal",
+        "Yaot Signal Alpha",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Topa":{
+      "1":[
+        "Civilian Rescue",
+        "Tanoch Signal Alpha"
+      ],
+      "2":[
+        "Tanoch Signal Beta",
+        "Tanoch Signal Gamma",
+        "Yaot Signal Alpha"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Samacon":{
+      "1":[
+        "Cangacian Signal Alpha",
+        "Yaot Signal Alpha"
+      ],
+      "2":[
+        "Civilian Rescue Alpha",
+        "Civilian Rescue Beta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Rama":{
+      "1":[
+        "Cangacian Signal",
+        "Civilian Rescue Alpha",
+        "Progenitor Signal",
+        "Yaot Signal Alpha (Epic)"
+      ],
+      "2":[
+        "Yaot Signal Beta",
+        "Relic Signature",
+        "Yaot Signal Gamma"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tocata":{
+      "1":[
+        "Cangacian Signal",
+        "Relic Signature"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Turmequi":{
+      "1":[
+        "Progenitor Signal",
+        "Relic Signature Alpha",
+        "Relic Signature Beta"
+      ],
+      "2":[
+        "Yaot Signal Alpha",
+        "Tanoch Signal Alpha"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Zipate":{
+      "1":[
+        "Tanoch Signal Beta",
+        "Relic Signature Alpha",
+        "Tanoch Signal Alpha",
+        "Tanoch Signal Gamma"
+      ],
+      "2":[
+        "Relic Signature Beta",
+        "Tanoch Signal Delta"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Topaque":{
+      "1":[
+        "Civilian Rescue Alpha",
+        "Progenitor Activities",
+        "Progenitor Signal",
+        "Cangacian Signal Alpha"
+      ],
+      "2":[
+        "Relic Signature Alpha",
+        "Civilian Rescue Beta",
+        "Relic Signature Beta",
+        "Tanoch Signal"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Teuasia":{
+      "1":[
+        "Relic Signature Beta",
+        "Cangacian Signal",
+        "Relic Signature Alpha"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tiba":{
+      "1":[
+        "Tanoch Signal Beta",
+        "Tanoch Signal Alpha",
+        "Civilian Rescue"
+      ],
+      "2":[
+        "Yaot Signal Alpha (Epic)",
+        "Progenitor Signal"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Sabio":{
+      "1":[
+        "Cangacian Signal Beta",
+        "Progenitor Activities Beta (Epic)",
+        "Cangacian Signal Alpha",
+        "Progenitor Activities Alpha"
+      ],
+      "2":[
+        "Yaot Signal Alpha",
+        "Tanoch Signal Alpha",
+        "Yaot Signal Beta",
+        "Relic Signature Alpha"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Ubacontl":{
+      "1":[
+        "Civilian Rescue Alpha",
+        "Civilian Rescue Beta",
+        "Relic Signature"
+      ],
+      "2":[
+
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tinjo":{
+      "1":[
+        "Relic Signature Beta",
+        "Relic Signature Alpha",
+        "Cangacian Signal Alpha"
+      ],
+      "2":[
+        "Civilian Rescue",
+        "Cangacian Signal Beta",
+        "Tanoch Signal"
+      ],
+      "3":[
+
+      ],
+      "4":[
+
+      ]
+    }
+  },
+  {
+    "Tenjaca":{
+      "1":[
+        "Relic Signature Beta",
+        "Cangacian Signal Alpha",
+        "Relic Signature Alpha",
+        "Yaot Signal Alpha (Epic)"
+      ],
+      "2":[
+        "Relic Signature Epsilon",
+        "Relic Signature Gamma",
+        "Relic Signature Delta",
+        "Tanoch Signal Alpha"
+      ],
+      "3":[
+        "Relic Signature Zeta",
+        "Tanoch Signal Beta (Epic)",
+        "Progenitor Activities Alpha (Epic)"
+      ],
+      "4":[
+
+      ]
+    }
+  }
+]

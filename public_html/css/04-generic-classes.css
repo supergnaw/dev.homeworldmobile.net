@@ -1,0 +1,58 @@
+.main {
+    max-width: 2000px;
+    margin: 0 auto 0 auto;
+}
+.banner {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    box-shadow: 0 0 32px 32px #000000 inset;
+}
+.banner img {
+    max-width: 100%;
+    visibility: hidden;
+}
+
+.title {
+    font-family: var(--banner-font), sans-serif;
+    font-size: 3.5em;
+    color: #2e73cf;
+    text-shadow:
+        -1px -1px 3px #a6ceed,
+        -1px 0px 3px #a6ceed,
+        -1px 1px 3px #a6ceed,
+        0px -1px 3px #a6ceed,
+        0px 0px 3px #a6ceed,
+        0px 1px 3px #a6ceed,
+        1px -1px 3px #a6ceed,
+        1px 0px 3px #a6ceed,
+        1px 1px 3px #a6ceed;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+.subtitle {
+    text-align: center;
+    /*font-weight: bold;*/
+    font-family: 'Titillium Web', sans-serif;
+    font-size: var(--subtitle-font-size);
+    margin-top: 0px;
+    color: #a4d8f7;
+    text-shadow: 0px 0px 4px #0082be, 0px 0px 8px rgb(0 130 190 / 85%), 0px 0px 12px rgb(0 130 190 / 65%), 0px 0px 20px rgb(0 130 190 / 24%), 0px 0px 20px rgb(0 130 190 / 24%);
+}
+
+/*.top {*/
+/*    width: 100px;*/
+/*    margin-left: auto;*/
+/*    margin-right: auto;*/
+/*}*/
+
+.code {
+    font-family: 'Roboto Mono', monospace;
+}
+
+img.in-line {
+    height: var(--body-font-size);
+    margin-bottom: -0.28em;
+}

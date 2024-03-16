@@ -1,0 +1,6 @@
+/*** OFFICERS PAGE ***/
+/* Abilities */
+img[src^="/img/abilities"] {
+    width:50px;
+}
+/* /img/abilities/KineticBurst.png */

@@ -1,0 +1,57 @@
+.strike-map-container {
+    -webkit-box-shadow: inset 0px 0px 6px 1px #9C8200;
+    box-shadow: inset 0px 0px 6px 1px #9C8200;
+    border: 1px solid #9C8200;
+    border-radius: 6px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: right;
+    margin: 0 25px 10px 25px;
+    max-width: 50%;
+}
+
+.strike-map-container.ph { background-image: url('img/strikes/phbg.png'); }
+.strike-map-container.sd { background-image: url('img/strikes/sdbg.png'); }
+.strike-map-container.pr { background-image: url('img/strikes/prbg.png'); }
+
+.strike-map-container:hover {
+    -webkit-box-shadow: inset 0px 0px 6px 1px #FFE700;
+    box-shadow: inset 0px 0px 6px 1px #FFE700;
+    border: 1px solid #FFE700;
+}
+.strike-map {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-width: 100%;
+}
+
+.strike-map#pht1 { background-image: url('img/strikes/pht1.png'); }
+.strike-map#pht2 { background-image: url('img/strikes/pht2.png'); }
+.strike-map#sdt2 { background-image: url('img/strikes/sdt2.png'); }
+.strike-map#sdt3 { background-image: url('img/strikes/sdt3.png'); }
+.strike-map#prt2 { background-image: url('img/strikes/prt2.png'); }
+.strike-map#prt3 { background-image: url('img/strikes/prt3.png'); }
+
+.strike-map-container:hover .strike-map {
+    -webkit-animation-name: rotate;
+    -webkit-animation-duration:15s;
+    -webkit-animation-iteration-count:infinite;
+    -webkit-animation-timing-function:linear;
+    -moz-animation-name: rotate;
+    -moz-animation-duration:15s;
+    -moz-animation-iteration-count:infinite;
+    -moz-animation-timing-function:linear;
+    max-width: 100%;
+}
+
+@-webkit-keyframes rotate {
+    from {-webkit-transform:rotate(0deg); }
+    to {  -webkit-transform:rotate(360deg); }
+}
+
+@-moz-keyframes rotate {
+    from {-moz-transform:rotate(0deg); }
+    to {  -moz-transform:rotate(360deg); }
+}

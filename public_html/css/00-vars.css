@@ -1,0 +1,105 @@
+/*
+    'Yaot' => "rgba(160,252,207,0.25)",
+    'Tanoch' => "rgba(231,73,97,0.25)",
+    'Iyatequa' => "rgba(51,83,124,0.25)",
+    'Unknown' => "rgba(207,207,115,0.25)",
+ */
+@import url('http://fonts.googleapis.com/css2?family=Michroma&family=Titillium+Web:wght@400;700&family=Roboto+Mono&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Michroma&family=Montserrat&family=Roboto+Mono&family=Titillium+Web:wght@400;700&display=swap');*/
+:root {
+    /* Fonts */
+    --header-font: "Michroma";
+    --banner-font: "Michroma";
+    --subtitle-font: "Michroma";
+    --subtitle-font-size: 2em;
+    --body-font: "Titillium Web";
+    --body-font-size: 1.25em;
+    --mono-font: "Titillium Web";
+
+    /* Boolean Colors */
+    --yes: #70ba52;
+    --no: #f4374a;
+
+    /* Kiith Colors */
+    --kiith-color-hiigaran-pri: #839AB3;
+    --kiith-color-hiigaran-sec: #CCCCCCC;
+    --kiith-color-kaalel-pri: #666380;
+    --kiith-color-kaalel-sec: #FFC14C;
+    --kiith-color-manaan-pri: #63B05C;
+    --kiith-color-manaan-sec: #C6E277;
+    --kiith-color-naabal-pri: #E3AE52;
+    --kiith-color-naabal-sec: #996E2A;
+    --kiith-color-paktu-pri: #E2BC67;
+    --kiith-color-paktu-sec: #F1F1F1;
+    --kiith-color-sjet-pri: #ECECEC;
+    --kiith-color-sjet-sec: #DD4025;
+    --kiith-color-soban-pri: #C7352B;
+    --kiith-color-soban-sec: #FFFFFF;
+    --kiith-color-somtaaw-pri: #5286BE;
+    --kiith-color-somtaaw-sec: #FFFFFF;
+
+    /* Faction Colors */
+    --faction-color-cangacian: #cd244a;
+    --faction-color-cangacian-bg: rgb(205, 36, 74, 0.25);
+    --faction-color-hiigaran: #5b8edd;
+    --faction-color-hiigaran-bg: rgb(91, 142, 221, 0.25);
+    --faction-color-iyatequa: #b25b20;
+    --faction-color-iyatequa-bg: rgb(178, 91, 32, 0.25);
+    --faction-color-tanoch: #c59f1e;
+    --faction-color-tanoch-bg: rgb(197, 159, 30, 0.25);
+    --faction-color-yaot: #23c36b;
+    --faction-color-yaot-bg: rgb(35, 195, 107, 0.25);
+    --faction-color-amassari: #cecb60;
+    --faction-color-amassari-bg: rgb(206, 203, 96, 0.25);
+
+    /* Text Colors */
+    --emphasize: #FBB03F;
+
+    /* Rarity Colors */
+    --common: #5a88d6;
+    --common-bg: rgba(90, 136, 214, 0.25);
+    --uncommon: #74ccfa;
+    --uncommon-bg: rgba(116, 204, 250, 0.25);
+    --rare: #7c944f;
+    --rare-bg: rgba(124, 148, 79, 0.25);
+    --epic: #9053a1;
+    --epic-bg: rgba(144, 83, 161, 0.25);
+    --legendary: #f4ce68;
+    --legendary-bg: rgba(244, 206, 104, 0.25);
+
+    /* Resource Colors */
+    --ru-m-dark: #5f5f71;
+    --ru-m-light: #b9b9e3;
+    --ru-m-transparent: rgba(185, 185, 227, 0.25);
+    --ru-a-dark: #4e3d38;
+    --ru-a-light: #6a5348;
+    --ru-a-transparent: rgba(106, 83, 72, 0.25);
+    --ru-b-dark: #6d7171;
+    --ru-b-light: #a6a6a7;
+    --ru-b-transparent: rgba(166, 166, 167, 0.25);
+    --ru-c-dark: #964a24;
+    --ru-c-light: #bd7b4d;
+    --ru-c-transparent: rgba(189, 123, 77, 0.25);
+    --ru-d-dark: #716633;
+    --ru-d-light: #a49148;
+    --ru-d-transparent: rgba(164, 145, 72, 0.25);
+    --gu-e-dark: #2374b1;
+    --gu-e-light: #60ffff;
+    --gu-e-transparent: rgba(96, 255, 255, 0.25);
+    --gu-f-dark: #498256;
+    --gu-f-light: #4cff81;
+    --gu-f-transparent: rgba(76, 255, 129, 0.25);
+    --gu-g-dark: #685ea0;
+    --gu-g-light: #b59cfd;
+    --gu-g-transparent: rgba(181, 156, 253, 0.25);
+    --gu-h-dark: #d6693d;
+    --gu-h-light: #fed671;
+    --gu-h-transparent: rgba(254, 214, 113, 0.25);
+
+    /* Layout */
+    --margin: 25px;
+}
+
+.xdebug-error th, .xdebug-error td {
+    color: #000000;
+}

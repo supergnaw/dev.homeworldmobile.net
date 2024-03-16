@@ -1,0 +1,130 @@
+.hw-outer-box {
+    -webkit-box-shadow: 0px 0px 6px 1px #D69E00, 0px 0px 0px 1px #D69E00;
+    box-shadow: 0px 0px 6px 1px #D69E00, 0px 0px 0px 1px #D69E00;
+    border: 1px solid #7B0000;
+    border-radius: 10px;
+    background-color: #000000;
+}
+
+.hw-inner-box {
+    -webkit-box-shadow: inset 0px 0px 6px 1px #D69E00, inset 0px 0px 0px 1px #D69E00;
+    box-shadow: inset 0px 0px 6px 1px #D69E00, inset 0px 0px 0px 1px #D69E00;
+    border: 1px solid #7B0000;
+    border-radius: 10px;
+    background-color: #00204A;
+}
+
+.hw-blue-box {
+    -webkit-box-shadow: inset 0px 0px 6px 1px #9C8200;
+    box-shadow: inset 0px 0px 6px 1px #9C8200;
+    border: 1px solid #9C8200;
+    border-radius: 6px;
+    background-color: #00204A;
+    color: #088EC6;
+}
+
+.hw-blue-box > * {
+    margin: 12px;
+}
+
+.hw-blue-box:hover, .hw-blue-box:focus {
+    -webkit-box-shadow: inset 0px 0px 6px 1px #FFE700;
+    box-shadow: inset 0px 0px 6px 1px #FFE700;
+    border: 1px solid #FFE700;
+    color: #42aef7;
+}
+
+.hw-border-box {
+    border: 1px solid #00457B;
+    border-radius: 10px;
+    background-color: #000000;
+}
+
+.hw-border-box.info {
+    color: #ffffff;
+    text-shadow: 0px 0px 5px #000000, 0px 0px 5px #000000, 0px 0px 5px #000000;
+    font-family: var(--banner-font);
+    border: 1px solid var(--faction-color-hiigaran);
+    background: var(--faction-color-hiigaran-bg) repeating-linear-gradient(
+            45deg,
+            var(--faction-color-hiigaran),
+            var(--faction-color-hiigaran) 10px,
+            var(--faction-color-hiigaran-bg) 10px,
+            var(--faction-color-hiigaran-bg) 20px
+    );
+}
+.hw-border-box.success {
+    color: #ffffff;
+    text-shadow: 0px 0px 5px #000000, 0px 0px 5px #000000, 0px 0px 5px #000000;
+    font-family: var(--banner-font);
+    border: 1px solid var(--faction-color-yaot);
+    background: var(--faction-color-yaot-bg) repeating-linear-gradient(
+            45deg,
+            var(--faction-color-yaot),
+            var(--faction-color-yaot) 10px,
+            var(--faction-color-yaot-bg) 10px,
+            var(--faction-color-yaot-bg) 20px
+    );
+}
+
+.hw-border-box.warning {
+    color: #ffffff;
+    text-shadow: 0px 0px 5px #000000, 0px 0px 5px #000000, 0px 0px 5px #000000;
+    font-family: var(--banner-font);
+    border: 1px solid var(--faction-color-tanoch);
+    background: var(--faction-color-tanoch-bg) repeating-linear-gradient(
+            45deg,
+            var(--faction-color-tanoch),
+            var(--faction-color-tanoch) 10px,
+            var(--faction-color-tanoch-bg) 10px,
+            var(--faction-color-tanoch-bg) 20px
+    );
+}
+
+.hw-border-box.error {
+    color: #ffffff;
+    text-shadow: 0px 0px 5px #000000, 0px 0px 5px #000000, 0px 0px 5px #000000;
+    font-family: var(--banner-font);
+    border: 1px solid var(--faction-color-cangacian);
+    background: var(--faction-color-cangacian-bg) repeating-linear-gradient(
+            45deg,
+            var(--faction-color-cangacian),
+            var(--faction-color-cangacian) 10px,
+            var(--faction-color-cangacian-bg) 10px,
+            var(--faction-color-cangacian-bg) 20px
+    );
+}
+
+.hw-research-img {
+    filter: drop-shadow(0px 0px 3px #000);
+    background-color: #000;
+    display: block;
+    border-radius: 6px;
+    margin: 10px;
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+    display: block;
+    background-image: url("/img/research-bg.png");
+    background-repeat: repeat;
+    background-position: center;
+}
+
+.hw-research-text {
+    padding: 15px;
+    margin: 10px;
+    background-color: rgba(0,0,0,.75);
+    position: absolute;
+    color: #42aef7;
+    top: 0;
+    height: calc(100% - 50px);
+    width: calc(100% - 50px);
+    text-align: justify;
+    text-justify: inter-word;
+    display: block;
+    opacity: 0;
+    transition: all .2s ease-in-out;
+}
+
+.hw-research-box:hover .hw-research-text {
+    opacity: 1;
+}

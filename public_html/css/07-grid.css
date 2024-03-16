@@ -1,0 +1,39 @@
+.grid {
+    display: grid;
+    grid-column-gap: 25px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 0;
+}
+.grid-2 > * { margin: 0; }
+
+/* fixed-width columns */
+.col1 { grid-template-columns: 1fr }
+.col2 { grid-template-columns: 1fr 1fr }
+.col3 { grid-template-columns: 1fr 1fr 1fr }
+.col4 { grid-template-columns: 1fr 1fr 1fr 1fr }
+.col5 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr }
+.col6 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr }
+.col7 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr }
+.col8 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr }
+.col9 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr }
+.col10 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr }
+.col11 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr }
+.col12 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr }
+
+/* auto-width columns*/
+.col1-auto { grid-template-columns: auto }
+.col2-auto { grid-template-columns: auto auto }
+.col3-auto { grid-template-columns: auto auto auto }
+.col4-auto { grid-template-columns: auto auto auto auto }
+.col5-auto { grid-template-columns: auto auto auto auto auto }
+.col6-auto { grid-template-columns: auto auto auto auto auto auto }
+.col7-auto { grid-template-columns: auto auto auto auto auto auto auto }
+.col8-auto { grid-template-columns: auto auto auto auto auto auto auto auto }
+.col9-auto { grid-template-columns: auto auto auto auto auto auto auto auto auto }
+.col10-auto { grid-template-columns: auto auto auto auto auto auto auto auto auto auto }
+.col11-auto { grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto }
+.col12-auto { grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto }

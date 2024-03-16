@@ -1,0 +1,61 @@
+
+span.common {
+    color: #4b8adc;
+    border: 1px solid #4b8adc;
+    background-color: rgba(75, 138, 220, 0.25);
+    text-transform: capitalize;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+span.uncommon {
+    color: #4fcfff;
+    border: 1px solid #4fcfff;
+    background-color: rgba(79, 207, 255, 0.25);
+    text-transform: capitalize;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+span.rare {
+    color: #769544;
+    border: 1px solid #769544;
+    background-color: rgba(118, 149, 68, 0.25);
+    text-transform: capitalize;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+span.epic {
+    color: #9a4fa6;
+    border: 1px solid #9a4fa6;
+    background-color: rgba(154, 79, 166, 0.25);
+    text-transform: capitalize;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+span.legendary {
+    color: #fccc53;
+    border: 1px solid #fccc53;
+    background-color: rgba(252, 204, 83, 0.25);
+    text-transform: capitalize;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+img.common {
+    background-color: #4b8adc;
+}
+img.uncommon {
+    background-color: #4fcfff;
+}
+img.rare {
+    background-color: #769544;
+}
+img.epic {
+    background-color: #9a4fa6;
+}
+img.legendary {
+    background-color: #fccc53;
+}

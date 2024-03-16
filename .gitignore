@@ -8,3 +8,7 @@
 .idea*
 .idea_modules/
 out/
+
+# Composer
+composer.json
+composer.lock

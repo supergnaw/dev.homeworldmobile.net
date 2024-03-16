@@ -1,0 +1,84 @@
+.main-tabs .tab a div:before {
+    content: "";
+    display: inline-block;
+    width: var(--body-font-size);
+    height: var(--body-font-size);
+    margin-bottom: -0.28em;
+    background-color: currentColor;
+    mask-size: contain;
+}
+
+.main-tabs .tab a.chronicle div:before {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-event-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-event-svgrepo-com.svg");
+}
+
+.main-tabs .tab a.enchiridion div:before {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-notebook-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-notebook-svgrepo-com.svg");
+}
+
+.main-tabs .tab a.mythos div:before {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-info-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-info-svgrepo-com.svg");
+}
+
+.main-tabs .tab a.compendium div:before {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-database-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-database-svgrepo-com.svg");
+}
+
+.main-tabs .tab a.abaci div:before {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-variable-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-variable-svgrepo-com.svg");
+}
+
+.main-tabs .tab a.vanguard div:before {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-swarm-request-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-swarm-request-svgrepo-com.svg");
+}
+
+.main-tabs .tab a.console div:before {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-icons-settings-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-icons-settings-svgrepo-com.svg");
+}
+
+@media screen and (max-width: 1175px) {
+    .main-tabs .tab .tab-text {
+        display: none;
+    }
+}
+
+a {
+    position: relative;
+}
+
+a.action:after {
+    content: "";
+    display: inline-block;
+    width: var(--body-font-size);
+    height: var(--body-font-size);
+    margin-bottom: -0.28em;
+    background-color: currentColor;
+    mask-size: contain;
+}
+
+a.action.versions:after {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-icons-change-record-type-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-icons-change-record-type-svgrepo-com.svg");
+}
+
+a.action.edit:after {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-icons-edit-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-icons-edit-svgrepo-com.svg");
+}
+
+a.action.show:after {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-icons-preview-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-icons-preview-svgrepo-com.svg");
+}
+
+a.action.hide:after {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-icons-hide-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-icons-hide-svgrepo-com.svg");
+}

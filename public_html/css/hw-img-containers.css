@@ -1,0 +1,71 @@
+/*** Image Container ***/
+.img-container {
+    -webkit-box-shadow: inset 0px 0px 6px 1px #9C8200;
+    box-shadow: inset 0px 0px 6px 1px #9C8200;
+    border: 1px solid #9C8200;
+    border-radius: 6px;
+    /* background-color: #00204A;
+    color: #088EC6; */
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: right;
+    margin: 0 25px 10px 25px;
+    max-width: 50%;
+}
+
+.img-container img {
+    -webkit-box-shadow: inset 0px 0px 6px 1px #9C8200;
+    box-shadow: inset 0px 0px 6px 1px #9C8200;
+    border: 1px solid #9C8200;
+    border-radius: 6px;
+    /* background-color: #00204A;
+    color: #088EC6; */
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-width: 100%;
+}
+
+/*** Fleet Ship Images ***/
+.fleet-img-container {
+    max-width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+    -webkit-box-shadow: inset 0px 0px 6px 1px #9C8200;
+    box-shadow: inset 0px 0px 6px 1px #9C8200;
+    border: 1px solid #9C8200;
+    border-radius: 6px;
+    position: relative;
+}
+.fleet-img-container:hover {
+    -webkit-box-shadow: inset 0px 0px 6px 1px #FFE700;
+    box-shadow: inset 0px 0px 6px 1px #FFE700;
+    border: 1px solid #FFE700;
+}
+.fleet-img-container img {
+    max-width: 100%;
+    visibility: hidden;
+}
+.fleet-img-container a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.fleet-img-container span.overlay {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: #ADAAAD;
+    padding: 3px;
+    margin: 10px;
+    background-color: rgba( 0, 0, 0, 0.75 );
+    border-radius: 5px;
+    pointer-events: none;
+    -webkit-box-shadow: 0px 0px 4px 1px #D69E00, 0px 0px 0px 1px #D69E00;
+    box-shadow: 0px 0px 4px 1px #D69E00, 0px 0px 0px 1px #D69E00;
+    border: 1px solid #7B0000;
+}

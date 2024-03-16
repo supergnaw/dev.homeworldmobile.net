@@ -1,0 +1,149 @@
+[
+  {
+    "name":"Hiigaran Navy",
+    "description":"The proud legacy of the exile fleet continues well into the present.",
+    "primary_color":"839AB3",
+    "secondary_color":"CCCCCCC",
+    "buff":[
+      {
+        "Fabrication Time":-5
+      }
+    ],
+    "nerf":[
+
+    ]
+  },
+  {
+    "name":"Kiith Kaalel",
+    "description":"Truth is a precious commodity, spend it well.",
+    "primary_color":"666380",
+    "secondary_color":"FFC14C",
+    "buff":[
+      {
+        "Engine Weapon Armor Damage":10
+      },
+      {
+        "Flagship Engine Speed":10
+      }
+    ],
+    "nerf":[
+      {
+        "Refining Time":10
+      }
+    ]
+  },
+  {
+    "name":"Kiith Manaan",
+    "description":"Trade and kind words are levers that move nations.",
+    "primary_color":"63B05C",
+    "secondary_color":"C6E277",
+    "buff":[
+      {
+        "Missile Weapon Hull Damage":10
+      },
+      {
+        "Research Point Capacity":10
+      }
+    ],
+    "nerf":[
+      {
+        "Refining Time":10
+      }
+    ]
+  },
+  {
+    "name":"Kiith Naabal",
+    "description":"Hiigaran History is built on diverse materials and reliable construction.",
+    "primary_color":"E3AE52",
+    "secondary_color":"996E2A",
+    "buff":[
+      {
+        "Fighter Hull Damage":10
+      },
+      {
+        "Frigate Hull Damage":10
+      }
+    ],
+    "nerf":[
+      {
+        "Module Fabrication Time":10
+      }
+    ]
+  },
+  {
+    "name":"Kiith Paktu",
+    "description":"With our own gifts, we answer to no master.",
+    "primary_color":"E2BC67",
+    "secondary_color":"F1F1F1",
+    "buff":[
+      {
+        "Flagship Hull Damage":10
+      },
+      {
+        "Flagship Hull":10
+      }
+    ],
+    "nerf":[
+      {
+        "Ship Fabrication Time":10
+      }
+    ]
+  },
+  {
+    "name":"Kiith S'jet",
+    "description":"Knowledge is not learned from the comfort of one's home.",
+    "primary_color":"ECECEC",
+    "secondary_color":"DD4025",
+    "buff":[
+      {
+        "Beam Weapon Hull Damage":10
+      },
+      {
+        "Research Time":10
+      }
+    ],
+    "nerf":[
+      {
+        "Fabrication Time":5
+      }
+    ]
+  },
+  {
+    "name":"Kiith Soban",
+    "description":"United by our creed of Spirit; feared from our power of force.",
+    "primary_color":"C7352B",
+    "secondary_color":"FFFFFF",
+    "buff":[
+      {
+        "Torpedo Weapon Armor Damage":10
+      },
+      {
+        "Flagship Weapon Cooldown":-5
+      }
+    ],
+    "nerf":[
+      {
+        "Research Time":10
+      }
+    ]
+  },
+  {
+    "name":"Kiith Somtaaw",
+    "description":"Strength is drawn from the dust and re-forged into might.",
+    "primary_color":"5286BE",
+    "secondary_color":"FFFFFF",
+    "buff":[
+      {
+        "Kinetic Weapon Cooldown":-10
+      },
+      {
+        "Mineral Mining Yield":5
+      }
+    ],
+    "nerf":[
+      {
+        "Research Time":10
+      }
+    ]
+  }
+]
