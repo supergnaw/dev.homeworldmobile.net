@@ -1,0 +1,27 @@
+{
+  "name": "vendor_name/dev.homeworldmobile.net",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "loren",
+      "email": "email@example.com"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "./php/functions.php",
+      "./php/Parsedown.php"
+    ],
+    "psr-4": {
+      "app\\": "./php/classes/"
+    }
+  },
+  "require": {
+    "ext-pdo": "*",
+    "ext-curl": "*",
+    "ext-sqlite3": "*",
+    "benjaminhoegh/parsedown-extended": "^1.2"
+  }
+}

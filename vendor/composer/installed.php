@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => 'vendor_name/dev.homeworldmobile.net',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '6a60afa3a635cfba082d02cda18701fab6e82a93',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
+    ),
+    'versions' => array(
+        'benjaminhoegh/parsedown-extended' => array(
+            'pretty_version' => 'v1.2.9',
+            'version' => '1.2.9.0',
+            'reference' => 'bfbbf48640504e272d1fe503536aa05e5a17026b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../benjaminhoegh/parsedown-extended',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'erusev/parsedown' => array(
+            'pretty_version' => '1.7.4',
+            'version' => '1.7.4.0',
+            'reference' => 'cb17b6477dfff935958ba01325f2e8a2bfa6dab3',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../erusev/parsedown',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'vendor_name/dev.homeworldmobile.net' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '6a60afa3a635cfba082d02cda18701fab6e82a93',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);

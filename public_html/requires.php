@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 require_once(implode(DIRECTORY_SEPARATOR, [$_SERVER['DOCUMENT_ROOT'], '..', 'vendor', 'autoload.php']));
 
-require_once(__DIR__ . '/Parsedown.php');
+//require_once(__DIR__ . '/Parsedown.php');
 
-$credentials = implode(DIRECTORY_SEPARATOR, [$_SERVER['DOCUMENT_ROOT'], '..', '!globals_sensitive.php');
-if file_exists($credentials) {
+$credentials = implode(DIRECTORY_SEPARATOR, [$_SERVER['DOCUMENT_ROOT'], '..', '!globals_sensitive.php']);
+if (file_exists($credentials)) {
     require_once($credentials);
 }
 
