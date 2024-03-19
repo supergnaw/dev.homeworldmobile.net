@@ -565,7 +565,7 @@ $html .= "</div>";
 
 if (true == false) {
     $table = "google_data_systems";
-    $ingest_uri = "https://sheets.googleapis.com/v4/spreadsheets/1eTCM4KNb7lv7mtFmMx9WVOud2pg7EnqcDP40n9S-5go/values/HWM+Website+Ingest!A1:CJ151?key=AIzaSyDuboYUh0em_NyAp_tC826XZJsLgdaXBlE";
+    $ingest_uri = "https://sheets.googleapis.com/v4/spreadsheets/1eTCM4KNb7lv7mtFmMx9WVOud2pg7EnqcDP40n9S-5go/values/HWM+Website+Ingest!A1:CJ151?key=" . GOOGLE_SHEETS;
     $json = array_filter(json_decode(file_get_contents($ingest_uri))->values);
     $sql = "CREATE TABLE IF NOT EXISTS `{$table}` (
                 `system_name` VARCHAR(16) PRIMARY KEY,
