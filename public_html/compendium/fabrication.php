@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once( implode(DIRECTORY_SEPARATOR,[$_SERVER['DOCUMENT_ROOT'],'requires.php']));
+require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
 $nb = new \app\Nestbox\Nestbox();
 
@@ -57,8 +57,6 @@ foreach ($rows as $row) {
     $mat3 = (!empty($material)) ? "<a href='/abaci/fabrication/{$row['material_3']}/1/'>{$row['material_3']}</a>" : $row['material_3'];
     $qty3 = (!empty($material)) ? number_format($row['quantity_3'],0) : '';
 
-//    $mat2Link = "<a href='/abaci/fabrication/{$row['material_2']}/1/'>{$row['material_2']}</a>";
-//    $mat3Link = "<a href='/abaci/fabrication/{$row['material_3']}/1/'>{$row['material_3']}</a>";
     $output .= "
             <tr>
                 <td>{$itemLink}</td>

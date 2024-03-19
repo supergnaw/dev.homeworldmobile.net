@@ -37,6 +37,7 @@ class Magpie extends Nestbox
         return true;
     }
 
+    // todo: use Nestbox->load_settings() instead
     private function load_settings(): bool
     {
         return true;

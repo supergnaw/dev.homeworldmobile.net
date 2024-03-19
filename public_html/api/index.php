@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
+
 function is_list(array $array): bool {
     $expectedKey = 0;
     foreach ($array as $i => $_) {

@@ -29,7 +29,8 @@ class Lorikeet extends Nestbox
         // database functions
         parent::__construct();
         // create class tables
-        // $this->create_lorikeet_tables();
+        // $thi
+        //// todo: use Nestbox->load_settings()s->create_lorikeet_tables(); instead
         $this->load_settings();
         $this->create_image_directory($image_directory);
     }
@@ -50,6 +51,8 @@ class Lorikeet extends Nestbox
         }
 
         if (!$this->valid_schema('lorikeet_settings')) {
+            // todo: create nestbox master table for settings and use that instead of individual ones
+            // todo: add two columns: "module" and "datatype" so raw values can be stored and parsed properly
             $sql = "CREATE TABLE IF NOT EXISTS `lorikeet_settings` (
                         `setting_name` VARCHAR( 5 ) NOT NULL ,
                         `setting_value` VARCHAR( 5 ) NOT NULL ,
@@ -70,7 +73,8 @@ class Lorikeet extends Nestbox
                         ('allow_jpg', :allow_jpg),
                         ('allow_png', :allow_png),
                         ('allow_webp', :allow_webp),
-                        ('convert_to_filetype', :convert_to_filetype)
+                        ('convert_to_filetype', :convert_to_filetype),
+                        ('virus_total_api', :virus_total_api)
                     ;";
             $params = [
                 "image_save_directory" => $this->image_save_directory,
@@ -85,6 +89,7 @@ class Lorikeet extends Nestbox
                 "allow_png" => ($this->allow_png) ? "1" : "0",
                 "allow_webp" => ($this->allow_webp) ? "1" : "0",
                 "convert_to_filetype" => $this->convert_to_filetype,
+                "virus_total_api" => ($this->virus_total_api),
             ];
             if (!$this->query_execute($sql, $params)) return false;
         }
@@ -92,6 +97,7 @@ class Lorikeet extends Nestbox
         return true;
     }
 
+    // todo: use Nestbox->load_settings() instead
     private function load_settings(): bool
     {
         return true;

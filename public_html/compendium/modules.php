@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once( implode(DIRECTORY_SEPARATOR,[$_SERVER['DOCUMENT_ROOT'],'requires.php']));
+require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
 $nb = new \app\Nestbox\Nestbox();
 
@@ -14,7 +14,7 @@ $uri[3] = $uri[3] ?? $defaultCol;
 $uri[4] = $uri[4] ?? 'asc';
 
 $col = str_replace('-','_',$uri[3]);
-$col = ($nb->valid_schema($table,$col)) ? $col : $defaultCol;
+$col = ($nb->valid_schema($table,$col)) ? $col : $defaultCol; // <-- somethings up with this and I don't know why
 
 $rarities = [
     0 => "common",

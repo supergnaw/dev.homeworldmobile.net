@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once( implode(DIRECTORY_SEPARATOR,[$_SERVER['DOCUMENT_ROOT'],'requires.php']));
+require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
 $nb = new \app\Nestbox\Nestbox();
 

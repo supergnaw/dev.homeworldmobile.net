@@ -10,6 +10,10 @@ use app\Nestbox\Nestbox;
 
 class Titmouse extends Nestbox
 {
+    private const DEFAULT_USERS_TABLE = 'users';
+    private const DEFAULT_USER_COLUMN = 'email';
+    private const DEFAULT_HASH_COLUMN = 'hashword';
+    private const DEFAULT_SESSION_KEY = 'user_data';
     private string $usersTable;
     private string $userColumn;
     private string $hashColumn;
@@ -129,7 +133,7 @@ class Titmouse extends Nestbox
             if (!$this->query_execute($sql)) return false;
         }
 
-        // add columns if missing
+        // add columns if missing from an existing table
         if (!$this->valid_schema($usersTable, "username")) {
             $sql = "ALTER TABLE `{$usersTable}` ADD COLUMN `username` VARCHAR ( 64 ) NOT NULL";
             if (!$this->query_execute($sql)) return false;
@@ -241,41 +245,44 @@ class Titmouse extends Nestbox
     {
         // select user
         $user = $this->select_user($user);
-        var_dump($user);
-        if ($user) {
-            // verify user
-            if (1 !== count($user)) {
-                throw new NestboxException("More than one user has the same identifier.");
-            } else {
-                if (!password_verify($password, $user[0][$this->hashColumn])) {
-                    // login failed
-                    throw new NestboxException("Invalid username or password.");
-                    return false;
-                }
 
-                if (password_needs_rehash($user[0][$this->hashColumn], PASSWORD_DEFAULT)) {
-                    // If newer hashing algorithm is available, create a new hash, and replace the old one
-                    $hashword = password_hash($password, PASSWORD_DEFAULT);
-                    $userData = [
-                        'user' => $user,
-                        'hashword' => $hashword
-                    ];
-                    if ($this->edit_user($userData[$this->userColumn], $userData)) {
-                        // reload the user, although it shouldn't change anything
-                        $user = $this->select($this->usersTable, [$this->userColumn => $user]);
-                    }
-                }
-                $this->load_user_session($user[0]);
-                return true;
-            }
-        } else {
+        // invalid user
+        if (!$user) {
             return false;
         }
+
+        // multiple users (this should never happen, but might on an existing table without a primary key)
+        if (1 !== count($user)) {
+            throw new NestboxException("More than one user has the same identifier.");
+        }
+
+        // login failed
+        if (!password_verify($password, $user[0][$this->hashColumn])) {
+            throw new NestboxException("Invalid username or password.");
+        }
+
+        // rehash password if newer algorithm is available
+        if (password_needs_rehash($user[0][$this->hashColumn], PASSWORD_DEFAULT)) {
+            $hashword = password_hash($password, PASSWORD_DEFAULT);
+            $userData = [
+                'user' => $user,
+                'hashword' => $hashword
+            ];
+            if ($this->edit_user($userData[$this->userColumn], $userData)) {
+                // reload the user, although it shouldn't change anything
+                $user = $this->select($this->usersTable, [$this->userColumn => $user]);
+            }
+        }
+
+        $this->load_user_session($user[0]);
+
+        return true;
     }
 
+    // todo: check usage and change name to update_user and adjust return value to int instead of bool
     public function edit_user($user, $userData): bool
     {
-        if (false !== $this->update($this->usersTable, $userData, [$this->userColumn => $user])) {
+        if (false !== $this->update(table: $this->usersTable, params: $userData, where: [$this->userColumn => $user])) {
             return true;
         } else {
             return false;

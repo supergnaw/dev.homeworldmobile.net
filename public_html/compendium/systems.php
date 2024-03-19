@@ -4,64 +4,7 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-//$nestbox = new \app\Nestbox\Nestbox();
-//$babbler = new \app\Nestbox\Babbler\Babbler();
 $api = new \app\PlayFab\Playfab(PLAYFAB_APP_ID);
-
-//
-///*
-// * Star Systems
-// */
-//$results = json_decode($api->get_title_data(keys: "StarSystemData")[0]['data_content']);
-//$string_data = json_decode($api->get_title_data(keys: "StringData")[0]['data_content']);
-//
-//$table = ["
-//            <table>"];
-//$table[] = "
-//                <thead>
-//                    <tr>
-//                        <th>Name</th>
-//                        <th>Tier</th>
-//                        <th>Faction</th>
-//                        <th>Scan Req.</th>
-//                        <th>Jump Req.</th>
-//                        <th>Liaison</th>
-//                        <th>Shipyard</th>
-//                    </tr>
-//                </thead>
-//                <tbody>";
-//
-//$has = [
-//    0 => "<img class=\"in-line\" src=\"/img/no.png\" alt-text='\"no\"'>",
-//    1 => "<img class=\"in-line\" src=\"/img/yes.png\" alt-text='\"yes\"'>",
-//];
-//
-//foreach ($results as $system) {
-//    $name = $system->Name;
-//    $tier = "<img class=\"in-line\" src=\"/img/ui/tier/{$system->Tier}.png\" alt-text=\"{$system->Tier}\"/>";
-//    $faction = $system->Faction;
-//    $faction = $string_data->$faction->en;
-//    $jump = $system->JumpDifficulty;
-//    $liaison = $has[str_contains(haystack: strtoupper($system->TemplateTags), needle: "FACTION_OFFICE:FACTION_MARKET")];
-//    $shipyard = $has[str_contains(haystack: strtoupper($system->TemplateTags), needle: "SHIPYARD")];
-//    list($partial, $full) = explode(",", $system->ScanDifficulty);
-////        if (!in_array(needle: $system->Tier, haystack: [0,1,2,3,4])) continue;
-//    $class = strtolower($faction);
-//    $table[] = "
-//                    <tr class=\"{$class}\">
-//                        <td>{$name}</td>
-//                        <td>{$tier}</td>
-//                        <td><img class='in-line' src='/img/faction/{$faction}.png'> {$faction}</td>
-//                        <td>{$system->ScanDifficulty}</td>
-//                        <td>{$jump}</td>
-//                        <td>{$liaison}</td>
-//                        <td>{$shipyard}</td>
-//                    </tr>";
-//}
-//$table[] = "</tbody></table>";
-//$table = implode(separator: "\n", array: $table);
-//return $table;
-
 
 $sort_whitelist = [
     'system_name',

@@ -1,6 +1,7 @@
 <?php
 /**** GLOBAL FUNCTIONS ****/
 // Generic Web Queries
+// probably roll all the Git ones into a wrapper class just because
 function fetch_raw_web(string $url): string
 {
     $ch = curl_init();
@@ -106,6 +107,7 @@ function git_table_update(string $tableID): int
 }
 
 // Convert MD to Array
+// todo: check to see if this is even needed anymore
 function md_table_to_array(string $tableData): array
 {
     // format compendium for easy regexing
@@ -134,6 +136,7 @@ function md_table_to_array(string $tableData): array
 }
 
 // Convert Database Rows To HTML
+// todo: check to see if this is even needed anymore
 function db_table_to_html(string $tableID): string
 {
     // vars
@@ -205,6 +208,7 @@ function db_table_to_html(string $tableID): string
 }
 
 // Update Page
+// todo: check to confirm this was the old way of updating pages
 function git_page_update(string $pageID): bool
 {
     $nb = new \app\Nestbox\Nestbox();
@@ -241,6 +245,7 @@ function git_page_update(string $pageID): bool
 }
 
 // Add <a>nchors to # Headers
+// todo: reimplement with Parsedown Extended
 function add_header_anchors(string $html): string
 {
     preg_match_all('/<(h)(\d)>(.*?(?=<))(<\/h\d>)/i', $html, $headers);
@@ -255,6 +260,7 @@ function add_header_anchors(string $html): string
 }
 
 // Convert # Header Text to header-text
+// todo: confirm Parsedown Extended migration means this won't be used anymore
 function string_to_anchor(string $s): string
 {
     $s = preg_replace('/[^A-Za-z09]+/', '-', $s);
@@ -262,12 +268,14 @@ function string_to_anchor(string $s): string
     return strtolower($s);
 }
 
+// todo: confirm this is no longer needed
 function anchor_to_string(string $a): string
 {
     return preg_replace(pattern: "/[\-]/", replacement: " ", subject: $a);
 }
 
 // Generate HTML for table of contents
+// todo: reimplement with Parsedown Extended
 function generate_table_of_contents(string $md, int $toc_level, string $prefix = ''): string
 {
     $toc = [];
@@ -333,6 +341,7 @@ function generate_table_of_contents(string $md, int $toc_level, string $prefix =
 }
 
 // Generate HTML for table of category
+// todo: check if depricated
 function generate_table_of_category(string $category): string
 {
     $bb = new \app\Nestbox\Babbler\Babbler();
@@ -349,6 +358,7 @@ function generate_table_of_category(string $category): string
 }
 
 // Find {{content-tags}} and replace with compendium from table
+// todo: find a new home for this but it's likely still needed
 function add_dynamic_content(string $text): string
 {
     preg_match_all('/\{\{(.+?(?=\}))\}\}/', $text, $matches);
@@ -365,6 +375,7 @@ function add_dynamic_content(string $text): string
 }
 
 // Find specific strings in document and replace them with images
+// todo: will this be depricated with Parsedown Extended migration?
 function add_inline_images(string $html): string
 {
     $html = str_replace("\n", "{{im-a-new-line-bitch}}", $html);
@@ -384,6 +395,7 @@ function add_inline_images(string $html): string
 }
 
 // Find specific strings in document and replace them with links to other pages
+// todo: check if Parsedown Extended migration will make this obsolete
 function add_inline_links(string $html, array $links): string
 {
     foreach ($links as $regex => $target) {
@@ -393,6 +405,7 @@ function add_inline_links(string $html, array $links): string
 }
 
 // Generate HTML Header
+// todo: verify Parsedown Extended migration will make this obsolute
 function generate_html_header(): string
 {
     // main
@@ -421,6 +434,7 @@ function generate_html_header(): string
 }
 
 // Generate Tabbed Navigation
+// todo: find a new home for this or verify it's still needed
 function generate_navtabs(): string
 {
     $links = [
@@ -481,6 +495,7 @@ function generate_subnav(array $links, string $active = '', string $prefix = '')
 }
 
 // Generate Table Nav
+// todo: verify this is depricated
 function generate_table_nav(string $tableID = null): string
 {
     $nb = new \app\Nestbox\Nestbox();
@@ -530,6 +545,8 @@ function generate_table_nav(string $tableID = null): string
 }
 
 // Generate Page HTML
+// todo: migrate from Parsdown to Parsedown Extended
+// todo: alternatively, javascript MarkDown parser?
 function generate_page_html(string $markdown, array $inline_links = []): string
 {
     $pd = new Parsedown();
@@ -547,6 +564,7 @@ function generate_page_html(string $markdown, array $inline_links = []): string
 }
 
 // Convert Multi-Dimensional Array to Table
+// todo: find a better home for this
 function array_2_table(array $arr, bool $justified = true): string
 {
     if (empty($arr)) {
@@ -578,6 +596,7 @@ function array_2_table(array $arr, bool $justified = true): string
 }
 
 // Generate A Thumbnail Image
+// todo: verify if this is actually still required or if it will be rolled into Lorikeet
 function generate_thumbnail(string $srcImg, string $dstImg, int $width = 100, int $height = 100, bool $crop = true): bool
 {
     if (!file_exists($srcImg)) return false;
@@ -629,6 +648,7 @@ function generate_thumbnail(string $srcImg, string $dstImg, int $width = 100, in
 }
 
 /***** COUNTDOWN TIMER PARSERS *****/
+// todo: find a better home for this since it appears be exclusively for research. maybe also fabrication/refining?
 function parse_seconds(string|int $seconds): string
 {
     $output = [];

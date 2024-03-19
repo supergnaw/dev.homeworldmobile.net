@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 
-
-require_once(implode(DIRECTORY_SEPARATOR,[$_SERVER['DOCUMENT_ROOT'],'requires.php']));
+require_once(implode(DIRECTORY_SEPARATOR, [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
 function fetch_blueprint(string $item): array
 {
@@ -335,8 +334,7 @@ echo "
 
                 Object.keys(items).forEach(key => {
                     console.log(key, items[key]);
-                    bpSelect.options[bpSelect.options.length] = new Option(key,key);
-                    //bpSelect.getElementsByTagName('option')[key].selected = 'selected'                    
+                    bpSelect.options[bpSelect.options.length] = new Option(key,key);                   
                 });
             };
         </script>

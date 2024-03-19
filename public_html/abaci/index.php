@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'],'requires.php']));
+require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
 
 // Process Request URI
@@ -36,7 +36,6 @@ $tools = [
 $header = generate_html_header();
 
 ///// Main Navigation Tabs /////
-//$navtabs = generate_navtabs(current: "/{$category}/");
 $navtabs = generate_navtabs();
 
 ///// Sub Navitagion Links /////

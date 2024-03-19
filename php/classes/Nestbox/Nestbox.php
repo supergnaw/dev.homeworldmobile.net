@@ -5,6 +5,7 @@ namespace app\Nestbox;
 
 // https://phpdelusions.net/pdo
 
+use Couchbase\IndexFailureException;
 use PDO;
 use PDOException;
 use app\Nestbox\Exception\CannotBindArrayException;
@@ -13,9 +14,6 @@ use app\Nestbox\Exception\FailedToBindValueException;
 use app\Nestbox\Exception\InvalidColumnException;
 use app\Nestbox\Exception\InvalidTableException;
 use app\Nestbox\Exception\EmptyParamsException;
-use app\Nestbox\Exception\MissingDatabaseNameException;
-use app\Nestbox\Exception\MissingDatabasePassException;
-use app\Nestbox\Exception\MissingDatabaseUserException;
 use app\Nestbox\Exception\NestboxException;
 use app\Nestbox\Exception\QueryErrorException;
 use app\Nestbox\Exception\TransactionBeginFailedException;
@@ -49,6 +47,8 @@ class Nestbox
     protected $rowCount = null;
     protected $lastInsertId = null;
 
+    private const SETTINGS_TABLE = 'nestbox_settings';
+
 
     /**
      * Default constructor
@@ -60,10 +60,29 @@ class Nestbox
      */
     public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
-        $this->set_db_host($host);
-        $this->set_db_name($name);
-        $this->set_db_user($user);
-        $this->set_db_pass($pass);
+        if (is_null($host)) {
+            throw new EmptyParamsException("Missing database hostname.");
+        } else {
+            $this->host = $host;
+        }
+
+        if (is_null($user)) {
+            throw new EmptyParamsException("Missing database username.");
+        } else {
+            $this->user = $user;
+        }
+
+        if (is_null($pass)) {
+            throw new EmptyParamsException("Missing database password.");
+        } else {
+            $this->pass = $pass;
+        }
+
+        if (is_null($name)) {
+            throw new EmptyParamsException("Missing database name.");
+        } else {
+            $this->name = $name;
+        }
     }
 
     /**
@@ -86,91 +105,68 @@ class Nestbox
      */
     public function __invoke(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
-        $this->set_db_host($host);
-        $this->set_db_user($user);
-        $this->set_db_pass($pass);
-        $this->set_db_name($name);
+        $this->__construct(host: $host, user: $user, pass: $pass, name: $name);
     }
 
-    /**
-     * Set database connection host
-     *
-     * @param string|null $host
-     * @return void
-     */
-    public function set_db_host(string $host = null): void
-    {
-        $this->close();
-        if (!empty($host)) {
-            $this->host = $host;
-        } else {
-            if (defined('NESTBOX_DB_HOST')) {
-                $this->host = NESTBOX_DB_HOST;
-            } else {
-                throw new EmptyParamsException("Missing database hostname.");
-            }
-        }
-    }
-
-    /**
-     * Set database connection user
-     *
-     * @param string|null $user
-     * @return void
-     */
-    public function set_db_user(string $user = null): void
-    {
-        $this->close();
-        if (!empty($user)) {
-            $this->user = $user;
-        } else {
-            if (defined('NESTBOX_DB_USER')) {
-                $this->user = NESTBOX_DB_USER;
-            } else {
-                throw new MissingDatabaseUserException("Missing database username.");
-            }
-        }
-    }
-
-    /**
-     * Set database connection password
-     *
-     * @param string|null $pass
-     * @return void
-     */
-    public function set_db_pass(string $pass = null): void
-    {
-        $this->close();
-        if (!empty($pass)) {
-            $this->pass = $pass;
-        } else {
-            if (defined('NESTBOX_DB_PASS')) {
-                $this->pass = NESTBOX_DB_PASS;
-            } else {
-                throw new MissingDatabasePassException("Missing database password.");
-            }
-        }
-    }
-
-    /**
-     * Set database connection name
-     *
-     * @param string|null $name
-     * @return void
-     */
-    public function set_db_name(string $name = null): void
-    {
-        $this->close();
-        if (!empty($name)) {
-            $this->name = $name;
-        } else {
-            if (defined('NESTBOX_DB_NAME')) {
-                $this->name = NESTBOX_DB_NAME;
-            } else {
-                throw new MissingDatabaseNameException("Missing database name.");
-            }
-        }
-    }
+//    /**
+//     * Set database connection host
+//     *
+//     * @param string|null $host
+//     * @return void
+//     */
+//    public function set_db_host(string $host = null): void
+//    {
+//        if (empty($host)) {
+//            throw new EmptyParamsException("Missing database hostname.");
+//        }
+//
+//        $this->host = $host;
+//    }
+//
+//    /**
+//     * Set database connection user
+//     *
+//     * @param string|null $user
+//     * @return void
+//     */
+//    public function set_db_user(string $user = null): void
+//    {
+//        if (empty($user)) {
+//            throw new EmptyParamsException("Missing database username.");
+//        }
+//
+//        $this->user = $user;
+//    }
+//
+//    /**
+//     * Set database connection password
+//     *
+//     * @param string|null $pass
+//     * @return void
+//     */
+//    public function set_db_pass(string $pass = null): void
+//    {
+//        if (empty($pass)) {
+//            throw new EmptyParamsException("Missing database password.");
+//        }
+//
+//        $this->pass = $pass;
+//    }
+//
+//    /**
+//     * Set database connection name
+//     *
+//     * @param string|null $name
+//     * @return void
+//     */
+//    public function set_db_name(string $name = null): void
+//    {
+//        if (empty($name)) {
+//            throw new EmptyParamsException("Missing database name.");
+//        }
+//
+//        $this->name = $name;
+//    }
 
     /*
         2.0 Connections
@@ -390,7 +386,7 @@ class Nestbox
 
     /**
      * Return resulting rows from a query; optionally, return only the first
-     * row of _depricated_data when only one row is expected
+     * row of data when only one row is expected
      *
      * @param bool $firstResultOnly
      * @return array
@@ -450,9 +446,8 @@ class Nestbox
             // start transaction if not already in progress
             if ($this->pdo->inTransaction()) {
                 throw new TransactionInProgressException("Unable to start new transaction while one is already in progress.");
-            } else {
-                $this->pdo->beginTransaction();
             }
+            $this->pdo->beginTransaction();
 
             // perform transaction
             $results = [];
@@ -483,7 +478,7 @@ class Nestbox
                 throw new TransactionCommitFailedException("Failed to commit transaction.");
             }
         } catch (\Exception $e) {
-            // Oh no! Roll back database and re-throw the error
+            // Oh no, we dun goof'd! Roll back database and re-throw the error
             $this->pdo->rollback();
             throw new TransactionException($e->getMessage());
         }
@@ -561,30 +556,27 @@ class Nestbox
             throw new InvalidTableException("Cannot insert into invalid table: {$table}");
         }
 
-        // verify columns
-        if (!empty($params)) {
-            foreach ($params as $col => $val) {
-                if (!is_array($val)) {
-                    // inserting a single row
-                    if (!$this->valid_schema($table, $col)) {
-                        throw new InvalidColumnException("Cannot insert into invalid column: {$table}.{$col}");
-                    }
-                    $insertMode = "single";
-                } else {
-                    // inserting multiple rows
-                    foreach ($val as $c => $v) {
-                        if (!$this->valid_schema($table, $c)) {
-                            throw new InvalidColumnException("Cannot insert into invalid column: {$table}.{$col}");
-                        }
-                    }
-                    $insertMode = "many";
-                }
-            }
+        if (empty($params)) {
+            throw new EmptyParamsException("Cannot insert no values into table.");
         }
 
-        if (!isset($insertMode)) {
-            var_dump($params);
-            die;
+        // verify columns
+        foreach ($params as $col => $val) {
+            if (!is_array($val)) {
+                // inserting a single row
+                if (!$this->valid_schema($table, $col)) {
+                    throw new InvalidColumnException("Cannot insert into invalid column: {$table}.{$col}");
+                }
+                $insertMode = "single";
+            } else {
+                // inserting multiple rows
+                foreach ($val as $c => $v) {
+                    if (!$this->valid_schema($table, $c)) {
+                        throw new InvalidColumnException("Cannot insert into invalid column: {$table}.{$col}");
+                    }
+                }
+                $insertMode = "many";
+            }
         }
 
         // prepare variables
@@ -873,6 +865,63 @@ class Nestbox
     }
 
     /*
+     *  8.0 Nestbox Settings
+     */
+    public function create_settings_table(): bool
+    {
+        $sql = "CREATE TABLE IF NOT EXISTS `" . self::SETTINGS_TABLE ."` (
+                    `package_name` VARCHAR( 64 ) NOT NULL ,
+                    `setting_name` VARCHAR( 64 ) NOT NULL ,
+                    `setting_type` VARCHAR( 64 ) NOT NULL ,
+                    `setting_value` VARCHAR( 128 ) NULL ,
+                    PRIMARY KEY ( `setting_name` )
+                ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+
+        if (!$this->query_execute($sql)) return false;
+
+        return true;
+    }
+
+    public function update_setting_values(array $settings): bool
+    {
+        if (count($settings) != $this->insert(table: self::SETTINGS_TABLE, params: $settings)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function load_settings(string $package = null): array
+    {
+        if (empty($package)) {
+            $sql = "SELECT * FROM " . self::SETTINGS_TABLE . "
+                ORDER BY `package_name` ASC, `setting_name` ASC;";
+        } else {
+            $sql = "SELECT * FROM " . self::SETTINGS_TABLE . "
+                WHERE `package_name` == :package_name
+                ORDER BY `setting_name` ASC;";
+        }
+
+
+
+        return [];
+    }
+
+    public function parse_settings(array $settings): array
+    {
+        $output = [];
+        foreach ($settings as $setting) {
+            $output[$setting['setting_name']] = $this->parse_setting(type: $setting['setting_type'], value: $setting['setting_value']);
+        }
+        return $output;
+    }
+
+    public function parse_setting(string $type, string $value): array
+    {
+        return [];
+    }
+
+    /*
         Other
     */
     /**
@@ -897,7 +946,7 @@ class Nestbox
         }
         $code .= "<tr>{$hdrs}</tr>";
 
-        // add _depricated_data
+        // add data
         foreach ($table as $tblRow) {
             $row = "";
             foreach ($tblRow as $col => $val) {

@@ -2,24 +2,10 @@
 
 declare(strict_types=1);
 
-require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'],'requires.php']));
+require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
 $api = new \app\PlayFab\Playfab();
 
-//$regex = "/qg_stat([^\"]+)/i";
-//$file = "..\\title_data.json";
-//preg_match_all($regex, file_get_contents($file), $stats, PREG_PATTERN_ORDER);
-//$stats = array_unique($stats[1]);
-//$allStats = [];
-//foreach ($stats as $stat) {
-//    $stat = explode("_", $stat);
-//    foreach ($stat as $s) {
-//        $allStats[] = $s;
-//    }
-//}
-//$allStats = array_unique($allStats);
-//header('Content-Type: application/json; charset=utf-8');
-//print(json_encode($allStats));
 $statsListing = [
     "Refining1N",
     "Refining1O",
@@ -599,7 +585,6 @@ $stats = [
 //sort($validStats);
 //$validStats = array_unique($validStats);
 //echo json_encode($validStats);
-//exit();
 
 $playerId = "ADA4E1380D35CDF2";
 $characters = [

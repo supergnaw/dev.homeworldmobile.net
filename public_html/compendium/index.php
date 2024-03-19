@@ -33,14 +33,10 @@ $subnav = generate_subnav(links: ($links ?? []), active: ($uri[1] ?? "n/a"), pre
  * DISPLAY DATA
  */
 
-if ($uri[1] ?? false) {
-    $content = "";
-} else {
-    $content = "
+$content = ($uri[1] ?? false) ? "" : "
         <h1 style='text-align: center'>The Compendium</h1>
         <p style='text-align: center'>Catalog of ship, faction, item, and system data.</p>
         <img src='/img/guidestone.jpg' style='width: 100%;max-width: 100%;'>";
-}
 
 $system_messages = show_session_alerts();
 echo "

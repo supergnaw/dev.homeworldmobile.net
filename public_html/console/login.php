@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
+
 return "
 <h3 style='text-align:center;'>Login</h3>
 <p style='text-align:center;'>You must login to access the requested information.</p>

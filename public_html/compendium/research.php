@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-require_once(implode(DIRECTORY_SEPARATOR, [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
+require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-//$nestbox = new \app\Nestbox\Nestbox();
-//$babbler = new \app\Nestbox\Babbler\Babbler();
 $api = new \app\PlayFab\Playfab(PLAYFAB_APP_ID);
 
 $uri = array_filter(explode("/", $_SERVER['REQUEST_URI']));
@@ -65,7 +63,7 @@ foreach ($research_data as $key => $item) {
         ];
     }
     $tech->rarity = $tech->rarity ?? '0';
-    $tech->rarity_name = $rarities[$tech->rarity];
+    $tech->rarity_name = $rarities[$tech->rarity]; // <-- this doesn't exist? where did it go????
 
     $tech->tier = $tech->tier ?? '1';
     $tech->scaling_mod = $tech->scaling_mod ?? '1';

@@ -11,11 +11,6 @@ if (file_exists($credentials)) {
     require_once($credentials);
 }
 
-use app\FormSecurity\FormSecurity as FormSecurity;
-use app\Nestbox\Nestbox as Nestbox;
-use app\Nestbox\Titmouse\Titmouse as Titmouse;
-use app\Nestbox\Babbler\Blabbler as Blabbler;
-
 // keep the php session active
 if (PHP_SESSION_ACTIVE !== session_status()) {
     session_start();

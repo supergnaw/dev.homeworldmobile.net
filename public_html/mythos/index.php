@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'],'requires.php']));
+require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-//$nestbox = new \app\Nestbox\Nestbox();
 $babbler = new \app\Nestbox\Babbler\Babbler();
 
 // Process Request URI
