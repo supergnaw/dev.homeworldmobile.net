@@ -47,7 +47,7 @@ function git_commit_timestamp(string $gitFilepath): string
 function git_table_update(string $tableID): int
 {
     // initiate nestbox
-    $nb = new \app\Nestbox\Nestbox();
+    $nb = new \Supergnaw\Nestbox\Nestbox();
 
     // validate table request
     if (!$nb->valid_table($tableID)) {
@@ -146,7 +146,7 @@ function db_table_to_html(string $tableID): string
     $uri[4] = (array_key_exists(4, $uri)) ? $sortFilter[$uri[4]] : 'ascending';
 
     // database fetching
-    $nb = new \app\Nestbox\Nestbox();
+    $nb = new \Supergnaw\Nestbox\Nestbox();
     if (!$nb->valid_table($tableID)) {
         return "";
     }
@@ -211,7 +211,7 @@ function db_table_to_html(string $tableID): string
 // todo: check to confirm this was the old way of updating pages
 function git_page_update(string $pageID): bool
 {
-    $nb = new \app\Nestbox\Nestbox();
+    $nb = new \Supergnaw\Nestbox\Nestbox();
     if ($nb->query_execute("SELECT * FROM `pages` WHERE page_id = :page_id;", ['page_id' => $pageID])) {
         $page = $nb->results()[0];
     }
@@ -344,7 +344,7 @@ function generate_table_of_contents(string $md, int $toc_level, string $prefix =
 // todo: check if depricated
 function generate_table_of_category(string $category): string
 {
-    $bb = new \app\Nestbox\Babbler\Babbler();
+    $bb = new \Supergnaw\Nestbox\Babbler\Babbler();
     $pages = $bb->fetch_entries_by_category($category);
     $toc = [];
     foreach ($pages as $page) {
@@ -362,7 +362,7 @@ function generate_table_of_category(string $category): string
 function add_dynamic_content(string $text): string
 {
     preg_match_all('/\{\{(.+?(?=\}))\}\}/', $text, $matches);
-    $nb = new \app\Nestbox\Nestbox();
+    $nb = new \Supergnaw\Nestbox\Nestbox();
     foreach ($matches[1] as $m => $id) {
         if ($nb->query_execute("SELECT * FROM `dynamic_content` WHERE `content_id` = :content_id;", ['content_id' => $id])) {
             $row = $nb->results();
@@ -498,7 +498,7 @@ function generate_subnav(array $links, string $active = '', string $prefix = '')
 // todo: verify this is depricated
 function generate_table_nav(string $tableID = null): string
 {
-    $nb = new \app\Nestbox\Nestbox();
+    $nb = new \Supergnaw\Nestbox\Nestbox();
     $tables = ($nb->query_execute("SELECT * FROM `data_tables`;")) ? $nb->results() : [];
     $tableCount = count($tables);
     switch ($tableCount) {

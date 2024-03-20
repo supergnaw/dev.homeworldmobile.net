@@ -120,6 +120,108 @@
                 "source": "https://github.com/erusev/parsedown/tree/1.7.x"
             },
             "install-path": "../erusev/parsedown"
+        },
+        {
+            "name": "supergnaw/form-security",
+            "version": "v1.0.1",
+            "version_normalized": "1.0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/supergnaw/FormSecurity.git",
+                "reference": "838ff736897c83a5ada64f0287ce7db26a0fbad1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/supergnaw/FormSecurity/zipball/838ff736897c83a5ada64f0287ce7db26a0fbad1",
+                "reference": "838ff736897c83a5ada64f0287ce7db26a0fbad1",
+                "shasum": ""
+            },
+            "time": "2024-03-20T02:30:03+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Supergnaw\\FormSecurity\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0"
+            ],
+            "description": "Class for simplifying webpage form security",
+            "support": {
+                "issues": "https://github.com/supergnaw/FormSecurity/issues",
+                "source": "https://github.com/supergnaw/FormSecurity/tree/v1.0.1"
+            },
+            "install-path": "../supergnaw/form-security"
+        },
+        {
+            "name": "supergnaw/nestbox",
+            "version": "0.0.2",
+            "version_normalized": "0.0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/supergnaw/Nestbox.git",
+                "reference": "7b315b5339d1d91738612607473b7a68c34811b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/supergnaw/Nestbox/zipball/7b315b5339d1d91738612607473b7a68c34811b2",
+                "reference": "7b315b5339d1d91738612607473b7a68c34811b2",
+                "shasum": ""
+            },
+            "time": "2024-03-20T04:55:57+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Supergnaw\\Nestbox\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0"
+            ],
+            "description": "A interface for databases using PHP Data Objects written to easily fill gaps of niche requirements.",
+            "support": {
+                "issues": "https://github.com/supergnaw/Nestbox/issues",
+                "source": "https://github.com/supergnaw/Nestbox/tree/0.0.2"
+            },
+            "install-path": "../supergnaw/nestbox"
+        },
+        {
+            "name": "supergnaw/playfab-php",
+            "version": "1.0.2",
+            "version_normalized": "1.0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/supergnaw/PlayFab-PHP.git",
+                "reference": "d8152bf92ee97298a7daa96517f8af7bc6f3a8ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/supergnaw/PlayFab-PHP/zipball/d8152bf92ee97298a7daa96517f8af7bc6f3a8ee",
+                "reference": "d8152bf92ee97298a7daa96517f8af7bc6f3a8ee",
+                "shasum": ""
+            },
+            "time": "2024-03-20T04:22:49+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Supergnaw\\PlayFabPhp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "description": "A single-file PHP class for simple PlayFab API calls that uses the local database for caching.",
+            "support": {
+                "issues": "https://github.com/supergnaw/PlayFab-PHP/issues",
+                "source": "https://github.com/supergnaw/PlayFab-PHP/tree/1.0.2"
+            },
+            "install-path": "../supergnaw/playfab-php"
         }
     ],
     "dev": true,

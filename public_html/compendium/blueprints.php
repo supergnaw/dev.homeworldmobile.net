@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$nb = new \app\Nestbox\Nestbox();
+$nb = new \Supergnaw\Nestbox\Nestbox();
 
 $uri = array_filter(explode("/",$_SERVER['REQUEST_URI']));
 
@@ -14,7 +14,7 @@ $uri[3] = $uri[3] ?? $defaultCol;
 $uri[4] = $uri[4] ?? 'asc';
 
 $col = str_replace('-','_',$uri[3]);
-$col = ($nb->valid_schema($table,$col)) ? $col : $defaultCol;
+$col = ($nb->valid_schema($table,$col)) ? $col : $defaultCol; // <-- why is this here???
 
 $dir = (in_array($uri[4],['asc','desc'])) ? $uri[4] : 'asc';
 

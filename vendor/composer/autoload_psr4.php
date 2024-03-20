@@ -7,4 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'app\\' => array($baseDir . '/php/classes'),
+    'Supergnaw\\PlayFabPhp\\' => array($vendorDir . '/supergnaw/playfab-php/src'),
+    'Supergnaw\\Nestbox\\' => array($vendorDir . '/supergnaw/nestbox/src'),
+    'Supergnaw\\FormSecurity\\' => array($vendorDir . '/supergnaw/form-security/src'),
 );

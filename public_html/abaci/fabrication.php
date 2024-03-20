@@ -7,7 +7,7 @@ require_once(implode(DIRECTORY_SEPARATOR, [$_SERVER['DOCUMENT_ROOT'], 'requires.
 
 function fetch_blueprint(string $item): array
 {
-    $nb = new \app\Nestbox\Nestbox();
+    $nb = new \Supergnaw\Nestbox\Nestbox();
     $sql = "SELECT * FROM `fabrication` WHERE `item` = :item;";
     return ($nb->query_execute($sql,['item'=>$item])) ? $nb->results(true) : [];
 }
@@ -101,7 +101,7 @@ function fetch_fabrication(string $item, int $quantity = 1): array
 
 function fetch_parent_products(string $item): array
 {
-    $nb = new \app\Nestbox\Nestbox();
+    $nb = new \Supergnaw\Nestbox\Nestbox();
     $sql = "SELECT * FROM `fabrication`
             WHERE `material_1` = :item
                OR `material_2` = :item
@@ -202,7 +202,7 @@ function round_up_to_any(int|float $n, int $x=5): float
     return (round($n)%$x === 0) ? round($n) : round(($n+$x/2)/$x)*$x;
 }
 
-$nb = new \app\Nestbox\Nestbox();
+$nb = new \Supergnaw\Nestbox\Nestbox();
 $requirements = null;
 
 // url directed calculations

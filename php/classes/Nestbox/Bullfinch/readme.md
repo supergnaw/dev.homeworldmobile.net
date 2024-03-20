@@ -1,3 +1,0 @@
-# Bullfinch
-
-Bulletin board system.

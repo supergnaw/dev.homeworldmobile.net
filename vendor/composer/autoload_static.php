@@ -8,6 +8,7 @@ class ComposerStaticInit329d7ba3d01be132dd54cb738fe563d2
 {
     public static $files = array (
         '71ce32c8bec5da43387951ed9983c7f6' => __DIR__ . '/../..' . '/php/functions.php',
+        '5c2d92537b356afe4b82ca195036a55f' => __DIR__ . '/../..' . '/php/!globals_sensitive.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -15,12 +16,30 @@ class ComposerStaticInit329d7ba3d01be132dd54cb738fe563d2
         array (
             'app\\' => 4,
         ),
+        'S' => 
+        array (
+            'Supergnaw\\PlayFabPhp\\' => 21,
+            'Supergnaw\\Nestbox\\' => 18,
+            'Supergnaw\\FormSecurity\\' => 23,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'app\\' => 
         array (
             0 => __DIR__ . '/../..' . '/php/classes',
+        ),
+        'Supergnaw\\PlayFabPhp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/supergnaw/playfab-php/src',
+        ),
+        'Supergnaw\\Nestbox\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/supergnaw/nestbox/src',
+        ),
+        'Supergnaw\\FormSecurity\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/supergnaw/form-security/src',
         ),
     );
 

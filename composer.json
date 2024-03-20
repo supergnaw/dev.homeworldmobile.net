@@ -12,7 +12,7 @@
   "autoload": {
     "files": [
       "./php/functions.php",
-      "./php/Parsedown.php"
+      "./php/!globals_sensitive.php"
     ],
     "psr-4": {
       "app\\": "./php/classes/"
@@ -22,6 +22,9 @@
     "ext-pdo": "*",
     "ext-curl": "*",
     "ext-sqlite3": "*",
-    "benjaminhoegh/parsedown-extended": "^1.2"
+    "benjaminhoegh/parsedown-extended": "^1.2",
+    "supergnaw/form-security": "^1.0",
+    "supergnaw/playfab-php": "^1.0",
+    "supergnaw/nestbox": "^0.0.2"
   }
 }

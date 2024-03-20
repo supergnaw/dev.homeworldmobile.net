@@ -1,3 +1,0 @@
-babbler
-
-php blogging tool

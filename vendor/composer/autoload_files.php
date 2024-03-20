@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     '71ce32c8bec5da43387951ed9983c7f6' => $baseDir . '/php/functions.php',
+    '5c2d92537b356afe4b82ca195036a55f' => $baseDir . '/php/!globals_sensitive.php',
 );

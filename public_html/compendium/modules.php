@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$nb = new \app\Nestbox\Nestbox();
+$nb = new \Supergnaw\Nestbox\Nestbox();
 
 $uri = array_filter(explode("/",$_SERVER['REQUEST_URI']));
 

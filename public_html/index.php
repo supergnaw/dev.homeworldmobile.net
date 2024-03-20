@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$api = new \app\PlayFab\Playfab();
+$api = new Supergnaw\PlayFabPhp\PlayFab(PLAYFAB_APP_ID);
 
 $statsListing = [
     "Refining1N",

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$titmouse = new \app\Nestbox\Titmouse\Titmouse('users', 'username');
+$titmouse = new \Supergnaw\Nestbox\Titmouse\Titmouse('users', 'username');
 
 // Process Request URI
 $uri = explode("/", trim($_SERVER['REQUEST_URI'], "/"));

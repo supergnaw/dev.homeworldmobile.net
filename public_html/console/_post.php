@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$babbler = new \app\Nestbox\Babbler\Babbler();
+$babbler = new \Supergnaw\Nestbox\Babbler\Babbler();
 
 $response = "";
 
@@ -31,13 +31,13 @@ if (!empty($_POST)) {
         "minor_version" => 'int',
     ];
 
-    $post = \app\FormSecurity\FormSecurity::filter_post($post_var_filter);
+    $post = \Supergnaw\FormSecurity\FormSecurity::filter_input("post", $post_var_filter);
 
     /*
      * USER SESSION
      */
     if ("register" == $post['action']) {
-        $tm = new \app\Nestbox\Titmouse\Titmouse('users', 'username');
+        $tm = new \Supergnaw\Nestbox\Titmouse\Titmouse('users', 'username');
 
         $user_data = [
             "username" => $post['username'],
@@ -56,14 +56,14 @@ if (!empty($_POST)) {
     }
 
     if ("login" == $post['action']) {
-        $tm = new \app\Nestbox\Titmouse\Titmouse('users', 'username');
+        $tm = new \Supergnaw\Nestbox\Titmouse\Titmouse('users', 'username');
 
         $user = $tm->select_user($post['username']);
 
         if (!empty($user)) {
             try {
                 $tm->login_user($post['username'], $post['password']);
-            } catch (\app\Nestbox\Exception\NestboxException $e) {
+            } catch (\Supergnaw\Nestbox\Exception\NestboxException $e) {
                 save_session_alert(text: $e->getMessage(), classes: "error");
             }
         }

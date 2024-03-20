@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$api = new \app\PlayFab\Playfab(PLAYFAB_APP_ID);
+$api = new \app\PlayFab\PlayFab(PLAYFAB_APP_ID);
 
 // Process Request URI
 $uri = explode("/", trim($_SERVER['REQUEST_URI'], "/"));

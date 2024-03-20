@@ -1,3 +1,0 @@
-# Magpie
-
-User permissions management.
