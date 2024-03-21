@@ -17,10 +17,10 @@ class Babbler extends Nestbox
     protected int $title_size = 255;
 
     // constructor
-    public function __construct()
+    public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
         // database functions
-        parent::__construct();
+        parent::__construct(host: $host, user: $user, pass: $pass, name: $name);
         // create class tables
         $this->create_entry_table();
         $this->create_history_table();

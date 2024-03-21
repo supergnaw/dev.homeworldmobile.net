@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$api = new \app\PlayFab\PlayFab(PLAYFAB_APP_ID);
+$api = new \Supergnaw\PlayFabPhp\PlayFab(PLAYFAB_APP_ID);
+$api->login_with_email(email: PLAYFAB_EMAIL, password: PLAYFAB_PASSWORD);
 
 // Process Request URI
 $uri = explode("/", trim($_SERVER['REQUEST_URI'], "/"));
@@ -13,6 +14,7 @@ $uri = explode("/", trim($_SERVER['REQUEST_URI'], "/"));
  * NEWS POSTS
  */
 $news = $api->get_news(count: 20);
+var_dump($news);
 $posts = [];
 foreach ($news as $post) {
     $body = preg_replace('/\\n\\n/mis', "</p>\n<p>", $post['news_body']);

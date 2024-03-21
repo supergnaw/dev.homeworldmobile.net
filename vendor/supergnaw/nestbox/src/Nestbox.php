@@ -26,7 +26,7 @@ class Nestbox
     */
 
     // connection properties
-    private $host;
+    protected $host;
     protected $user;
     protected $pass;
     protected $name;
@@ -57,29 +57,32 @@ class Nestbox
      */
     public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
-        if (is_null($host)) {
+        // set default connection properties
+        if (defined(constant_name: 'NESTBOX_DB_HOST')) $this->host = NESTBOX_DB_HOST;
+        if (defined(constant_name: 'NESTBOX_DB_USER')) $this->user = NESTBOX_DB_USER;
+        if (defined(constant_name: 'NESTBOX_DB_PASS')) $this->pass = NESTBOX_DB_PASS;
+        if (defined(constant_name: 'NESTBOX_DB_NAME')) $this->name = NESTBOX_DB_NAME;
+
+        // overwrite defaults if provided
+        if (is_null($host) && is_null($this->host)) {
             throw new EmptyParamsException("Missing database hostname.");
-        } else {
-            $this->host = $host;
         }
+        $this->host = $host;
 
-        if (is_null($user)) {
+        if (is_null($user) && is_null($this->user)) {
             throw new EmptyParamsException("Missing database username.");
-        } else {
-            $this->user = $user;
         }
+        $this->user = $user;
 
-        if (is_null($pass)) {
+        if (is_null($pass) && is_null($this->pass)) {
             throw new EmptyParamsException("Missing database password.");
-        } else {
-            $this->pass = $pass;
         }
+        $this->pass = $pass;
 
-        if (is_null($name)) {
+        if (is_null($name) && is_null($this->name)) {
             throw new EmptyParamsException("Missing database name.");
-        } else {
-            $this->name = $name;
         }
+        $this->name = $name;
     }
 
     /**
@@ -102,68 +105,9 @@ class Nestbox
      */
     public function __invoke(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
+        $this->close();
         $this->__construct(host: $host, user: $user, pass: $pass, name: $name);
     }
-
-//    /**
-//     * Set database connection host
-//     *
-//     * @param string|null $host
-//     * @return void
-//     */
-//    public function set_db_host(string $host = null): void
-//    {
-//        if (empty($host)) {
-//            throw new EmptyParamsException("Missing database hostname.");
-//        }
-//
-//        $this->host = $host;
-//    }
-//
-//    /**
-//     * Set database connection user
-//     *
-//     * @param string|null $user
-//     * @return void
-//     */
-//    public function set_db_user(string $user = null): void
-//    {
-//        if (empty($user)) {
-//            throw new EmptyParamsException("Missing database username.");
-//        }
-//
-//        $this->user = $user;
-//    }
-//
-//    /**
-//     * Set database connection password
-//     *
-//     * @param string|null $pass
-//     * @return void
-//     */
-//    public function set_db_pass(string $pass = null): void
-//    {
-//        if (empty($pass)) {
-//            throw new EmptyParamsException("Missing database password.");
-//        }
-//
-//        $this->pass = $pass;
-//    }
-//
-//    /**
-//     * Set database connection name
-//     *
-//     * @param string|null $name
-//     * @return void
-//     */
-//    public function set_db_name(string $name = null): void
-//    {
-//        if (empty($name)) {
-//            throw new EmptyParamsException("Missing database name.");
-//        }
-//
-//        $this->name = $name;
-//    }
 
     /*
         2.0 Connections
@@ -348,7 +292,7 @@ class Nestbox
         throw new FailedToBindValueException("Failed to bind '{$value}' to :{$variable} ({$type})");
     }
 
-    protected static function check_variable_type($var): int | string
+    protected static function check_variable_type($var): int|string
     {
         if (is_int($var)) return PDO::PARAM_INT;
         if (is_bool($var)) return PDO::PARAM_BOOL;
@@ -546,6 +490,12 @@ class Nestbox
     /*
         6.0 Quick Queries
     */
+    /**
+     * @param string $table
+     * @param array $params
+     * @param bool $update
+     * @return int
+     */
     public function insert(string $table, array $params, bool $update = true): int
     {
         // verify table
@@ -630,6 +580,13 @@ class Nestbox
         }
     }
 
+    /**
+     * @param string $table
+     * @param array $params
+     * @param array $where
+     * @param string $conjunction
+     * @return int
+     */
     public function update(string $table, array $params, array $where, string $conjunction = "AND"): int
     {
         // verify table
@@ -655,7 +612,7 @@ class Nestbox
                 $wheres[] = "`{$col}` = :{$col}";
             }
         }
-        $conjunction = (in_array($conjunction, ["AND", "OR"])) ? $conjunction : "AND";
+        $conjunction = (in_array(strtoupper($conjunction), ["AND", "OR"])) ? " " . strtoupper($conjunction) . " " : " AND ";
         $wheres = implode(" {$conjunction} ", $wheres);
 
         // compile query
@@ -666,6 +623,12 @@ class Nestbox
         return $this->row_count();
     }
 
+    /**
+     * @param string $table
+     * @param array $where
+     * @param $conjunction
+     * @return int
+     */
     public function delete(string $table, array $where, $conjunction = "AND"): int
     {
         // verify table
@@ -684,7 +647,7 @@ class Nestbox
                 $params[$col] = $val;
             }
         }
-        $conjunction = (in_array($conjunction, ["AND", "OR"])) ? $conjunction : "AND";
+        $conjunction = (in_array(strtoupper($conjunction), ["AND", "OR"])) ? " " . strtoupper($conjunction) . " " : " AND ";
         $wheres = implode(" {$conjunction} ", $wheres);
 
         // compile query
@@ -695,7 +658,13 @@ class Nestbox
         return $this->row_count();
     }
 
-    public function select(string $table, array $where, string $conjunction = "AND"): array
+    /**
+     * @param string $table
+     * @param array $where
+     * @param string $conjunction
+     * @return array
+     */
+    public function select(string $table, array $where = [], string $conjunction = "AND"): array
     {
         if (!$this->valid_schema($table)) {
             throw new InvalidTableException();
@@ -711,6 +680,7 @@ class Nestbox
                 $params[$col] = $val;
             }
         }
+        $conjunction = (in_array(strtoupper($conjunction), ["AND", "OR"])) ? " " . strtoupper($conjunction) . " " : " AND ";
         $wheres = implode($conjunction, $wheres);
 
         $sql = "SELECT * FROM `{$table}` WHERE {$wheres}";
@@ -755,7 +725,7 @@ class Nestbox
     {
         $sql = "SELECT `TRIGGER_NAME`, `EVENT_OBJECT_TABLE`
                 FROM `INFORMATION_SCHEMA`.`TRIGGERS`
-                WHERE `TRIGGER_SCHEMA` = '". NESTBOX_DB_NAME ."';";
+                WHERE `TRIGGER_SCHEMA` = '" . NESTBOX_DB_NAME . "';";
 
         if (!$this->query_execute($sql, ['database_name' => $this->name])) return false;
 
@@ -777,7 +747,7 @@ class Nestbox
      * @param string|null $col
      * @return bool
      */
-    public function valid_schema(string $tbl, string $col = null): bool
+    public function valid_schema(string $table, string $column = null): bool
     {
         if (empty($this->tableSchema)) $this->load_table_schema();
 
@@ -866,7 +836,7 @@ class Nestbox
      */
     public function create_settings_table(): bool
     {
-        $sql = "CREATE TABLE IF NOT EXISTS `" . self::SETTINGS_TABLE ."` (
+        $sql = "CREATE TABLE IF NOT EXISTS `" . self::SETTINGS_TABLE . "` (
                     `package_name` VARCHAR( 64 ) NOT NULL ,
                     `setting_name` VARCHAR( 64 ) NOT NULL ,
                     `setting_type` VARCHAR( 64 ) NOT NULL ,
@@ -898,7 +868,6 @@ class Nestbox
                 WHERE `package_name` == :package_name
                 ORDER BY `setting_name` ASC;";
         }
-
 
 
         return [];

@@ -486,12 +486,23 @@ function generate_subnav(array $links, string $active = '', string $prefix = '')
 
     $subnav = "<div class='hw-nav {$classCols}-auto'>";
     foreach ($links as $link => $text) {
+        $link = (str_starts_with($link, "?")) ? $link : "?{$link}";
         $class = (str_contains(haystack: $link, needle: $active) && !empty($active)) ? "class='active'" : "";
         $subnav .= "<a href='{$prefix}{$link}' {$class}><div class='btn'>{$text}</div></a>";
     }
     $subnav .= "</div>";
 
     return $subnav;
+}
+
+// Process URI
+function process_uri(): array
+{
+    $uri = explode("/", trim($_SERVER['REQUEST_URI'], "/"));
+    foreach ($uri as $k => $v) {
+        $uri[$k] = trim($v, "?");
+    }
+    return $uri;
 }
 
 // Generate Table Nav

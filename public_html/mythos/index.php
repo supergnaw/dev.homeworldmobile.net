@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$nestbox = new \Supergnaw\Nestbox\Nestbox();
-$babbler = new \Supergnaw\Nestbox\Babbler\Babbler();
+$babbler = new \Supergnaw\Nestbox\Babbler\Babbler(NESTBOX_DB_HOST, NESTBOX_DB_USER, NESTBOX_DB_PASS, NESTBOX_DB_NAME);
 
 // Process Request URI
 $uri = explode("/",trim($_SERVER['REQUEST_URI'],"/"));
