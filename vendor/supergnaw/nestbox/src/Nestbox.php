@@ -58,31 +58,37 @@ class Nestbox
     public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
         // set default connection properties
-        if (defined(constant_name: 'NESTBOX_DB_HOST')) $this->host = NESTBOX_DB_HOST;
-        if (defined(constant_name: 'NESTBOX_DB_USER')) $this->user = NESTBOX_DB_USER;
-        if (defined(constant_name: 'NESTBOX_DB_PASS')) $this->pass = NESTBOX_DB_PASS;
-        if (defined(constant_name: 'NESTBOX_DB_NAME')) $this->name = NESTBOX_DB_NAME;
-
-        // overwrite defaults if provided
-        if (is_null($host) && is_null($this->host)) {
+        $this->host = $host;
+        if (defined(constant_name: 'NESTBOX_DB_HOST') && is_null($this->host)) {
+            $this->host = NESTBOX_DB_HOST;
+        }
+        if (is_null($this->host)) {
             throw new EmptyParamsException("Missing database hostname.");
         }
-        $this->host = $host;
 
-        if (is_null($user) && is_null($this->user)) {
+        $this->user = $user;
+        if (defined(constant_name: 'NESTBOX_DB_USER') && is_null($this->user)) {
+            $this->user = NESTBOX_DB_USER;
+        }
+        if (is_null($this->user)) {
             throw new EmptyParamsException("Missing database username.");
         }
-        $this->user = $user;
+        $this->pass = $pass;
+        if (defined(constant_name: 'NESTBOX_DB_PASS') && is_null($this->pass)) {
+            $this->pass = NESTBOX_DB_PASS;
+        }
 
-        if (is_null($pass) && is_null($this->pass)) {
+        if (is_null($this->pass)) {
             throw new EmptyParamsException("Missing database password.");
         }
-        $this->pass = $pass;
 
-        if (is_null($name) && is_null($this->name)) {
+        $this->name = $name;
+        if (defined(constant_name: 'NESTBOX_DB_NAME') && is_null($this->name)) {
+            $this->name = NESTBOX_DB_NAME;
+        }
+        if (is_null($this->name)) {
             throw new EmptyParamsException("Missing database name.");
         }
-        $this->name = $name;
     }
 
     /**

@@ -75,6 +75,7 @@
     grid-row-gap: 12px;
     margin-top: 12px;
     margin-bottom: 12px;
+    position: relative;
 }
 .hw-nav > * {
     margin: 0;
@@ -191,7 +192,6 @@
 .hw-nav .icon-external:before { background-image: url("/img/Assets/Art/Textures/UI/Overhaul/InternalFlagshipMenuSprites/SideViewMenuIcon_External.png"); }
 .hw-nav .icon-orbital:before { background-image: url("/img/Assets/Art/Textures/UI/Overhaul/InternalFlagshipMenuSprites/SideViewMenuIcon_OrbitalGlobalSegment.png"); }
 
-
 /*
  * MARKDOWN EDITOR CONTROLS
  */
@@ -283,4 +283,36 @@
 }
 .hw-nav.md-edit a.disabled [class*="icon-"]:before {
     background-color: #787878;
+}
+
+/*
+ * PAGINATION BUTTONS
+ */
+.hw-nav [class*='paginate-']:before{
+    position: absolute;
+    display: block;
+    content: '';
+    height: var(--body-font-size);
+    width: var(--body-font-size);
+    text-decoration: none;
+    background-size: contain;
+    background-position: left;
+    background-repeat: no-repeat;
+    background-color: #4271ad;
+    mask-size: contain;
+    left: 10px;
+}
+/*.hw-nav [class*='paginate-']:hover:before { background-color: #5a8ac6; }*/
+
+.paginate .paginate-prev:before {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-collection-jump-to-left-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-collection-jump-to-left-svgrepo-com.svg");
+}
+.paginate .paginate-top:before {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-collection-jump-to-top-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-collection-jump-to-top-svgrepo-com.svg");
+}
+.paginate .paginate-next:before {
+    -webkit-mask-image: url("/img/ui/generic/lightning-design-utility-collection-jump-to-right-svgrepo-com.svg");
+    mask-image: url("/img/ui/generic/lightning-design-utility-collection-jump-to-right-svgrepo-com.svg");
 }

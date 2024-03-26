@@ -24,7 +24,6 @@ class Babbler extends Nestbox
         // create class tables
         $this->create_entry_table();
         $this->create_history_table();
-        $this->create_levenshtein_function();
     }
 
     // add entry
@@ -224,8 +223,8 @@ class Babbler extends Nestbox
                     `created` DATETIME NOT NULL ,
                     `edited` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
                     `published` DATETIME NULL ,
-                    `is_draft` NOT NULL DEFAULT 0 ,
-                    `is_hidden` NOT NULL DEFAULT 0 ,
+                    `is_draft` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
+                    `is_hidden` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
                     `created_by` VARCHAR( {$this->author_size} ) NOT NULL ,
                     `edited_by` VARCHAR( {$this->author_size} ) NOT NULL ,
                     `category` VARCHAR( {$this->category_size} ) NOT NULL ,
@@ -250,8 +249,8 @@ class Babbler extends Nestbox
                     `created` DATETIME NOT NULL ,
                     `edited` TIMESTAMP ,
                     `published` DATETIME NULL ,
-                    `is_draft` NOT NULL DEFAULT 0 ,
-                    `is_hidden` NOT NULL DEFAULT 0 ,
+                    `is_draft` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
+                    `is_hidden` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
                     `created_by` VARCHAR( {$this->author_size} ) NOT NULL ,
                     `edited_by` VARCHAR( {$this->author_size} ) NOT NULL ,
                     `category` VARCHAR( {$this->category_size} ) NOT NULL ,
@@ -263,7 +262,7 @@ class Babbler extends Nestbox
         if (!$this->query_execute($sql)) return false;
 
         // create history trigger
-        $sql = "CREATE TRIGGER `babbler_history_trigger` AFTER UPDATE ON `babbler_entries`
+        $sql = "CREATE TRIGGER IF NOT EXISTS `babbler_history_trigger` AFTER UPDATE ON `babbler_entries`
                 FOR EACH ROW
                 IF ( OLD.edited <> NEW.edited ) THEN
                     INSERT INTO `babbler_history` (
@@ -330,101 +329,6 @@ class Babbler extends Nestbox
         return true;
     }
 
-    // create
-    public function create_levenshtein_function(): bool
-    {
-        return true;
-        $sql = "DELIMITER $$
-                CREATE FUNCTION levenshtein( s1 VARCHAR(255), s2 VARCHAR(255) )
-                    RETURNS INT
-                    DETERMINISTIC
-                    BEGIN
-                        DECLARE s1_len, s2_len, i, j, c, c_temp, cost INT;
-                        DECLARE s1_char CHAR;
-                        -- max strlen=255
-                        DECLARE cv0, cv1 VARBINARY(256);
-                
-                        SET s1_len = CHAR_LENGTH(s1), s2_len = CHAR_LENGTH(s2), cv1 = 0x00, j = 1, i = 1, c = 0;
-                
-                        IF s1 = s2 THEN
-                            RETURN 0;
-                        ELSEIF s1_len = 0 THEN
-                            RETURN s2_len;
-                        ELSEIF s2_len = 0 THEN
-                            RETURN s1_len;
-                        ELSE
-                            WHILE j <= s2_len DO
-                                SET cv1 = CONCAT(cv1, UNHEX(HEX(j))), j = j + 1;
-                            END WHILE;
-                            WHILE i <= s1_len DO
-                                SET s1_char = SUBSTRING(s1, i, 1), c = i, cv0 = UNHEX(HEX(i)), j = 1;
-                                WHILE j <= s2_len DO
-                                    SET c = c + 1;
-                                    IF s1_char = SUBSTRING(s2, j, 1) THEN
-                                        SET cost = 0; ELSE SET cost = 1;
-                                    END IF;
-                                    SET c_temp = CONV(HEX(SUBSTRING(cv1, j, 1)), 16, 10) + cost;
-                                    IF c > c_temp THEN SET c = c_temp; END IF;
-                                    SET c_temp = CONV(HEX(SUBSTRING(cv1, j+1, 1)), 16, 10) + 1;
-                                    IF c > c_temp THEN
-                                        SET c = c_temp;
-                                    END IF;
-                                    SET cv0 = CONCAT(cv0, UNHEX(HEX(c))), j = j + 1;
-                                END WHILE;
-                                SET cv1 = cv0, i = i + 1;
-                            END WHILE;
-                        END IF;
-                        RETURN c;
-                    END$$
-                DELIMITER ;";
-
-        $sql = "DROP FUNCTION IF EXISTS `levenshtein`;
-                DELIMITER $$
-                CREATE DEFINER=`" . NESTBOX_DB_USER . "`@`" . NESTBOX_DB_HOST . "` FUNCTION `levenshtein`( s1 VARCHAR(255), s2 VARCHAR(255) ) RETURNS int
-                    DETERMINISTIC
-                BEGIN
-                    DECLARE s1_len, s2_len, i, j, c, c_temp, cost INT;
-                    DECLARE s1_char CHAR;
-                    -- max strlen=255
-                    DECLARE cv0, cv1 VARBINARY(256);
-            
-                    SET s1_len = CHAR_LENGTH(s1), s2_len = CHAR_LENGTH(s2), cv1 = 0x00, j = 1, i = 1, c = 0;
-            
-                    IF s1 = s2 THEN
-                        RETURN 0;
-                    ELSEIF s1_len = 0 THEN
-                        RETURN s2_len;
-                    ELSEIF s2_len = 0 THEN
-                        RETURN s1_len;
-                    ELSE
-                        WHILE j <= s2_len DO
-                            SET cv1 = CONCAT(cv1, UNHEX(HEX(j))), j = j + 1;
-                        END WHILE;
-                        WHILE i <= s1_len DO
-                            SET s1_char = SUBSTRING(s1, i, 1), c = i, cv0 = UNHEX(HEX(i)), j = 1;
-                            WHILE j <= s2_len DO
-                                SET c = c + 1;
-                                IF s1_char = SUBSTRING(s2, j, 1) THEN
-                                    SET cost = 0; ELSE SET cost = 1;
-                                END IF;
-                                SET c_temp = CONV(HEX(SUBSTRING(cv1, j, 1)), 16, 10) + cost;
-                                IF c > c_temp THEN SET c = c_temp; END IF;
-                                SET c_temp = CONV(HEX(SUBSTRING(cv1, j+1, 1)), 16, 10) + 1;
-                                IF c > c_temp THEN
-                                    SET c = c_temp;
-                                END IF;
-                                SET cv0 = CONCAT(cv0, UNHEX(HEX(c))), j = j + 1;
-                            END WHILE;
-                            SET cv1 = cv0, i = i + 1;
-                        END WHILE;
-                    END IF;
-                    RETURN c;
-                END$$
-                DELIMITER ;";
-
-        return $this->query_execute($sql);
-    }
-
     // get table entries
     public function fetch_entry_table(string $orderBy = "", string $sort = "", int $limit = 50, int $start = 0): array
     {
@@ -446,8 +350,14 @@ class Babbler extends Nestbox
     // get available categories
     public function fetch_categories(): array
     {
+        $output = [];
         $sql = "SELECT `category`, COUNT(*) as `count` FROM `babbler_entries` GROUP BY `category`;";
-        return ($this->query_execute($sql)) ? $this->results() : [];
+
+        if (!$this->query_execute($sql)) return $output;
+
+        foreach ($this->results() as $result) $output[$result['category']] = $result['count'];
+
+        return $output;
     }
 
     // get available subcategories
@@ -460,14 +370,21 @@ class Babbler extends Nestbox
     }
 
     // get all entries of a certain category
-    public function fetch_entries_by_category(string $category, string $sub_category = '', string $order_by = 'created', string $sort = ''): array
+    public function fetch_entries_by_category(string $category, string $sub_category = '', string $order_by = 'created', string $sort = '', int $start = 0, int $limit = 10): array
     {
         $where = "`category` = :category" . (!(empty($sub_category)) ? " AND `sub_category` = :sub_category" : '');
-        $where .= " AND `published` IS NOT NULL AND `is_draft` = 0 AND `is_hidden` = 0";
-        $order_by = ($this->valid_schema(tbl: 'babbler_entries', col: $order_by)) ? $order_by : 'created';
+//        $where .= " AND `published` IS NOT NULL AND `is_draft` = 0 AND `is_hidden` = 0"; // hidden for testing purposes
+        $order_by = ($this->valid_schema(table: 'babbler_entries', column: $order_by)) ? $order_by : 'created';
         $sort = (in_array(needle: strtoupper($sort), haystack: ['ASC', 'DESC'])) ? strtoupper($sort) : 'ASC';
 
-        $sql = "SELECT * FROM `babbler_entries` WHERE {$where} ORDER BY {$order_by} {$sort};";
+        $sql = "SELECT * FROM `babbler_entries` WHERE {$where} ORDER BY {$order_by} {$sort}";
+
+        if (0 !== $limit) {
+            $sql .= ($start < 0) ? " LIMIT {$limit};" : " LIMIT {$start}, {$limit};";
+        } else {
+            $sql .= ";";
+        }
+
         $params = ['category' => $category];
         if (!empty($sub_category)) $params['sub_category'] = $sub_category;
         return ($this->query_execute($sql, $params)) ? $this->results() : [];
@@ -480,8 +397,6 @@ class Babbler extends Nestbox
         $sql = "SELECT * FROM `babbler_entries` {$where} AND `title` LIKE :title;";
         $params = ['category' => $category, 'title' => $title];
         if (!empty($sub_category)) $params['sub_category'] = $sub_category;
-        return ($this->query_execute($sql, $params))
-            ? $this->results(true)
-            : [];
+        return ($this->query_execute($sql, $params)) ? $this->results(true) : [];
     }
 }

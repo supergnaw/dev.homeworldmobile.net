@@ -4,36 +4,24 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$babbler = new \Supergnaw\Nestbox\Babbler\Babbler(NESTBOX_DB_HOST, NESTBOX_DB_USER, NESTBOX_DB_PASS, NESTBOX_DB_NAME);
+$babbler = new \Supergnaw\Nestbox\Babbler\Babbler();
 
 // Process Request URI
-//$uri = explode("/", trim($_SERVER['REQUEST_URI'], "/"));
 $uri = process_uri();
 
-var_dump($uri);
-//die($uri);
-
-/**
- * Generate Page Sections
- ***/
-
-///// HTML Header /////
-$header = generate_html_header();
-
-///// Main Navigation Tabs /////
-$navtabs = generate_navtabs();
-
-///// Sub Navigation Links /////
-$links = [
+// Sub Navigation LInks
+$linkList = [
     "news" => 'News',
     "events" => 'Events',
     "timers" => 'Timers',
     "patch-notes" => 'Patch Notes'
 ];
+$linkActive = ($uri[1] ?? "n/a");
+$linkPrefix = "/{$uri[0]}/";
 
-$subnav = generate_subnav(links: $links, active: ($uri[1] ?? "n/a"), prefix: "/{$uri[0]}/");
-
-///// Generate HTML /////
+/**
+ * Generate HTML
+ **/
 $whitelist = ["events", "news", "patch-notes", "timers"];
 if (!in_array($uri[1] ?? false, $whitelist)) {
     $html = "
@@ -56,10 +44,10 @@ echo "
 <!DOCTYPE html>
 <html>
     <head>
-        {$header}
+        " . generate_html_header() . "
     </head>
     <body>
-        {$navtabs}
+        " . generate_navtabs() . "
         <div class='main hw-outer-box'>
             <div class='title'>HOMEWORLD MOBILE</div>
             <div class='subtitle'>Unofficial Guide</div>
@@ -69,12 +57,9 @@ echo "
                     <a style='grid-column: 5 / 6;' href='#' id='form-btn' onclick='submit_form(\"search\")'><div id='form-btn-txt' class='btn'>Search</div></a>
                 </div>
             </form>
-            {$subnav}
+            " . generate_subnav(links: $linkList, active: $linkActive, prefix: $linkPrefix) . "
             <hr>
             {$html}
-            <div class='hw-nav col1'>
-                <a href='#top'><div>Top</div></a>
-            </div>
             <hr>
             <p style='text-align: center'><a href='/console/'><img src='/img/25x25bdgB.GIF'></a></p>
         </div>
