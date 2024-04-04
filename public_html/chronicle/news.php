@@ -14,7 +14,7 @@ $uri = explode("/", trim($_SERVER['REQUEST_URI'], "/"));
  * NEWS POSTS
  */
 $news = $api->get_news(count: 20);
-var_dump($news);
+
 $posts = [];
 foreach ($news as $post) {
     $body = preg_replace('/\\n\\n/mis', "</p>\n<p>", $post['news_body']);

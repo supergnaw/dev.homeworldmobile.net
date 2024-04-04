@@ -3,7 +3,9 @@
 A interface for databases using PHP Data Objects written to easily fill gaps of niche requirements. This project is
 updated as needs arise and is probably a result of NIH syndrome.
 
-## Nestbox Birds
+## Nestbox "Birds"
+
+*(or sub-classes, or packages, however you want to view them)*
 
 Each bird *(class)* in the "nestbox" serves as a way to add specific functionality to Nestbox.
 
@@ -17,7 +19,23 @@ Each bird *(class)* in the "nestbox" serves as a way to add specific functionali
 | [Myna](Myna/readme.md)           | An API endpoint management system for easy REST API building. *(Not yet complete/available)*                                  |
 | [Titmouse](Titmouse/readme.md)   | A user management interface that can register/login/logout users while adhering to standard practicces for password handling. |
 
-### Basic Usage
+### Bird File Structure
+
+For code cleanliness and future development and maintenance, each bird class should have a structure similar to the
+following:
+
+1. Magic Methods
+    1. `__construct()` will always call `parent::__construct()` before doing anything else
+    2. `__invoke` will always call `$this->__construct()` and nothing else
+    3. `__destruct()` will always do bird-specific acitons and must call `parent::__destruct()` at the end
+2. Table Methods
+    1. A main function that calls all table creation function
+    2. An individual function to create each unique table
+3. Bird Methods
+    - The remaining function for which the class will use, organized in a logical flow in order of how they might be
+      used in practice
+
+## Basic Usage
 
 The Nestbox class was designed for simplistic usage for database interaction while incorporating best practices for
 safely interacting with the database.
@@ -25,14 +43,15 @@ safely interacting with the database.
 ```php
 use Supergnaw\Nestbox;
 
-$nest = new Nestbox();
+$nb = new Nestbox();
+$sql = "SELECT * FROM `users`;";
 
 try {
-    if( $nest->query_execute( "SELECT * FROM `users`;" )) {
-        $users = $nest->results();
+    if ($nb->query_execute($sql)) {
+        $users = $nb->results();
     }
-} catch ( NestboxException $exception ) {
-    die( $exception->getMessage());
+} catch (NestboxException $exception ) {
+    die ($exception->getMessage());
 }
 ```
 
@@ -43,7 +62,7 @@ Nestbox database connection defaults can be defined using four constants (`examp
 - `NESTBOX_DB_HOST`: the database host (`localhost`)
 - `NESTBOX_DB_USER`: the database username (`root`)
 - `NESTBOX_DB_PASS`: the database password ([`correct horse battery staple`](https://xkcd.com/936/))
-- `NESTBOX_DB_NAME`: the database name (`my_database`)
+- `NESTBOX_DB_NAME`: the database name (`nestbox_database`)
 
 If these constants are not defined, Nestbox will attempt to use the parameters passed when a new instance is created, or
 an existing instance is envoked. The benefit of being able to pass unique connection parameters to a given instance is
@@ -93,7 +112,8 @@ update(string $table, array $params, array $where, string $conjunction = "AND"):
 
 The return value is `int` type of the number of rows affected.
 
-*Please note that a return value of `0` does not necessarily mean a query failed to execute, rather no values were changed.*
+*Please note that a return value of `0` does not necessarily mean a query failed to execute, rather no values were
+changed.*
 
 ### Delete
 

@@ -22,8 +22,8 @@ $linkPrefix = "/{$uri[0]}/";
 /**
  * Generate HTML
  **/
-$whitelist = ["events", "news", "patch-notes", "timers"];
-if (!in_array($uri[1] ?? false, $whitelist)) {
+$whitelist = array_keys($linkList);
+if (!in_array($linkActive, $whitelist)) {
     $html = "
         <h1 style='text-align: center'>The Chronicle</h1>
         <p style='text-align: center'>Hub for current events.</p>

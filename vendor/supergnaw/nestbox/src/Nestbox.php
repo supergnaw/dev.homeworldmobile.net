@@ -57,6 +57,11 @@ class Nestbox
      */
     public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
+        // start session if unstarted
+        if (PHP_SESSION_ACTIVE !== session_status()) {
+            session_start();
+        }
+
         // set default connection properties
         $this->host = $host;
         if (defined(constant_name: 'NESTBOX_DB_HOST') && is_null($this->host)) {
@@ -757,18 +762,18 @@ class Nestbox
     {
         if (empty($this->tableSchema)) $this->load_table_schema();
 
-        $tbl = trim($tbl ?? "");
+        $table = trim($table ?? "");
         $col = trim($col ?? "");
 
         // check table
-        if (!array_key_exists($tbl, $this->tableSchema)) {
+        if (!array_key_exists($table, $this->tableSchema)) {
             if (empty($this->tableSchema)) $this->load_table_schema();
-            if (!array_key_exists($tbl, $this->tableSchema)) return false;
+            if (!array_key_exists($table, $this->tableSchema)) return false;
         }
         if (empty($col)) return true;
 
         // check column
-        return array_key_exists($col, $this->tableSchema[$tbl]);
+        return array_key_exists($col, $this->tableSchema[$table]);
     }
 
     /**
@@ -779,7 +784,7 @@ class Nestbox
      */
     public function valid_table(string $table): bool
     {
-        return $this->valid_schema(tbl: $table);
+        return $this->valid_schema(table: $table);
     }
 
     /**
@@ -791,7 +796,7 @@ class Nestbox
      */
     public function valid_column(string $table, string $column): bool
     {
-        return $this->valid_schema(tbl: $table, col: $column);
+        return $this->valid_schema(table: $table, column: $column);
     }
 
     /**
@@ -807,7 +812,7 @@ class Nestbox
             $this->load_trigger_schema();
         }
 
-        if (!$this->valid_schema(tbl: $table)) return false;
+        if (!$this->valid_schema(table: $table)) return false;
 
         if (in_array(needle: $trigger, haystack: $this->triggerSchema[$table] ?? [])) return true;
 
@@ -866,31 +871,82 @@ class Nestbox
 
     public function load_settings(string $package = null): array
     {
-        if (empty($package)) {
-            $sql = "SELECT * FROM " . self::SETTINGS_TABLE . "
-                ORDER BY `package_name` ASC, `setting_name` ASC;";
-        } else {
-            $sql = "SELECT * FROM " . self::SETTINGS_TABLE . "
-                WHERE `package_name` == :package_name
-                ORDER BY `setting_name` ASC;";
+        $where = ($package) ? ['package_name' => $package] : [];
+        try {
+            $settings = $this->select(table: self::SETTINGS_TABLE, where: $where);
+        } catch (InvalidTableException) {
+            $tableCreated = $this->create_settings_table();
+            $settings = $this->select(table: self::SETTINGS_TABLE, where: $where);
         }
 
-
-        return [];
+        return $this->parse_settings($settings);
     }
 
-    public function parse_settings(array $settings): array
+    private function parse_settings(array $settings): array
     {
         $output = [];
         foreach ($settings as $setting) {
-            $output[$setting['setting_name']] = $this->parse_setting(type: $setting['setting_type'], value: $setting['setting_value']);
+            $output[$setting['setting_name']] = $this->setting_type_conversion(type: $setting['setting_type'], value: $setting['setting_value']);
         }
         return $output;
     }
 
-    public function parse_setting(string $type, string $value): array
+    PRIVATE FUNCTION parse_setting_type(int | float | bool | string $setting): string
     {
-        return [];
+        if (is_int($setting)) return "string";
+        if (is_float($setting)) return "float";
+        if (is_bool($setting)) return "boolean";
+        return "string";
+    }
+
+    private function setting_type_conversion(string $type, string $value): int | float | bool | string
+    {
+        if (str_starts_with(strtolower($type), "int")) {
+            return intval($value);
+        }
+
+        if (in_array(strtolower($type), ["double", "float"])) {
+            return floatval($value);
+        }
+
+        if (str_starts_with(strtolower($type), "bool")) {
+            return boolval($value);
+        }
+
+        return $value;
+    }
+
+    public function save_settings(string $package, array $settings): bool
+    {
+        if (empty($package)) return true;
+
+        $sql = "INSERT INTO `" . self::SETTINGS_TABLE . "` (
+                    `package_name`, `setting_name`, `setting_type`, `setting_value`
+                ) VALUES (
+                    :package_name, :setting_name, :setting_type, :setting_value
+                ) ON DUPLICATE KEY UPDATE
+                    `package_name` = :package_name,
+                    `setting_type` = :setting_type,
+                    `setting_value` = :setting_value;";
+        foreach ($settings as $setting) {
+            if (!property_exists($this, strval($setting))) {
+                continue;
+            }
+
+            $params = [
+                "package_name" => $package,
+                "setting_name" => $setting,
+                "setting_type" => $this->parse_setting_type($this->$setting),
+                "setting_value" => strval($this->$setting),
+            ];
+
+            if (!$this->query_execute($sql, $params)) {
+                // this should never happen ever
+                die("failed to update setting '{$name}' => {$value}");
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -900,20 +956,20 @@ class Nestbox
      * Generate HTML code for a two-dimensional array
      *
      * @param string $table
-     * @param string $tblClass
-     * @param array $colClass
+     * @param string $tableClass
+     * @param array $columnClass
      * @return string
      */
-    public static function html_table(string $table, string $tblClass = "", array $colClass = []): string
+    public static function html_table(string $table, string $tableClass = "", array $columnClass = []): string
     {
         // table start
         $code = "";
-        $code .= "<table class='{$tblClass}'>";
+        $code .= "<table class='{$tableClass}'>";
 
         // add headers
         $hdrs = "";
         foreach ($table[0] as $col => $data) {
-            $class = (array_key_exists($col, $colClass)) ? "class='{$colClass[$col]}'" : "";
+            $class = (array_key_exists($col, $columnClass)) ? "class='{$columnClass[$col]}'" : "";
             $hdrs .= "<th {$class}>{$col}</th>";
         }
         $code .= "<tr>{$hdrs}</tr>";
@@ -922,7 +978,7 @@ class Nestbox
         foreach ($table as $tblRow) {
             $row = "";
             foreach ($tblRow as $col => $val) {
-                $class = (array_key_exists($col, $colClass)) ? "class='{$colClass[$col]}'" : "";
+                $class = (array_key_exists($col, $columnClass)) ? "class='{$columnClass[$col]}'" : "";
                 $row .= "<td {$class}>{$val}</td>";
             }
             $code .= "<tr>{$row}</tr>";

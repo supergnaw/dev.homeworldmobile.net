@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$babbler = new \Supergnaw\Nestbox\Babbler\Babbler(NESTBOX_DB_HOST, NESTBOX_DB_USER, NESTBOX_DB_PASS, NESTBOX_DB_NAME);
+$babbler = new \Supergnaw\Nestbox\Babbler\Babbler();
 
 // Process Request URI
-$uri = explode("/",trim($_SERVER['REQUEST_URI'],"/"));
+$uri = process_uri();
 
 /**
  * Generate Page Sections
@@ -30,7 +30,9 @@ foreach ($sub_links as $page) {
 $dynamic_links = [];
 $links = array_merge($links, $dynamic_links);
 asort(array: $links);
-$subnav = generate_subnav(links: ($links ?? []), active: ($uri[1] ?? "n/a"), prefix: "/{$uri[0]}/");
+$linkList = ($links ?? []);
+$linkActive = ($uri[1] ?? "n/a");
+$linkPrefix = "/{$uri[0]}/";
 
 ///// Generate HTML /////
 if (empty($uri[1] ?? null)) {
@@ -56,10 +58,10 @@ echo "
 <!DOCTYPE html>
 <html>
     <head>
-        {$header}
+        " . generate_html_header() . "
     </head>
     <body>
-        {$navtabs}
+        " . generate_navtabs() . "
         <div class='main hw-outer-box'>
             <div class='title'>HOMEWORLD MOBILE</div>
             <div class='subtitle'>Unofficial Guide</div>
@@ -69,7 +71,7 @@ echo "
                     <a style='grid-column: 5 / 6;' href='#' id='form-btn' onclick='submit_form(\"search\")'><div id='form-btn-txt' class='btn'>Search</div></a>
                 </div>
             </form>
-            {$subnav}
+            " . generate_subnav(links: $linkList, active: $linkActive, prefix: $linkPrefix) . "
             <hr>
             {$html}
             <div class='hw-nav col1'>

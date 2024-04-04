@@ -10,163 +10,128 @@ use Supergnaw\Nestbox\Nestbox;
 
 class Titmouse extends Nestbox
 {
+    // static default values
     private const DEFAULT_USERS_TABLE = 'users';
-    private const DEFAULT_USER_COLUMN = 'email';
+    private const DEFAULT_USER_COLUMN = 'username';
+    private const DEFAULT_NAME_LENGTH = 64;
+    private const DEFAULT_MAIL_COLUMN = 'email';
     private const DEFAULT_HASH_COLUMN = 'hashword';
     private const DEFAULT_SESSION_KEY = 'user_data';
-    private string $usersTable;
-    private string $userColumn;
-    private string $hashColumn;
-    private string $sessionKey;
-    private string $permissionsTable;
 
-    public function __construct(
-        string $usersTable = "users",
-        string $userColumn = "email",
-        string $hashColumn = "hashword",
-        string $sessionKey = "user_data",
-        string $permsTable = "user_permissions"
-    )
+    // setting variables
+    public string $usersTable;
+    public string $userColumn;
+    public int $nameLength;
+    public string $mailColumn;
+    public string $hashColumn;
+    public string $sessionKey;
+
+    public function __construct()
     {
-        // start session if unstarted
-        if (PHP_SESSION_ACTIVE !== session_status()) {
-            session_start();
+        // call parent constructor
+        parent::__construct();
+
+        // set default variables
+        $defaultSettings = [
+            "usersTable" => self::DEFAULT_USERS_TABLE,
+            "userColumn" => self::DEFAULT_USER_COLUMN,
+            "nameLength" => self::DEFAULT_NAME_LENGTH,
+            "mailColumn" => self::DEFAULT_MAIL_COLUMN,
+            "hashColumn" => self::DEFAULT_HASH_COLUMN,
+            "sessionKey" => self::DEFAULT_SESSION_KEY
+        ];
+
+        // load package settings
+        $settings = $this->load_settings("titmouse");
+        foreach ($defaultSettings as $name => $val) {
+            if (array_key_exists($name, array: $defaultSettings)) {
+                $this->$name = $val;
+            }
         }
 
-        // prepare class variables
-        parent::__construct();
-        $this->set_session_key($sessionKey);
-
         // create class tables
-        $this->create_user_table(usersTable: $usersTable, userColumn: $userColumn, hashColumn: $hashColumn);
-        $this->create_permission_table(permissionsTable: $permsTable);
+        $this->create_titmouse_tables();
     }
 
     public function __invoke(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
-        parent::__construct($host, $user, $pass, $name);
+        $this->__construct($host, $user, $pass, $name);
     }
 
-    public function set_users_table(string $table): bool
+    public function __destruct()
     {
-        if (!$this->valid_schema($table)) {
-            throw new InvalidTableException("Failed to find table: {$table}");
-        } else {
-            $this->usersTable = $table;
-            return true;
-        }
+        // save settings
+        $settings = ["usersTable", "userColumn", "nameLength", "mailColumn", "hashColumn", "sessionKey", "permsTable"];
+        $this->save_settings("titmouse", $settings);
+
+        // do the thing
+        parent::__destruct();
     }
 
-    public function set_permissions_table(string $table): bool
+    // create titmouse tables
+    public function create_titmouse_tables(): void
     {
-        if (!$this->valid_schema($table)) {
-            throw new InvalidTableException("Failed to find permissions table: {$table}");
-        } else {
-            $this->permissionsTable = $table;
-            return true;
-        }
+        $this->create_user_table();
     }
 
-    public function users_table(): string
+    // create user table
+    public function create_user_table(): bool
     {
-        return $this->usersTable;
-    }
-
-    public function user_column(): string
-    {
-        return $this->userColumn;
-    }
-
-    public function hash_column(): string
-    {
-        return $this->hashColumn;
-    }
-
-    public function session_key(): string
-    {
-        return $this->sessionKey;
-    }
-
-    public function set_user_column(string $column): bool
-    {
-        if (!$this->valid_schema($this->usersTable, $column)) {
-            throw new InvalidColumnException("Invalid column defiened for table: {$this->usersTable}.{$column}");
-        } else {
-            $this->userColumn = $column;
-            return true;
-        }
-    }
-
-    public function set_hash_column(string $column): bool
-    {
-        if (!$this->valid_schema($this->usersTable, $column)) {
-            throw new InvalidColumnException("Invalid column defiened for table: {$this->usersTable}.{$column}");
-        } else {
-            $this->hashColumn = $column;
-            return true;
-        }
-    }
-
-    public function set_session_key(string $sessionKey): bool
-    {
-        if ($this->sessionKey = $sessionKey) {
-            return true;
-        }
-        return false;
-    }
-
-    // create entry table
-    public function create_user_table(string $usersTable, string $userColumn, string $hashColumn): bool
-    {
-        // check if entry table exists
-        if (!$this->valid_schema($usersTable)) {
-            $sql = "CREATE TABLE IF NOT EXISTS `{$usersTable}` (
-                        `username` VARCHAR ( 64 ) NOT NULL ,
-                        `email` VARCHAR( 64 ) NOT NULL ,
-                        `hashword` VARCHAR( 128 ) NOT NULL ,
-                        `last_login` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-                        `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
-                        `permissions` INT( 11 ) NOT NULL DEFAULT 0
-                        PRIMARY KEY ( `username` ) ,
-                        UNIQUE KEY `email` ( `email` )
-                    ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+        // check if user table exists
+        if (!$this->valid_schema($this->usersTable)) {
+            $sql = "CREATE TABLE IF NOT EXISTS `{$this->usersTable}` (
+                    `{$this->userColumn}` VARCHAR ( 64 ) NOT NULL ,
+                    `{$this->hashColumn}` VARCHAR( 128 ) NOT NULL ,
+                    `last_login` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+                    `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+                    PRIMARY KEY ( `{$this->userColumn}` ) ,
+                    UNIQUE KEY `{$this->mailColumn}` ( `{$this->mailColumn}` )
+                ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
             if (!$this->query_execute($sql)) return false;
         }
 
         // add columns if missing from an existing table
-        if (!$this->valid_schema($usersTable, "username")) {
-            $sql = "ALTER TABLE `{$usersTable}` ADD COLUMN `username` VARCHAR ( 64 ) NOT NULL";
-            if (!$this->query_execute($sql)) return false;
-        }
-        if (!$this->valid_schema($usersTable, "email")) {
-            $sql = "ALTER TABLE `{$usersTable}` ADD COLUMN `email` VARCHAR ( 64 ) NOT NULL";
-            if (!$this->query_execute($sql)) return false;
-        }
-        if (!$this->valid_schema($usersTable, "hashword")) {
-            $sql = "ALTER TABLE `{$usersTable}` ADD COLUMN `hashword` VARCHAR ( 128 ) NOT NULL";
-            if (!$this->query_execute($sql)) return false;
-        }
-        if (!$this->valid_schema($usersTable, "last_login")) {
-            $sql = "ALTER TABLE `{$usersTable}` ADD COLUMN `last_login` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP";
-            if (!$this->query_execute($sql)) return false;
-        }
-        if (!$this->valid_schema($usersTable, "created")) {
-            $sql = "ALTER TABLE `{$usersTable}` ADD COLUMN `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
-            if (!$this->query_execute($sql)) return false;
-        }
-        if (!$this->valid_schema($usersTable, "permissions")) {
-            $sql = "ALTER TABLE `{$usersTable}` ADD COLUMN `permissions` INT ( 11 ) NOT NULL DEFAULT 0";
-            if (!$this->query_execute($sql)) return false;
+        // TODO: add schema check for column type and size and adjust as necessary
+        if (!$this->valid_schema($this->usersTable, $this->userColumn)) {
+            $sql = "ALTER TABLE `{$this->usersTable}` ADD COLUMN `{$this->userColumn}` VARCHAR ( 64 ) NOT NULL";
+            if (!$this->query_execute($sql)) {
+                throw new TitmouseException("failed to add column '{$this->userColumn}'");
+            };
         }
 
-        if (!$this->set_users_table($usersTable)) return false;
-        if (!$this->set_user_column($userColumn)) return false;
-        if (!$this->set_hash_column($hashColumn)) return false;
+        if (!$this->valid_schema($this->usersTable, $this->mailColumn)) {
+            $sql = "ALTER TABLE `{$this->usersTable}` ADD COLUMN `{$this->mailColumn}` VARCHAR ( 320 ) NOT NULL";
+            if (!$this->query_execute($sql)) {
+                throw new TitmouseException("failed to add column '{$this->mailColumn}'");
+            };
+        }
+
+        if (!$this->valid_schema($this->usersTable, $this->hashColumn)) {
+            $sql = "ALTER TABLE `{$this->usersTable}` ADD COLUMN `{$this->hashColumn}` VARCHAR ( 128 ) NOT NULL";
+            if (!$this->query_execute($sql)) {
+                throw new TitmouseException("failed to add column '{$this->hashColumn}'");
+            };
+        }
+
+        if (!$this->valid_schema($this->usersTable, "last_login")) {
+            $sql = "ALTER TABLE `{$this->usersTable}` ADD COLUMN `last_login` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP";
+            if (!$this->query_execute($sql)) {
+                throw new TitmouseException("failed to add column 'last_login'");
+            };
+        }
+
+        if (!$this->valid_schema($this->usersTable, "created")) {
+            $sql = "ALTER TABLE `{$this->usersTable}` ADD COLUMN `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
+            if (!$this->query_execute($sql)) {
+                throw new TitmouseException("failed to add column 'created'");
+            };
+        }
 
         return true;
     }
 
-    public function create_permission_table($permissionsTable): bool
+    // TODO: migrate to bullfinch
+    public function depricated_create_permission_table($permissionsTable): bool
     {
         $triggerName = "calculate_permission_value";
 
@@ -212,20 +177,28 @@ class Titmouse extends Nestbox
 
     public function register_user(array $userData, string $password): bool
     {
-        // validate user compendium columns
+        // validate user data columns
         $params = [];
         foreach ($userData as $col => $val) {
-            if (!$this->valid_schema($this->usersTable, $col)) {
-                throw new InvalidColumnException("Invalid column: {$col}");
-            } else {
-                $params[$col] = $val;
-            }
+            if (!$this->valid_schema($this->usersTable, $col)) continue;
+            $params[$col] = $val;
+        }
+
+        // make sure input vars are not too long
+        if ($this->nameLength < strlen($params[$this->userColumn])) {
+            throw new TitmouseException("Username too long.");
+        }
+
+        if (320 < strlen($params[$this->mailColumn])) {
+            // thank you RFC 5321 & RFC 5322
+            throw new TitmouseException("Email too long.");
+        }
+
+        if (0 < (trim($password))) {
+            throw new TitmouseException("Empty password provided.");
         }
 
         // securely hash the password
-        if (empty($password)) {
-            throw new NestboxException("Empty password provided.");
-        }
         $params[$this->hashColumn] = password_hash($password, PASSWORD_DEFAULT);
 
         // insert new user
@@ -238,69 +211,63 @@ class Titmouse extends Nestbox
 
     public function select_user(string $user): array
     {
-        return $this->select($this->users_table(), [$this->user_column() => $user]);
+        $results = $this->select($this->usersTable, [$this->userColumn => $user]);
+
+        // invalid user
+        if (!$results) {
+            return [];
+        }
+
+        // multiple users (this should never happen, but might on an existing table without a primary key)
+        if (1 !== count($results)) {
+            throw new TitmouseException("More than one user has the same identifier.");
+        }
+
+        return $results[0];
     }
 
-    public function login_user(string $user, string $password): bool
+    public function login_user(string $user, string $password, bool $loadToSession = true): array
     {
         // select user
         $user = $this->select_user($user);
 
-        // invalid user
-        if (!$user) {
-            return false;
-        }
-
-        // multiple users (this should never happen, but might on an existing table without a primary key)
-        if (1 !== count($user)) {
-            throw new NestboxException("More than one user has the same identifier.");
-        }
-
         // login failed
-        if (!password_verify($password, $user[0][$this->hashColumn])) {
-            throw new NestboxException("Invalid username or password.");
+        if (!password_verify($password, $user[$this->hashColumn])) {
+            throw new TitmouseException("Invalid username or password.");
         }
 
         // rehash password if newer algorithm is available
-        if (password_needs_rehash($user[0][$this->hashColumn], PASSWORD_DEFAULT)) {
-            $hashword = password_hash($password, PASSWORD_DEFAULT);
-            $userData = [
-                'user' => $user,
-                'hashword' => $hashword
-            ];
-            if ($this->edit_user($userData[$this->userColumn], $userData)) {
-                // reload the user, although it shouldn't change anything
-                $user = $this->select($this->usersTable, [$this->userColumn => $user]);
-            }
+        if (password_needs_rehash($user[$this->hashColumn], PASSWORD_DEFAULT)) {
+            $this->change_password($user[$this->userColumn], $password);
         }
 
-        $this->load_user_session($user[0]);
-
-        return true;
-    }
-
-    // todo: check usage and change name to update_user and adjust return value to int instead of bool
-    public function edit_user($user, $userData): bool
-    {
-        if (false !== $this->update(table: $this->usersTable, params: $userData, where: [$this->userColumn => $user])) {
-            return true;
-        } else {
-            return false;
+        if (true === $loadToSession) {
+            $this->load_user_session($user);
         }
+
+        return $user;
     }
 
-    public function load_user_session(array $user): void
+    public function update_user(string $user, array $userData): int
     {
-        foreach ($user as $col => $val) {
+        return $this->update(table: $this->usersTable, params: $userData, where: [$this->userColumn => $user]);
+    }
+
+    public function load_user_session(array $userData): void
+    {
+        foreach ($userData as $col => $val) {
             $_SESSION[$this->sessionKey][$col] = $val;
         }
     }
 
     public function logout_user(): void
     {
+        // clear out those session variables
         foreach ($_SESSION[$this->sessionKey] as $key => $val) {
             unset($_SESSION[$this->sessionKey][$key]);
         }
+
+        // superfluous is the name of the game
         unset($_SESSION[$this->sessionKey]);
     }
 
@@ -309,15 +276,19 @@ class Titmouse extends Nestbox
         return false;
     }
 
-    public function reset_password(): bool
+    public function change_password(string $user, string $newPassword): bool
     {
-        return false;
-    }
-}
+        $newHashword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-class user
-{
-    public function __construct(string $user_id) {
+        $userData = [
+            $this->userColumn => $user,
+            $this->hashColumn => $newHashword
+        ];
 
+        if (1 != $this->update_user($userData[$this->userColumn], $userData)) {
+            throw new TitmouseException("Failed to update password hash.");
+        }
+
+        return true;
     }
 }

@@ -4,34 +4,28 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$titmouse = new \Supergnaw\Nestbox\Titmouse\Titmouse('users', 'username');
+$titmouse = new \Supergnaw\Nestbox\Titmouse\Titmouse();
+$babbler = new \Supergnaw\Nestbox\Babbler\Babbler();
 
 // Process Request URI
-$uri = explode("/", trim($_SERVER['REQUEST_URI'], "/"));
+$uri = process_uri();
+
+$linkList = [
+    "content" => 'Content',
+    "tables" => 'Data Tables',
+    "users" => 'Users',
+    "symbology" => 'Symbology',
+    "images" => 'Images',
+    "logout" => 'Logout',
+];
+$linkActive = ($uri[1] ?? "n/a");
+$linkPrefix = "/{$uri[0]}/";
 
 /**
  * Generate Page Sections
  ***/
-
-///// HTML Header /////
-$header = generate_html_header();
-
-///// Main Navigation Tabs /////
-$navtabs = generate_navtabs();
-
-///// Sub Navitagion Links /////
-$links = [
-    "/console/content/" => 'Content',
-    "/console/tables/" => 'Data Tables',
-    "/console/users/" => 'Users',
-    "/console/symbology/" => 'Symbology',
-    "/console/images/" => 'Images',
-    "/console/logout/" => 'Logout',
-];
-$subnav = generate_subnav($links, "/console/" . ($uri[1] ?? 'overview') . '/');
-
-///// Generate HTML /////
-if (empty($_SESSION[$titmouse->session_key()])) {
+$whitelist = array_keys($linkList);
+if (!in_array($linkActive, $whitelist) || empty($_SESSION[$titmouse->session_key()])) {
     $post_response = '';
     $content = include("login.php");
 } else {
@@ -51,14 +45,14 @@ echo "
 <!DOCTYPE html>
 <html>
     <head>
-        {$header}
+        " . generate_html_header() . "
     </head>
     <body>
-        {$navtabs}
+        " . generate_navtabs() . "
         <div class='main hw-outer-box'>
             <div class='title'>HOMEWORLD MOBILE</div>
             <div class='subtitle'>Unofficial Guide</div>
-            {$subnav}
+            " . generate_subnav(links: $linkList, active: $linkActive, prefix: $linkPrefix) . "
             <hr>
             {$system_messages}
             {$post_response}
