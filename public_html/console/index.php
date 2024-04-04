@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
 $titmouse = new \Supergnaw\Nestbox\Titmouse\Titmouse();
+
 $babbler = new \Supergnaw\Nestbox\Babbler\Babbler();
 
 // Process Request URI
@@ -12,6 +13,7 @@ $uri = process_uri();
 
 $linkList = [
     "content" => 'Content',
+    "context" => 'Contextual Links',
     "tables" => 'Data Tables',
     "users" => 'Users',
     "symbology" => 'Symbology',
@@ -25,7 +27,7 @@ $linkPrefix = "/{$uri[0]}/";
  * Generate Page Sections
  ***/
 $whitelist = array_keys($linkList);
-if (!in_array($linkActive, $whitelist) || empty($_SESSION[$titmouse->session_key()])) {
+if (!in_array($linkActive, $whitelist) || empty($_SESSION[$titmouse->sessionKey])) {
     $post_response = '';
     $content = include("login.php");
 } else {

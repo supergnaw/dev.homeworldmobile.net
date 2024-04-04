@@ -14,7 +14,7 @@ $html = "";
 
 if ("edit" == ($uri[3] ?? "")) {
     // initiate form default values
-    $save_disabled = "disabled";
+
     if (empty($_POST)) {
         // if not a preview
         $entry = ($uri[4] ?? false)
@@ -66,9 +66,6 @@ if ("edit" == ($uri[3] ?? "")) {
             "patch_version" => intval($post['patch_version']),
             "page_id" => intval($post['page_id']),
         ];
-        if ("page_preview" == $post['action']) {
-            $save_disabled = "";
-        }
     }
 
     $is_draft = ("is_draft" == ($post['is_draft'] ?? false)) ? "checked" : '';
@@ -81,40 +78,30 @@ if ("edit" == ($uri[3] ?? "")) {
         "Gameplay" => ["Missions", "Officers", "Research", "Upgrades", "Mining", "Fabrication", "Strikes"],
         "Lore" => ["Hiigaran", "Iyatequa", "Tanoch", "Yaot", "Amassari", "Cangacian", "Kiithless", "Progenitor", "Ghost Stories"],
     ];
-    $sub_categories = [];
 
     $categories_json = json_encode($categories);
 
-    $category_select = "<select style='grid-column: 0/4;' id='page_category' name='page_category'>\n";
-    foreach ($categories as $category => $this_sub_categories) {
-        $category_select .= ($category == $entry['category'])
-            ? "            <option value='{$category}' selected>{$category}</option>\n"
-            : "            <option value='{$category}'>{$category}</option>\n";
-        if ($category == $entry['category']) {
-            $sub_categories = $this_sub_categories;
-        }
-    }
-    $category_select .= "        </select>";
+    $categorySelect = generate_select_field(
+        options: array_keys($categories),
+        selected: $entry['category'],
+        style: 'grid-column: 0/4;',
+        name: 'page_category');
 
-    $sub_category_select = (0 < count($sub_categories))
-        ? "<select id='page_sub_category' name='page_sub_category'>\n"
-        : "<select id='page_sub_category' name='page_sub_category' disabled>\n";
-    foreach ($sub_categories as $sub_category) {
-        $sub_category_select .= ($sub_category == $entry['sub_category'])
-            ? "            <option value='{$sub_category}' selected>{$sub_category}</option>\n"
-            : "            <option value='{$sub_category}'>{$sub_category}</option>\n";
-    }
-    $sub_category_select .= "        </select>";
+    $subCategorySelect = generate_select_field(
+        options: ($categories[$entry['category']] ?? []),
+        selected: $entry['sub_category'],
+        name: 'page_sub_category');
 
+    // content form input inputs
     $html = "
-        <form id='page-edit' method='post' action='/console/content/'>
+        <form id='page-edit' method='post' action='/console/?content/'>
             <div class='grid'>
                 <label for='page_category'>Category</label>
-                {$category_select}
+                {$categorySelect}
             </div>
             <div class='grid' id='sub-category-container'>
                 <label for='page_sub_category' id='page_sub_category_label'>Sub-Category</label>
-                {$sub_category_select}
+                {$subCategorySelect}
             </div>
             <div class='grid' id='version-container'>
                 <fieldset>
@@ -144,11 +131,9 @@ if ("edit" == ($uri[3] ?? "")) {
             <div class='grid'>
                 <label for='page_title'>Title</label>
                 <input type='text' id='page_title' name='page_title' value='{$entry['title']}'>
-            </div>";
-    $html .= "
-            <div class='grid'>
-                <label for='page_content'>Content</label>
-                <p>This text supports <a href='https://www.markdownguide.org/basic-syntax/' target='_blank'>Markdown</a> syntax.</p>
+            </div>
+            <div class='grid' id='md-edit-controls'>
+                <p>This text supports basic <a href='https://www.markdownguide.org/basic-syntax/' target='_blank'>Markdown</a> syntax.</p>
                 <div class='hw-nav md-edit'>
                     <a id='md-bold' value='bold' data-action='bold' data-target='page_content' onclick='md_button_action(this)'>
                         <div class='btn'><span class='icon-bold'></span>&nbsp;</div>
@@ -186,40 +171,53 @@ if ("edit" == ($uri[3] ?? "")) {
                         <div class='btn'><span class='icon-image'></span>&nbsp;</div>
                     </a>
                 </div>
-                <textarea id='page_content' name='page_content'>{$entry['content']}</textarea>
+            </div>
+            <div class='grid col2'>
+                <div class='grid'>
+                    <label for='page_content'>Content</label>
+                    <textarea id='page_content' name='page_content'>{$entry['content']}</textarea>
+                </div>
+                <div class='grid'>
+                    <label>Preview</label>
+                    <div id='page-preview'></div>
+                </div>
             </div>
             <input type='hidden' name='action' id='form_action' value='page_edit'>
             <input type='hidden' name='page_id' value={$entry['page_id']}>
             <div class='grid col5'>
                 <div></div>
-                <input type='button' value='Preview' onclick='preview()'>
-                <input type='button' value='Cancel' onclick='cancel(\"/console/content/\")'>
-                <input type='button' value='Save' id='save_button' {$save_disabled} onclick='save()'>
+                <input type='button' value='Cancel' onclick='cancel(\"/console/?content/\", \"Are you sure you want to cancel?\")'>
+                <input type='button' value='Save' id='save_button' onclick='save()'>
+                <input type='button' value='Undo Changes' id='undo_button' onclick='cancel(\"/console/?content/edit/{$entry['page_id']}\", \"Confirm page reload and undo all unsaved changes?\")'>
             </div>
         </form>";
+
     $html .= "
         <script>
             // Cateogires json
             var categories = {$categories_json};
-            
+        </script>";
+    $html .= "
+        <script src='https://cdn.jsdelivr.net/npm/marked/marked.min.js'></script>
+        <script src='/js/md_editor.js'></script>
+        <script>
             document.onreadystatechange = function(event) {
-                md_initialize('page_content');
                 if (document.readyState === 'complete') {
-                    
+                    // dynamically update page categories
                     document.getElementById('page_category')
                     .addEventListener('change', function(){ toggle_sub_categories(); });
                     
-                    document.getElementById('page_content')
-                    .addEventListener('change', function(){ force_preview(); });
-                    
+                    // change date selection elements
                     document.getElementById('publish_date_manual')
                     .addEventListener('change', function (){ toggle_publish_date(); });
                     document.getElementById('publish_date_auto')
                     .addEventListener('change', function (){ toggle_publish_date(); });
                     
+                    // update draft selections
                     document.getElementById('is_draft')
                     .addEventListener('change', function (){ toggle_draft(); });
                     
+                    // determine versioning fields
                     document.getElementById('major_version')
                     .addEventListener('change', function (){ update_patch_notes_title(); });
                     document.getElementById('minor_version')
@@ -229,8 +227,10 @@ if ("edit" == ($uri[3] ?? "")) {
                     document.getElementById('page_title')
                     .addEventListener('change', function (){ update_patch_notes_title(); });
                     
+                    // page load initialize
                     toggle_sub_categories();
-                    console.log('loaded');
+                    md_initialize('page_content');
+                    update_preview_on_change('page_content');
                 }
             };
             
@@ -308,197 +308,40 @@ if ("edit" == ($uri[3] ?? "")) {
                 }
             }
             
-            function preview() {
-                document.getElementById('page-edit').action = '/console/content/edit/{$entry['page_id']}';
-                document.getElementById('form_action').value = 'page_preview';
-                submit_form(\"page-edit\");
-            }
-            
-            function force_preview() {
-                let save_button = document.getElementById('save_button');
-                save_button.setAttribute('disabled', 'disabled');
-                save_button.onclick = null;
-            }
-            
-            function cancel(url) {
-                window.location = url;
+            function cancel(url, confirm_prompt='') {
+                if (!confirm_prompt) {
+                    window.location = url;
+                }
+                
+                if (confirm(confirm_prompt)) {
+                    window.location = url;
+                }
             }
             
             function save() {
-                submit_form(\"page-edit\");
+                if (confirm(\"Have you verified the preview and want to save the changes?\")) {
+                    submit_form(\"page-edit\");
+                }
             }
-        </script>";
-    $html .= "
-        <script>
-            /*
-                Markdown Editor
-             */
-            
-            function md_initialize(element_id) {
+
+            function update_preview_on_change(element_id) {
                 let md_editor = document.getElementById(element_id);
                 ['input', 'keydown', 'keyup', 'click'].forEach( event =>
                     md_editor.addEventListener(event, function () {
-                        md_update_gui_buttons();
+                        md_update_gui_buttons(md_editor);
+                        update_preview();
                     })
                 );
             }
             
-            /*
-            capture keyboard shortcuts:
-            https://stackoverflow.com/questions/3680919/overriding-browsers-keyboard-shortcuts
-            
-            paste clipboard with rich text to markdown
-            https://github.com/euangoddard/clipboard2markdown
-            
-            other notes:
-            - url-encode links when being addded
-            */
-            
-            function md_update_gui_buttons() {
-                const text_area = document.getElementById('page_content');
-                const cursor_start = text_area.selectionStart;
-                const cursor_end = text_area.selectionEnd;
-                if (cursor_start != cursor_end) { return; }
-                const content_before = text_area.value.substring(0, text_area.selectionStart);
-                const content_after = text_area.value.substring(text_area.selectionEnd);
-                const line_before = content_before.substring(content_before.lastIndexOf('\\n'));
-                const line_after = content_after.substring(0, content_after.indexOf('\\n'));
-                const this_line = (line_before + line_after).trim();
-                
-                // font styles
-                if ((content_before.match(/\*{2}/g) || []).length % 2 && (content_after.match(/\*{2}/g) || []).length % 2) {
-                    document.getElementById('md-bold').classList.add('active');
-                } else {
-                    document.getElementById('md-bold').classList.remove('active');
-                }
-                
-                if ((content_before.match(/\*/g) || []).length % 2 && (content_after.match(/\*/g) || []).length % 2) {
-                    document.getElementById('md-italic').classList.add('active');
-                } else {
-                    document.getElementById('md-italic').classList.remove('active');
-                }
-                
-                if ((content_before.match(/~~/g) || []).length % 2 && (content_after.match(/~~/g) || []).length % 2) {
-                    document.getElementById('md-strikethrough').classList.add('active');
-                } else {
-                    document.getElementById('md-strikethrough').classList.remove('active');
-                }
-                
-                // block elements
-                if (/\d+\.\s+.*$/.test(this_line.trim())) {
-                    document.getElementById('md-numberlist').classList.add('active');
-                    md_dent_enable();
-                } else {
-                    document.getElementById('md-numberlist').classList.remove('active');
-                    md_dent_disable();
-                }
-                
-                if (/\-\s+.*$/.test(this_line.trim())) {
-                    document.getElementById('md-bulletlist').classList.add('active');
-                    md_dent_enable();
-                } else {
-                    document.getElementById('md-bulletlist').classList.remove('active');
-                    md_dent_disable();
-                }
-                
-                if (/>\s+.*$/.test(this_line.trim())) {
-                    document.getElementById('md-quote').classList.add('active');
-                    md_dent_enable();
-                } else {
-                    document.getElementById('md-quote').classList.remove('active');
-                    md_dent_disable();
-                }
-                
-                if (/#\s+.*$/.test(this_line.trim())) {
-                    document.getElementById('md-header').classList.add('active');
-                    md_dent_enable();
-                } else {
-                    document.getElementById('md-header').classList.remove('active');
-                    md_dent_disable();
-                }
-                
-                if (/!?\[[^\]]*\]\([^\)]*\)/.test(this_line)) {
-                    let link_start = line_before.lastIndexOf('[') -1;
-                    if (0 < link_start && '!' == line_before.substring(link_start - 1)) {
-                        link_start--;
-                    }
-                    const link_end = line_after.indexOf(')');
-                    const link_string = this_line.substring(link_start, link_end + line_before.length);
-                    console.log(link_string);
-                    if (0 <= link_start && 0 <= link_end) {
-                        if (/^\[[^\]]*\]\([^\)]*\)$/.test(link_string)) {
-                            document.getElementById('md-link').classList.add('active');
-                        } else {
-                            document.getElementById('md-link').classList.remove('active');
-                        }
-                    } else {
-                        document.getElementById('md-link').classList.remove('active');
-                    }
-                } else {
-                    document.getElementById('md-link').classList.remove('active');
-                }
-            }
-            
-            function md_dent_enable() {
-                document.getElementById('md-indent').classList.remove('disabled');
-                document.getElementById('md-dedent').classList.remove('disabled');
-            }
-            
-            function md_dent_disable() {
-                document.getElementById('md-indent').classList.add('disabled');
-                document.getElementById('md-dedent').classList.add('disabled');
-            }
-            
-            function md_button_action(event) {
-                // get all the cursor selection data
-                const action = event.getAttribute('data-action');
-                const text_area = document.getElementById(event.getAttribute('data-target'));
-                const cursor_start = text_area.selectionStart;
-                const cursor_end = text_area.selectionEnd;
-                const content_before = text_area.value.substring(0, text_area.selectionStart);
-                const content_selected = (cursor_start < cursor_end) ? text_area.value.substring(cursor_start, cursor_end) : '';
-                const content_after = text_area.value.substring(text_area.selectionEnd)
-                const start_nl_index = content_before.lastIndexOf('\\n');
-                const end_nl_index = content_after.indexOf('\\n');
-                const applicable_lines = '\\n' + ((content_before.substring(start_nl_index) + content_selected + content_after.substring(0, end_nl_index)).trim());
-                let selection_start_offset = 0;
-                let selection_end_offset = 0;
-                
-                if ('header' == action) {
-                    let altered_lines = applicable_lines.replaceAll('\\n', '\\n# ').replaceAll('# #', '##').replaceAll('\\n####### ', '\\n');
-                    let output = content_before.substring(0, start_nl_index + 1) + altered_lines.trim() + content_after.substring(end_nl_index);
-                    let line_len_diff = altered_lines.length - applicable_lines.length;
-                    console.log(line_len_diff);
-                    text_area.value = output;
-                    if (0 < line_len_diff) {
-                        selection_start_offset += ('# ' == altered_lines.substring(1, 2)) ? 2 : 1;
-                        selection_end_offset += line_len_diff * (altered_lines.split('\\n').length - 1);
-                    } else {
-                        selection_start_offset -= 7;
-                        selection_end_offset -= 7 * (altered_lines.split('\\n').length - 1);
-                    }
-                }
-                if ('quote' == action) {
-                    let altered_lines = applicable_lines.replaceAll('\\n', '\\n> ').replaceAll('\\n> > ', '\\n');
-                    let output = content_before.substring(0, start_nl_index + 1) + altered_lines.trim() + content_after.substring(end_nl_index);
-                    let line_len_diff = altered_lines.length - applicable_lines.length;
-                    console.log(line_len_diff);
-                    text_area.value = output;
-                    if (0 < line_len_diff) {
-                        selection_start_offset += 2;
-                        selection_end_offset += line_len_diff;
-                    } else {
-                        selection_start_offset -= 2;
-                        selection_end_offset += line_len_diff;
-                    }
-                }
-                
-                text_area.focus();
-                text_area.setSelectionRange(cursor_start + selection_start_offset, cursor_end + selection_end_offset);
-                
-                md_update_gui_buttons();
+            function update_preview() {
+                var raw_markdown = document.getElementById('page_content').value;
+                var preview_container = document.getElementById('page-preview');
+                preview_container.innerHTML = marked.parse(raw_markdown);
+                console.log('preview updated');
             }
         </script>";
+
 }
 if ("view" == ($uri[3] ?? "")) {
     $entry = $babbler->fetch_entry(intval($uri[4]));
@@ -513,17 +356,18 @@ if ("view" == ($uri[3] ?? "")) {
         <div id='preview-contaienr' class='hw-border-box'>{$content}</div><hr>\n";
 }
 
+
 $output = [];
 
 $entries = $babbler->fetch_entry_table('created', 'asc');
 foreach ($entries as $entry) {
     $actions = [
-        "<a class='action edit' href='/console/content/edit/{$entry['entry_id']}'></a>&nbsp;",
-        "<a class='action versions' href='/console/content/versions/{$entry['entry_id']}'></a>&nbsp;",
+        "<a class='action edit' href='/console/?content/edit/{$entry['entry_id']}'></a>&nbsp;",
+        "<a class='action versions' href='/console/?content/versions/{$entry['entry_id']}'></a>&nbsp;",
         "<a class='action hide' a href='#'></a>&nbsp;",
     ];
     $output[] = [
-        'Title' => "<a href='/console/content/view/{$entry['entry_id']}'>{$entry['title']}</a>",
+        'Title' => "<a href='/console/?content/view/{$entry['entry_id']}'>{$entry['title']}</a>",
         'Category' => $entry['category'],
         'Sub-Category' => $entry['sub_category'],
         'Last Edit' => date("j M y H:i", strtotime($entry['edited'])),
@@ -536,7 +380,7 @@ $content = $html;
 $content .= ("edit" != ($uri[3] ?? false))
     ? "
             <div class='hw-nav col7'>
-                <a style='grid-column: 4 / 5;' href='/console/content/edit/'><div id='form-btn-txt' class='btn'>Add Page</div></a>
+                <a style='grid-column: 4 / 5;' href='/console/?content/edit/'><div id='form-btn-txt' class='btn'>Add Page</div></a>
             </div>\n"
     : "";
 $content .= array_2_table($output);

@@ -1,27 +1,40 @@
 /*
 	Markdown Editor
+
+        capture keyboard shortcuts:
+        https://stackoverflow.com/questions/3680919/overriding-browsers-keyboard-shortcuts
+
+        paste clipboard with rich text to markdown
+        https://github.com/euangoddard/clipboard2markdown
+
+        other notes:
+        - url-encode links when being addded
+
 */
 
+
+
 function md_initialize(element_id) {
+    console.log('Initializing markdown editor');
     let md_editor = document.getElementById(element_id);
-    ['input', 'keydown', 'keyup'].forEach( event =>
+    ['input', 'keydown', 'keyup', 'click'].forEach( event =>
         md_editor.addEventListener(event, function () {
-            md_update_gui_buttons();
+            md_update_gui_buttons(md_editor);
         })
     );
 }
 
-function md_update_gui_buttons() {
-    const text_area = document.getElementById('page_content');
-    const cursor_start = text_area.selectionStart;
-    const cursor_end = text_area.selectionEnd;
+function md_update_gui_buttons(element) {
+    const cursor_start = element.selectionStart;
+    const cursor_end = element.selectionEnd;
     if (cursor_start != cursor_end) { return; }
-    const content_before = text_area.value.substring(0, text_area.selectionStart);
-    const content_after = text_area.value.substring(text_area.selectionEnd);
+    const content_before = element.value.substring(0, element.selectionStart);
+    const content_after = element.value.substring(element.selectionEnd);
     const line_before = content_before.substring(content_before.lastIndexOf('\\n'));
     const line_after = content_after.substring(0, content_after.indexOf('\\n'));
     const this_line = (line_before + line_after).trim();
 
+    // font styles
     if ((content_before.match(/\*{2}/g) || []).length % 2 && (content_after.match(/\*{2}/g) || []).length % 2) {
         document.getElementById('md-bold').classList.add('active');
     } else {
@@ -40,28 +53,37 @@ function md_update_gui_buttons() {
         document.getElementById('md-strikethrough').classList.remove('active');
     }
 
+    // block elements
     if (/\d+\.\s+.*$/.test(this_line.trim())) {
         document.getElementById('md-numberlist').classList.add('active');
+        md_dent_enable();
     } else {
         document.getElementById('md-numberlist').classList.remove('active');
+        md_dent_disable();
     }
 
     if (/\-\s+.*$/.test(this_line.trim())) {
         document.getElementById('md-bulletlist').classList.add('active');
+        md_dent_enable();
     } else {
         document.getElementById('md-bulletlist').classList.remove('active');
+        md_dent_disable();
     }
 
     if (/>\s+.*$/.test(this_line.trim())) {
         document.getElementById('md-quote').classList.add('active');
+        md_dent_enable();
     } else {
         document.getElementById('md-quote').classList.remove('active');
+        md_dent_disable();
     }
 
     if (/#\s+.*$/.test(this_line.trim())) {
         document.getElementById('md-header').classList.add('active');
+        md_dent_enable();
     } else {
         document.getElementById('md-header').classList.remove('active');
+        md_dent_disable();
     }
 
     if (/!?\[[^\]]*\]\([^\)]*\)/.test(this_line)) {
@@ -84,6 +106,16 @@ function md_update_gui_buttons() {
     } else {
         document.getElementById('md-link').classList.remove('active');
     }
+}
+
+function md_dent_enable() {
+    document.getElementById('md-indent').classList.remove('disabled');
+    document.getElementById('md-dedent').classList.remove('disabled');
+}
+
+function md_dent_disable() {
+    document.getElementById('md-indent').classList.add('disabled');
+    document.getElementById('md-dedent').classList.add('disabled');
 }
 
 function md_button_action(event) {

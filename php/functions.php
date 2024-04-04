@@ -495,6 +495,29 @@ function generate_subnav(array $links, string $active = '', string $prefix = '')
     return $subnav;
 }
 
+function generate_select_field(array $options, string $selected = null, string $style = null, string $name = null, string $id = null): string
+{
+    // check for associative
+    if (array_is_list($options)) {
+        $newOptions = [];
+        foreach ($options as $option) $newOptions[$option] = $option;
+        $options = $newOptions;
+    }
+
+    // set empty id
+    if (empty($id)) $id = $name;
+
+    // generate output
+    $output = "<select style='{$style}' id='{$id}' name='{$name}'>\n";
+    foreach ($options as $optionName => $optionValue) {
+        $output .= ($optionName == $selected || $optionValue == $selected)
+            ? "    <option value='{$optionValue}' selected>{$optionName}</option>\n"
+            : "    <option value='{$optionValue}'>{$optionName}</option>\n";
+    }
+    $output .= "</select>";
+    return $output;
+}
+
 // Process URI
 function process_uri(): array
 {
