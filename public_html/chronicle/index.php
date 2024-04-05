@@ -62,6 +62,11 @@ echo "
             {$html}
             <hr>
             <p style='text-align: center'><a href='/console/'><img src='/img/25x25bdgB.GIF'></a></p>
+            <script>
+                function submit_form(form_id) {
+                    document.getElementById(form_id).submit();
+                }                        
+            </script>
         </div>
     </body>
 </html>";

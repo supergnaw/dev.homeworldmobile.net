@@ -142,6 +142,33 @@ if (!empty($_POST)) {
         <h2>{$post['page_title']} <em>(preview)</em></h2>
         <div id='preview-contaienr' class='hw-border-box'>{$html}</div><hr>\n";
     }
+
+    /*
+     * DATABASE MANAGEMENT
+     */
+    if ("export_json" == ($post['action'] ?? false)) {
+        $postVarFilter = ["table_name" => 'string'];
+        $post = \Supergnaw\FormSecurity\FormSecurity::filter_input("post", $postVarFilter);
+
+        $nb = new \Supergnaw\Nestbox\Nestbox();
+        $tableData = $nb->dump_database(tables: ($_POST['tables'] ?? []));
+        $tableCount = count($tableData);
+
+        $_SESSION['database_dump_json'] = ($tableData) ? json_encode($tableData) : "";
+
+        save_session_alert(text: "Successfully exported database JSON for {$tableCount} tables.", classes: "success");
+    }
+
+    if ("import_json" == ($post['action'] ?? false)) {
+        $post = \Supergnaw\FormSecurity\FormSecurity::filter_input("post", ["input_text" => "string"]);
+
+        $nb = new \Supergnaw\Nestbox\Nestbox();
+        $updateCount = $nb->load_database(json_decode($post['input_text'], associative: true));
+
+        $classes = (0 == $updateCount) ? "info" : "success";
+
+        save_session_alert(text: "Successfully completed import with {$updateCount} updates and/or inserts.", classes: $classes);
+    }
 }
 
 return $response;

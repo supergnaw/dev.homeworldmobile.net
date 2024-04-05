@@ -18,6 +18,7 @@ $linkList = [
     "users" => 'Users',
     "symbology" => 'Symbology',
     "images" => 'Images',
+    "database" => 'Database',
     "logout" => 'Logout',
 ];
 $linkActive = ($uri[1] ?? "n/a");
@@ -34,7 +35,7 @@ if (!in_array($linkActive, $whitelist) || empty($_SESSION[$titmouse->sessionKey]
     $post_response = include("_post.php");
 
     $target_file = ($uri[1] ?? '') . ".php";
-    $whitelist = ["content", "tables", "users", "symbology", "images", "logout"];
+    $whitelist = array_keys($linkList);
     if (in_array($uri[1] ?? '', $whitelist) and file_exists($target_file)) {
         $content = include($target_file);
     } else {

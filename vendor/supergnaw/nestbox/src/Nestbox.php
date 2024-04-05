@@ -694,7 +694,7 @@ class Nestbox
         $conjunction = (in_array(strtoupper($conjunction), ["AND", "OR"])) ? " " . strtoupper($conjunction) . " " : " AND ";
         $wheres = implode($conjunction, $wheres);
 
-        $sql = "SELECT * FROM `{$table}` WHERE {$wheres}";
+        $sql = ($wheres)  ? "SELECT * FROM `{$table}` WHERE {$wheres};" : "SELECT * FROM `{$table}`;";
         $this->query_execute($sql, $params);
         return $this->results();
     }
@@ -702,6 +702,12 @@ class Nestbox
     /*
         7.0 Schema
     */
+
+    public function table_schema(): array
+    {
+        $this->load_table_schema();
+        return $this->tableSchema;
+    }
 
     /**
      * Load table schema
@@ -947,6 +953,64 @@ class Nestbox
         }
 
         return true;
+    }
+
+    /*
+     *  9.0 Database Imports & Exports
+     */
+
+    public function dump_table(string $table): array
+    {
+        return $this->select($table);
+    }
+
+    public function dump_database(array $tables = []): array
+    {
+        if (empty($tables)) {
+            $tables = array_keys($this->table_schema());
+        }
+
+        $output = [];
+
+        foreach ($tables as $table) {
+            $output[$table] = $this->dump_table(table: $table);
+        }
+
+        return $output;
+    }
+
+    public function load_table(string $table, string | array $data): int
+    {
+        $updateCount = 0;
+
+        if (!$this->valid_schema($table)) {
+            return $updateCount;
+        }
+
+        if (is_string($data)) {
+            $data = json_decode($data, associative: true);
+        }
+
+        foreach ($data as $row) {
+            $updateCount += $this->insert(table: $table, params: $row, update: true);
+        }
+
+        return $updateCount;
+    }
+
+    public function load_database(string | array $input): int
+    {
+        $updateCount = 0;
+
+        if (is_string($input)) {
+            $input = json_decode($input, associative: true);
+        }
+
+        foreach ($input as $table => $data) {
+            $updateCount += $this->load_table(table: $table, data: $data);
+        }
+
+        return $updateCount;
     }
 
     /*

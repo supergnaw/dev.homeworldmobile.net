@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace app\FormSecurity;
+namespace Supergnaw\FormSecurity;
 
 use DateTime;
 
@@ -31,6 +31,7 @@ class FormSecurity
         'url' => ['options' => 'self::filter_url'],
         'email' => ['options' => 'self::filter_email'],
         'htmlenc' => ['options' => 'self::filter_htmlenc'],
+        // Arrays ???
     ];
 
     /**
