@@ -1,6 +1,6 @@
 # HomeworldMobile.Net
 
-This is the repository for the homeworldmobile.net website.
+This is the code repository for the homeworldmobile.net website.
 
 ### Environment Requirements
 
