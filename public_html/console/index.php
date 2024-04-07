@@ -28,17 +28,19 @@ $linkPrefix = "/{$uri[0]}/";
  * Generate Page Sections
  ***/
 $whitelist = array_keys($linkList);
-if (!in_array($linkActive, $whitelist) || empty($_SESSION[$titmouse->sessionKey])) {
-    $post_response = '';
+$post_response = include("_post.php");
+
+if (empty($_SESSION[$titmouse->sessionKey])) {
+    if (in_array($linkActive, $whitelist)) {
+        save_session_alert(text: "Access denied: You must login to access the requested information.", classes: "error");
+    }
     $content = include("login.php");
 } else {
-    $post_response = include("_post.php");
-
     $target_file = ($uri[1] ?? '') . ".php";
-    $whitelist = array_keys($linkList);
     if (in_array($uri[1] ?? '', $whitelist) and file_exists($target_file)) {
         $content = include($target_file);
     } else {
+        save_session_alert(text: "The page you are looking for does not exist.", classes: "info");
         $content = "<img src='/img/guidestone.jpg' style='width: 100%;max-width: 100%;'>";
     }
 }

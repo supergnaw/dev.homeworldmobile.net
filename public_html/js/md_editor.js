@@ -12,27 +12,33 @@
 
 */
 
-
-
 function md_initialize(element_id) {
-    console.log('Initializing markdown editor');
     let md_editor = document.getElementById(element_id);
     ['input', 'keydown', 'keyup', 'click'].forEach( event =>
         md_editor.addEventListener(event, function () {
-            md_update_gui_buttons(md_editor);
+            md_update_gui_button_highlights(md_editor);
         })
     );
 }
 
-function md_update_gui_buttons(element) {
-    const cursor_start = element.selectionStart;
-    const cursor_end = element.selectionEnd;
-    if (cursor_start != cursor_end) { return; }
-    const content_before = element.value.substring(0, element.selectionStart);
-    const content_after = element.value.substring(element.selectionEnd);
-    const line_before = content_before.substring(content_before.lastIndexOf('\\n'));
-    const line_after = content_after.substring(0, content_after.indexOf('\\n'));
+function md_update_gui_button_highlights(md_editor) {
+    const cursor_start = md_editor.selectionStart;
+    const cursor_end = md_editor.selectionEnd;
+
+    // todo: check if this selection contains a new line before automatically returning
+    // if (cursor_start != cursor_end) { return; }
+    // or apparently just completely remove it because it works just fine without it?
+
+    const content_before = md_editor.value.substring(0, md_editor.selectionStart);
+    const content_after = md_editor.value.substring(md_editor.selectionEnd);
+    const line_before = content_before.split(/\r?\n/).slice(-1)[0];
+    const line_after = content_after.split(/\r?\n/)[0];
     const this_line = (line_before + line_after).trim();
+
+    // is_bold_legacy(line_before, line_after);
+    // is_italic(content_before, content_after);
+    // is_strikethrough(content_before, content_after);
+    detect_formatting(line_before, line_after);
 
     // font styles
     if ((content_before.match(/\*{2}/g) || []).length % 2 && (content_after.match(/\*{2}/g) || []).length % 2) {
@@ -93,7 +99,6 @@ function md_update_gui_buttons(element) {
         }
         const link_end = line_after.indexOf(')');
         const link_string = this_line.substring(link_start, link_end + line_before.length);
-        console.log(link_string);
         if (0 <= link_start && 0 <= link_end) {
             if (/^\[[^\]]*\]\([^\)]*\)$/.test(link_string)) {
                 document.getElementById('md-link').classList.add('active');
@@ -106,6 +111,161 @@ function md_update_gui_buttons(element) {
     } else {
         document.getElementById('md-link').classList.remove('active');
     }
+}
+
+function detect_formatting(textBefore, textAfter) {
+    var cursorPosition = textBefore.length;
+    var inputText = textBefore + textAfter;
+
+    const patterns = {
+        "italic": /\*(?=\S)[^\*]+(?<=\S)\*/g,
+        "bold": /\*\*(?=\S)[^\*]+(?<=\S)\*\*/g,
+        "both": /\*\*\*(?=\S)[^\*]+(?<=\S)\*\*\*/g,
+        "strike": /~~(?=\S)[^~]+(?<=\S)~~/g
+    }
+    const italicRegex = /\*(?=\S)(?<!\\)[^\*]+(?<=\S)\*/g;
+    const boldRegex = /\*\*(?=\S)(?<!\\)[^\*]+(?<=\S)\*\*/g
+    const bothRegex = /\*\*\*(?=\S)[^\*]+(?<=\S)\*\*\*/g
+    const strikethroughRegex = /~~([^~]+)~~/g
+
+    let formatting = {
+        italic: false,
+        bold: false,
+        strikethrough: false
+    }
+
+    // const regexp = /t(e)(st(\d?))/g;
+    // const testString = 'test1test2';
+    // console.log([...testString.matchAll(regexp)]);
+    // return;
+
+    let matches = inputText.matchAll(/\w+/g);
+    for (const match of inputText.matchAll(italicRegex)) {
+        if (match.index <= cursorPosition && match.index + match[0].length >= cursorPosition) {
+            formatting.italic = true;
+            break;
+        }
+    }
+
+    console.log([inputText.slice(0, cursorPosition), '^', inputText.slice(cursorPosition)].join(''));
+    console.log(formatting);
+}
+
+// selection detection
+function is_bold(inputText) {
+    inputText = inputText.substring(
+        inputText.indexOf("*"),
+        inputText.lastIndexOf("*") + 1
+    )
+
+    if (!inputText) {
+        return false;
+    }
+
+    console.log(inputText);
+
+    // textBefore = textBefore.substring(textBefore.indexOf("*"));
+    // textAfter = textAfter.substring(0, textAfter.lastIndexOf("*") + 1);
+}
+function is_bold_legacy(textBefore, textAfter) {
+    // check of bold is possible
+    textBefore = textBefore.match(/[^\*]*\*\*\w.*$/g);
+    textAfter = textAfter.match(/.*\w\*\*/g)
+
+    if (null == textBefore || null == textAfter) {
+        return false;
+    } else {
+        textBefore = textBefore[0];
+        textAfter = textAfter[0];
+    }
+
+    // remove italics
+    textBefore = textBefore.replace(/(\s|^)\*\w[^\*]*($|\w\*(\s|$))/, '');
+    textAfter = textAfter.replace(/((^|\s)\*\w|^)[^\*]*\w\*(\s|$)/, '');
+
+    // remove closed-out bold tags
+    var exp = /\*\*\w[^\*]*\*\*/;
+    textBefore.replace(exp, '');
+    textAfter.replace(exp, '');
+
+    console.log(textBefore + "^" + textAfter);
+
+    var countBefore = (textBefore.match(/\*\*/g) || []).length;
+    var countAfter = (textAfter.match(/\*\*/g) || []).length;
+    var countTotal = countBefore + countAfter;
+
+    if ([countBefore, countAfter].some(num => num < 1)) {
+        console.log(false);
+        return false;
+    }
+
+    textBefore = textBefore.substring(textBefore.indexOf("*"));
+    textAfter = textAfter.substring(0, textAfter.lastIndexOf("*") + 1);
+
+    // console.log(textAfter.replace(/\*[^\*]+\*$/, ''))
+
+    var textFull = textBefore + textAfter;
+    var cursorPosition = textBefore.length;
+
+    // console.log(textBefore, textAfter);
+
+    if (textBefore.endsWith("*") && textAfter.startsWith("*")) {
+        // cursor is adjacent to asterisks
+    } else {
+        // cursor is not adjacent to asterisks
+    }
+
+    var first = textBefore.indexOf("*");
+    var last = textAfter.lastIndexOf("*");
+
+    return true;
+}
+
+function is_italic(textBefore, textAfter) {
+    // console.log(textBefore, textAfter);
+    return true;
+}
+
+function is_strikethrough(textBefore, textAfter) {
+    // console.log(textBefore, textAfter);
+    return true;
+}
+
+function is_header() {
+
+}
+
+function is_quote() {
+
+}
+
+function is_list() {
+
+}
+
+function is_numbered() {
+
+}
+
+function is_link() {
+
+}
+
+function is_image() {
+
+}
+
+function is_table() {
+
+}
+
+// button highlight toggles
+function button_active(elementId) {
+    document.getElementById(elementId).classList.add('active');
+}
+
+function button_inactive(elementId) {
+    document.getElementById(elementId).classList.remove('active');
 }
 
 function md_dent_enable() {
@@ -137,7 +297,6 @@ function md_button_action(event) {
         let altered_lines = applicable_lines.replaceAll('\\n', '\\n# ').replaceAll('# #', '##').replaceAll('\\n####### ', '\\n');
         let output = content_before.substring(0, start_nl_index + 1) + altered_lines.trim() + content_after.substring(end_nl_index);
         let line_len_diff = altered_lines.length - applicable_lines.length;
-        console.log(line_len_diff);
         text_area.value = output;
         if (0 < line_len_diff) {
             selection_start_offset += ('# ' == altered_lines.substring(1, 2)) ? 2 : 1;
@@ -151,7 +310,6 @@ function md_button_action(event) {
         let altered_lines = applicable_lines.replaceAll('\\n', '\\n> ').replaceAll('\\n> > ', '\\n');
         let output = content_before.substring(0, start_nl_index + 1) + altered_lines.trim() + content_after.substring(end_nl_index);
         let line_len_diff = altered_lines.length - applicable_lines.length;
-        console.log(line_len_diff);
         text_area.value = output;
         if (0 < line_len_diff) {
             selection_start_offset += 2;
@@ -165,5 +323,5 @@ function md_button_action(event) {
     text_area.focus();
     text_area.setSelectionRange(cursor_start + selection_start_offset, cursor_end + selection_end_offset);
 
-    md_update_gui_buttons();
+    md_update_gui_button_highlights();
 }

@@ -69,6 +69,12 @@ if (!empty($_POST)) {
         }
     }
 
+    if ("logout" == $post['action']) {
+        $tm = new \Supergnaw\Nestbox\Titmouse\Titmouse();
+        $tm->logout_user();
+        save_session_alert("Successfully logged out!", 'success');
+    }
+
     /*
      * CONTENT EDITS
      */
@@ -97,7 +103,6 @@ if (!empty($_POST)) {
 
         try {
             if (0 == intval($entry['page_id'])) {
-                var_dump("ADDING NEW ENTRY {$entry['page_id']}");
                 $result = $babbler->add_entry(
                     category: $entry['category'] ?? "",
                     sub_category: $entry['sub_category'] ?? "",
@@ -108,7 +113,6 @@ if (!empty($_POST)) {
                     is_draft: $entry['is_draft']
                 );
             } else {
-                var_dump("EDITING ENTRY {$entry['page_id']}");
                 $result = $babbler->edit_entry(
                     entry_id: $entry['page_id'],
                     editor: $user['username'],

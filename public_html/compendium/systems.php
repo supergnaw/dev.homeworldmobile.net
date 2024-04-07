@@ -61,7 +61,6 @@ $sql = "SELECT *,
 $sql = "SELECT * FROM `google_data_systems`";
 $api->sql_exec($sql);
 $results = $api->results();
-var_dump($results);
 
 $order = ('asc' == $order) ? 'desc' : 'asc';
 

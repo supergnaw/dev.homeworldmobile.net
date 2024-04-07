@@ -46,6 +46,9 @@ class Playfab
 
     // database properties
     protected array $table_schema = [];
+    protected $stmt;
+    protected $email;
+    protected $password;
 
     // application identification
     protected string $app_id;
@@ -349,6 +352,9 @@ class Playfab
                 echo "</pre>";
                 throw new PDOException("PDO Exception: {$msg}");
             } else {
+                if (str_contains(strtolower($msg), "base table or view not found")) {
+                    $this->build_playfab_db();
+                }
                 die("PDO Exception: {$msg}");
             }
         }
@@ -524,7 +530,12 @@ class Playfab
             "client" => $_SERVER['REMOTE_ADDR'],
             "status_code" => $status_code
         ];
-        $this->sql_exec($sql, $params);
+
+        try {
+            $this->sql_exec($sql, $params);
+        } catch (PDOException $e) {
+            die($e);
+        }
     }
 
     /**

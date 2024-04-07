@@ -647,7 +647,6 @@ function generate_thumbnail(string $srcImg, string $dstImg, int $width = 100, in
 
     $wNew = $w * $scale;
     $hNew = $h * $scale;
-    var_dump("widthRatio", $wNew, "heightRatio", $hNew);
 
     if ('image/png' == $mime) {
         $srcImg = imagecreatefrompng($srcImg);
@@ -674,7 +673,6 @@ function generate_thumbnail(string $srcImg, string $dstImg, int $width = 100, in
     );
 
     if (imagepng($canvas, $dstImg, 5)) {
-        var_dump("image created: {$dstImg}");
         return true;
     } else {
         die('failed to create image');

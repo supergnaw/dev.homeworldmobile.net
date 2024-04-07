@@ -134,7 +134,7 @@ if ("edit" == ($uri[3] ?? "")) {
             </div>
             <div class='grid' id='md-edit-controls'>
                 <p>This text supports basic <a href='https://www.markdownguide.org/basic-syntax/' target='_blank'>Markdown</a> syntax.</p>
-                <div class='hw-nav md-edit'>
+                <div class='hw-nav md-edit' style='display: none;'>
                     <a id='md-bold' value='bold' data-action='bold' data-target='page_content' onclick='md_button_action(this)'>
                         <div class='btn'><span class='icon-bold'></span>&nbsp;</div>
                     </a>
@@ -173,15 +173,16 @@ if ("edit" == ($uri[3] ?? "")) {
                 </div>
             </div>
             <div class='grid col2'>
-                <div class='grid'>
+                <div>
                     <label for='page_content'>Content</label>
-                    <textarea id='page_content' name='page_content'>{$entry['content']}</textarea>
+                    <textarea id='page_content' name='page_content' style='min-height: 50px; height: 100%; resize: none; font-size: calc(var(--body-font-size) * .6); line-height: var(--body-font-size);'>{$entry['content']}</textarea>
                 </div>
-                <div class='grid'>
+                <div>
                     <label>Preview</label>
                     <div id='page-preview'></div>
                 </div>
             </div>
+            <hr>
             <input type='hidden' name='action' id='form_action' value='page_edit'>
             <input type='hidden' name='page_id' value={$entry['page_id']}>
             <div class='grid col5'>
@@ -231,8 +232,14 @@ if ("edit" == ($uri[3] ?? "")) {
                     toggle_sub_categories();
                     md_initialize('page_content');
                     update_preview_on_change('page_content');
+                    parse_symbology();
+                    update_preview();
                 }
             };
+            
+            /*
+             * Interactive Form Functions
+             */
             
             function toggle_sub_categories() {
                 let category_select = document.getElementById('page_category');
@@ -323,14 +330,15 @@ if ("edit" == ($uri[3] ?? "")) {
                     submit_form(\"page-edit\");
                 }
             }
+            
+            /*
+             * Editor Preview Update Rendering 
+             */
 
             function update_preview_on_change(element_id) {
                 let md_editor = document.getElementById(element_id);
                 ['input', 'keydown', 'keyup', 'click'].forEach( event =>
-                    md_editor.addEventListener(event, function () {
-                        md_update_gui_buttons(md_editor);
-                        update_preview();
-                    })
+                    md_editor.addEventListener(event, function () {update_preview();})
                 );
             }
             
@@ -338,7 +346,16 @@ if ("edit" == ($uri[3] ?? "")) {
                 var raw_markdown = document.getElementById('page_content').value;
                 var preview_container = document.getElementById('page-preview');
                 preview_container.innerHTML = marked.parse(raw_markdown);
-                console.log('preview updated');
+            }
+        </script>";
+
+    $results = $babbler->select('symbology');
+    $symbology = json_encode($results);
+    $html .= "
+        <script>
+            function parse_symbology() {
+//                let symbols = JSON.parse('{$symbology}');
+                console.log({$symbology});
             }
         </script>";
 

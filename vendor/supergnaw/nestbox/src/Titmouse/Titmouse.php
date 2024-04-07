@@ -80,18 +80,19 @@ class Titmouse extends Nestbox
         // check if user table exists
         if (!$this->valid_schema($this->usersTable)) {
             $sql = "CREATE TABLE IF NOT EXISTS `{$this->usersTable}` (
-                    `{$this->userColumn}` VARCHAR ( 64 ) NOT NULL ,
+                    `{$this->userColumn}` VARCHAR ( 64 ) NOT NULL PRIMARY KEY,
+                    `{$this->mailColumn}` VARCHAR( 320 ) NOT NULL UNIQUE,
                     `{$this->hashColumn}` VARCHAR( 128 ) NOT NULL ,
                     `last_login` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
                     `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
-                    PRIMARY KEY ( `{$this->userColumn}` ) ,
-                    UNIQUE KEY `{$this->mailColumn}` ( `{$this->mailColumn}` )
+                    UNIQUE ( `{$this->mailColumn}` )
                 ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
             if (!$this->query_execute($sql)) return false;
         }
 
         // add columns if missing from an existing table
         // TODO: add schema check for column type and size and adjust as necessary
+        $this->load_table_schema();
         if (!$this->valid_schema($this->usersTable, $this->userColumn)) {
             $sql = "ALTER TABLE `{$this->usersTable}` ADD COLUMN `{$this->userColumn}` VARCHAR ( 64 ) NOT NULL";
             if (!$this->query_execute($sql)) {
@@ -100,7 +101,8 @@ class Titmouse extends Nestbox
         }
 
         if (!$this->valid_schema($this->usersTable, $this->mailColumn)) {
-            $sql = "ALTER TABLE `{$this->usersTable}` ADD COLUMN `{$this->mailColumn}` VARCHAR ( 320 ) NOT NULL";
+            $sql = "ALTER TABLE `{$this->usersTable}` ADD COLUMN `{$this->mailColumn}` VARCHAR ( 320 ) NOT NULL;
+                    ALTER TABLE `{$this->usersTable}` ADD CONSTRAINT `unique_email` UNIQUE ( `{$this->mailColumn}` );";
             if (!$this->query_execute($sql)) {
                 throw new TitmouseException("failed to add column '{$this->mailColumn}'");
             };
@@ -263,11 +265,6 @@ class Titmouse extends Nestbox
     public function logout_user(): void
     {
         // clear out those session variables
-        foreach ($_SESSION[$this->sessionKey] as $key => $val) {
-            unset($_SESSION[$this->sessionKey][$key]);
-        }
-
-        // superfluous is the name of the game
         unset($_SESSION[$this->sessionKey]);
     }
 

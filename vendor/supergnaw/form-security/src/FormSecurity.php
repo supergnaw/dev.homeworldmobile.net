@@ -10,28 +10,31 @@ class FormSecurity
 {
     const SANITYPES = [
         // Booleans
-        'bool' => ['options' => 'self::filter_boolean'],
+        'bool' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_boolean'],
         // Numbers
-        'float' => ['options' => 'self::filter_float'],
-        'hexint' => ['options' => 'self::filter_hexint'],
-        'int' => ['options' => 'self::filter_int'],
-        'octint' => ['options' => 'self::filter_octint'],
+        'float' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_float'],
+        'hexint' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_hexint'],
+        'int' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_int'],
+        'octint' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_octint'],
         // Networking
-        'ipv4' => ['options' => 'self::filter_ipv4'],
-        'ipv6' => ['options' => 'self::filter_ipv6'],
-        'mac' => ['options' => 'self::filter_mac'],
+        'ipv4' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_ipv4'],
+        'ipv6' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_ipv6'],
+        'mac' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_mac'],
         // Timestamps
-        'date' => ['options' => 'self::filter_date'],
-        'time' => ['options' => 'self::filter_time'],
-        'timestamp' => ['options' => 'self::filter_timestamp'],
+        'date' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_date'],
+        'time' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_time'],
+        'timestamp' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_timestamp'],
         // Strings
-        'string' => ['options' => 'self::filter_string'],
-        'alnum' => ['options' => 'self::filter_alnum'],
-        'hex' => ['options' => 'self::filter_hex'],
-        'url' => ['options' => 'self::filter_url'],
-        'email' => ['options' => 'self::filter_email'],
-        'htmlenc' => ['options' => 'self::filter_htmlenc'],
+        'string' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_string'],
+        'alnum' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_alnum'],
+        'hex' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_hex'],
+        'url' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_url'],
+        'email' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_email'],
+        'htmlenc' => ['options' => 'Supergnaw\FormSecurity\FormSecurity::filter_htmlenc'],
         // Arrays ???
+        'array' => ['options' => ''],
+        'list' => ['options' => ''],
+        'dict' => ['options' => '']
     ];
 
     /**
@@ -203,7 +206,7 @@ class FormSecurity
         // Loop through type-assigned variables to find expected type
         foreach ($types as $var => $type) {
             // Find expected variable type based on $types
-            $options = (array_key_exists($type, self::SANITYPES)) ? self::SANITYPES[$type] : "none";
+            $options = (array_key_exists($type, FormSecurity::SANITYPES)) ? FormSecurity::SANITYPES[$type] : "none";
 
             $filtered[$var] = ('none' !== $options)
                 // Use class built-in filtering function

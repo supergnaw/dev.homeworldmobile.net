@@ -220,9 +220,7 @@ $stats = [
 //        $validStats[] = $statName;
 //    }
 //}
-//var_dump($validStats);
 //echo json_encode($validStats);
-//var_dump($api->call_count());
 
 //$validStats = [
 //    "RepYaot",
