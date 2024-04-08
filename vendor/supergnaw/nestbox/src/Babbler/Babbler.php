@@ -133,8 +133,6 @@ class Babbler extends Nestbox
         $params["is_draft"] = (isset($is_draft)) ? $is_draft : false;
         $params["is_hidden"] = (isset($is_hidden)) ? $is_hidden : false;
 
-        var_dump("edit_entry", __LINE__, $params);
-
         $cols = [];
         foreach ($params as $column => $value) $cols[] = "`{$column}` = :{$column}";
         $cols = implode(", ", $cols);
