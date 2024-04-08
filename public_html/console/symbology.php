@@ -17,18 +17,53 @@ if (!$nb->valid_schema('symbology')) {
 }
 
 $results = $nb->select('symbology');
-
-$html = "";
-
-$table = ["<table><thead><tr><th>Name</th><th>RegEx</th><th>Image</th></tr></thead><tbody>"];
-foreach ($results as $row) {
-    $table[] = "<tr>
-        <td>{$row['symbol_name']}</td>
-        <td>{$row['symbol_regex']}</td>
-        <td>{$row['symbol_image']}</td>
-    </tr>";
+$output = [];
+foreach ($results as $symbol) {
+    $output[] = [
+        'Name' => $symbol['symbol_name'],
+        'RegEx' => $symbol['symbol_regex'],
+        'Image' => $symbol['symbol_image']
+    ];
 }
-$table[] = "</tbody></table>";
-$table = implode("\n", $table);
+$table = array_2_table($output);
 
-return $table;
+$rawImages = glob("../img/ui/generic/*");
+$radios = [];
+foreach ($rawImages as $rawImage) {
+    $img = trim($rawImage, "\.\.");
+    $imgTag = "<img src='{$img}' style='width: 100%;'>";
+    $radios[] = "
+            <label style='text-align: center;'>
+                {$imgTag}
+                <input type='radio' name='publish_date_type' value='{$img}'>
+            </label>";
+}
+$radios = implode($radios);
+
+$html = "
+            <div class='grid'>
+                <label for='page_category'>Image</label>
+                <input type='text' id='page_title' name='image' value=''>
+            </div>
+            <div class='grid'>
+                <label for='page_category'>RegEx</label>
+                <input type='text' id='page_title' name='regex' value=''>
+            </div>
+            <div class='grid'>
+                <fieldset>
+                    <legend>Symbol</legend>
+                    <div class='grid col12'>
+                        {$radios}
+                    </div>
+                </fieldset>
+            </div>";
+
+$content = $html;
+$content .= ("edit" != ($uri[2] ?? false))
+    ? "
+            <div class='hw-nav col7'>
+                <a style='grid-column: 4 / 5;' href='/console/?symbology/edit/'><div id='form-btn-txt' class='btn'>Add Symbol</div></a>
+            </div>\n"
+    : "";
+
+return $content;

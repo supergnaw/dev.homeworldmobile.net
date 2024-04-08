@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 require_once(implode(separator: DIRECTORY_SEPARATOR, array: [$_SERVER['DOCUMENT_ROOT'], 'requires.php']));
 
-$babbler = new \Supergnaw\Nestbox\Babbler\Babbler();
-
-$uri = array_filter(explode("/", $_SERVER['REQUEST_URI']));
-
 $defaultCol = 'item_name';
 
 $html = "";
 
-if ("edit" == ($uri[3] ?? "")) {
+if ("edit" == ($uri[2] ?? "")) {
     // initiate form default values
 
     if (empty($_POST)) {
         // if not a preview
-        $entry = ($uri[4] ?? false)
-            ? $babbler->fetch_entry(intval($uri[4]))
+        $entry = ($uri[3] ?? false)
+            ? $babbler->fetch_entry(intval($uri[3]))
             : [
                 "title" => '',
                 "category" => '',
@@ -349,8 +345,12 @@ if ("edit" == ($uri[3] ?? "")) {
             }
         </script>";
 
-    $results = $babbler->select('symbology');
-    $symbology = json_encode($results);
+    try {
+        $results = $babbler->select('symbology');
+        $symbology = json_encode($results);
+    } catch (Exception) {
+        $symbology = "";
+    }
     $html .= "
         <script>
             function parse_symbology() {
@@ -360,8 +360,8 @@ if ("edit" == ($uri[3] ?? "")) {
         </script>";
 
 }
-if ("view" == ($uri[3] ?? "")) {
-    $entry = $babbler->fetch_entry(intval($uri[4]));
+if ("view" == ($uri[2] ?? "")) {
+    $entry = $babbler->fetch_entry(intval($uri[3]));
 
     $links = [
         "/\b(officers?)\b/i" => "<a href='/enchiridion/officers/'>\$1</a>",
@@ -372,7 +372,6 @@ if ("view" == ($uri[3] ?? "")) {
         <h2><em>(Preview)</em></h2>
         <div id='preview-contaienr' class='hw-border-box'>{$content}</div><hr>\n";
 }
-
 
 $output = [];
 
@@ -394,7 +393,7 @@ foreach ($entries as $entry) {
 }
 
 $content = $html;
-$content .= ("edit" != ($uri[3] ?? false))
+$content .= ("edit" != ($uri[2] ?? false))
     ? "
             <div class='hw-nav col7'>
                 <a style='grid-column: 4 / 5;' href='/console/?content/edit/'><div id='form-btn-txt' class='btn'>Add Page</div></a>
