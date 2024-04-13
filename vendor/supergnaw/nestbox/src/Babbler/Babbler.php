@@ -4,26 +4,168 @@ declare(strict_types=1);
 
 namespace Supergnaw\Nestbox\Babbler;
 
+use Supergnaw\Nestbox\Exception\InvalidTableException;
+use Supergnaw\Nestbox\Exception\NestboxException;
 use Supergnaw\Nestbox\Nestbox;
 
 class Babbler extends Nestbox
 {
-    // vars
-    private $cols = ['entry_id', 'created', 'edited', 'created_by', 'edited_by', 'category', 'title', 'content'];
-
-    protected int $author_size = 32;
-    protected int $category_size = 64;
-    protected int $sub_category_size = 64;
-    protected int $title_size = 255;
+    // settings variables
+    public int $authorSize;
+    public int $categorySize;
+    public int $suBcategorySize;
+    public int $titleSize;
 
     // constructor
     public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
         // database functions
-        parent::__construct(host: $host, user: $user, pass: $pass, name: $name);
-        // create class tables
+        parent::__construct($host, $user, $pass, $name);
+
+        // set default variables
+        $defaultSettings = [
+            "authorSize" => 32,
+            "categorySize" => 64,
+            "subCategorySize" => 64,
+            "titleSize" => 255
+        ];
+
+        $this->load_settings(package: "lorikeet", defaultSettings: $defaultSettings);
+
+        $this->settingNames = array_keys($defaultSettings);
+    }
+
+    public function query_execute(string $query, array $params = [], bool $close = false): bool
+    {
+        try {
+            return parent::query_execute($query, $params, $close);
+        } catch (InvalidTableException) {
+            $this->create_tables();
+            return parent::query_execute($query, $params, $close);
+        }
+    }
+
+    public function create_tables(): void
+    {
         $this->create_entry_table();
         $this->create_history_table();
+    }
+
+    // create entry table
+    public function create_entry_table(): bool
+    {
+        // check if entry table exists
+        if ($this->valid_schema('babbler_entries')) return true;
+
+        $sql = "CREATE TABLE IF NOT EXISTS `babbler_entries` (
+                    `entry_id` INT NOT NULL AUTO_INCREMENT ,
+                    `created` DATETIME NOT NULL ,
+                    `edited` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+                    `published` DATETIME NULL ,
+                    `is_draft` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
+                    `is_hidden` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
+                    `created_by` VARCHAR( {$this->authorSize} ) NOT NULL ,
+                    `edited_by` VARCHAR( {$this->authorSize} ) NOT NULL ,
+                    `category` VARCHAR( {$this->categorySize} ) NOT NULL ,
+                    `sub_category` VARCHAR( {$this->suBcategorySize} ) NOT NULL ,
+                    `title` VARCHAR( {$this->titleSize} ) NOT NULL ,
+                    `content` MEDIUMTEXT NOT NULL ,
+                    PRIMARY KEY ( `entry_id` )
+                ) ENGINE = InnoDB DEFAULT CHARSET=UTF8MB4 COLLATE=utf8_unicode_ci;";
+        return $this->query_execute($sql);
+    }
+
+    // create history table and update trigger
+    public function create_history_table(): bool
+    {
+        // check if history table exists
+        if ($this->valid_schema('babbler_history')) return true;
+
+        // create the history table
+        $sql = "CREATE TABLE IF NOT EXISTS `babbler_history` (
+                    `history_id` INT NOT NULL AUTO_INCREMENT ,
+                    `entry_id` INT NOT NULL ,
+                    `created` DATETIME NOT NULL ,
+                    `edited` TIMESTAMP ,
+                    `published` DATETIME NULL ,
+                    `is_draft` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
+                    `is_hidden` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
+                    `created_by` VARCHAR( {$this->authorSize} ) NOT NULL ,
+                    `edited_by` VARCHAR( {$this->authorSize} ) NOT NULL ,
+                    `category` VARCHAR( {$this->categorySize} ) NOT NULL ,
+                    `sub_category` VARCHAR( {$this->suBcategorySize} ) NOT NULL ,
+                    `title` VARCHAR( {$this->titleSize} ) NOT NULL ,
+                    `content` MEDIUMTEXT NOT NULL ,
+                    PRIMARY KEY ( `history_id` )
+                ) ENGINE = InnoDB DEFAULT CHARSET=UTF8MB4 COLLATE=utf8_unicode_ci;";
+
+        if (!$this->query_execute($sql)) return false;
+
+        // create history trigger
+        $sql = "CREATE TRIGGER IF NOT EXISTS `babbler_history_trigger` AFTER UPDATE ON `babbler_entries`
+                FOR EACH ROW
+                IF ( OLD.edited <> NEW.edited ) THEN
+                    INSERT INTO `babbler_history` (
+                        `entry_id`
+                        , `created`
+                        , `edited`
+                        , `published`
+                        , `is_draft`
+                        , `is_hidden`
+                        , `created_by`
+                        , `edited_by`
+                        , `category`
+                        , `sub_category`
+                        , `title`
+                        , `content`
+                    ) VALUES (
+                        OLD.`entry_id`
+                        , OLD.`created`
+                        , OLD.`edited`
+                        , OLD.`published`
+                        , OLD.`is_draft`
+                        , OLD.`is_hidden`
+                        , OLD.`created_by`
+                        , OLD.`edited_by`
+                        , OLD.`category`
+                        , OLD.`sub_category`
+                        , OLD.`title`
+                        , OLD.`content`
+                    );
+                END IF;
+                CREATE TRIGGER `babbler_delete_trigger` BEFORE DELETE
+                ON `babbler_entries` FOR EACH ROW
+                BEGIN
+                    INSERT INTO `babbler_history` (
+                        `entry_id`
+                        , `created`
+                        , `edited`
+                        , `published`
+                        , `is_draft`
+                        , `is_hidden`
+                        , `created_by`
+                        , `edited_by`
+                        , `category`
+                        , `sub_category`
+                        , `title`
+                        , `content`
+                    ) VALUES (
+                        OLD.`entry_id`
+                        , OLD.`created`
+                        , OLD.`edited`
+                        , OLD.`published`
+                        , OLD.`is_draft`
+                        , OLD.`is_hidden`
+                        , OLD.`created_by`
+                        , OLD.`edited_by`
+                        , OLD.`category`
+                        , OLD.`sub_category`
+                        , OLD.`title`
+                        , OLD.`content`
+                    );
+                END;";
+
+        return $this->query_execute($sql);
     }
 
     // add entry
@@ -208,123 +350,6 @@ class Babbler extends Nestbox
         $title = implode(separator: "%", array: preg_split(pattern: "/[^\w]+/", subject: trim($title)));
         $params = ["title" => $title];
         return ($this->query_execute($sql, $params)) ? $this->results() : [];
-    }
-
-    // create entry table
-    public function create_entry_table(): bool
-    {
-        // check if entry table exists
-        if ($this->valid_schema('babbler_entries')) return true;
-
-        $sql = "CREATE TABLE IF NOT EXISTS `babbler_entries` (
-                    `entry_id` INT NOT NULL AUTO_INCREMENT ,
-                    `created` DATETIME NOT NULL ,
-                    `edited` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-                    `published` DATETIME NULL ,
-                    `is_draft` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
-                    `is_hidden` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
-                    `created_by` VARCHAR( {$this->author_size} ) NOT NULL ,
-                    `edited_by` VARCHAR( {$this->author_size} ) NOT NULL ,
-                    `category` VARCHAR( {$this->category_size} ) NOT NULL ,
-                    `sub_category` VARCHAR( {$this->sub_category_size} ) NOT NULL ,
-                    `title` VARCHAR( {$this->title_size} ) NOT NULL ,
-                    `content` MEDIUMTEXT NOT NULL ,
-                    PRIMARY KEY ( `entry_id` )
-                ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-        return $this->query_execute($sql);
-    }
-
-    // create history table and update trigger
-    public function create_history_table(): bool
-    {
-        // check if history table exists
-        if ($this->valid_schema('babbler_history')) return true;
-
-        // create the history table
-        $sql = "CREATE TABLE IF NOT EXISTS `babbler_history` (
-                    `history_id` INT NOT NULL AUTO_INCREMENT ,
-                    `entry_id` INT NOT NULL ,
-                    `created` DATETIME NOT NULL ,
-                    `edited` TIMESTAMP ,
-                    `published` DATETIME NULL ,
-                    `is_draft` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
-                    `is_hidden` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
-                    `created_by` VARCHAR( {$this->author_size} ) NOT NULL ,
-                    `edited_by` VARCHAR( {$this->author_size} ) NOT NULL ,
-                    `category` VARCHAR( {$this->category_size} ) NOT NULL ,
-                    `sub_category` VARCHAR( {$this->category_size} ) NOT NULL ,
-                    `title` VARCHAR( {$this->title_size} ) NOT NULL ,
-                    `content` MEDIUMTEXT NOT NULL ,
-                    PRIMARY KEY ( `history_id` )
-                ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-        if (!$this->query_execute($sql)) return false;
-
-        // create history trigger
-        $sql = "CREATE TRIGGER IF NOT EXISTS `babbler_history_trigger` AFTER UPDATE ON `babbler_entries`
-                FOR EACH ROW
-                IF ( OLD.edited <> NEW.edited ) THEN
-                    INSERT INTO `babbler_history` (
-                        `entry_id`
-                        , `created`
-                        , `edited`
-                        , `published`
-                        , `is_draft`
-                        , `is_hidden`
-                        , `created_by`
-                        , `edited_by`
-                        , `category`
-                        , `sub_category`
-                        , `title`
-                        , `content`
-                    ) VALUES (
-                        OLD.`entry_id`
-                        , OLD.`created`
-                        , OLD.`edited`
-                        , OLD.`published`
-                        , OLD.`is_draft`
-                        , OLD.`is_hidden`
-                        , OLD.`created_by`
-                        , OLD.`edited_by`
-                        , OLD.`category`
-                        , OLD.`sub_category`
-                        , OLD.`title`
-                        , OLD.`content`
-                    );
-                END IF;
-                CREATE TRIGGER `babbler_delete_trigger` BEFORE DELETE
-                ON `babbler_entries` FOR EACH ROW
-                BEGIN
-                    INSERT INTO `babbler_history` (
-                        `entry_id`
-                        , `created`
-                        , `edited`
-                        , `published`
-                        , `is_draft`
-                        , `is_hidden`
-                        , `created_by`
-                        , `edited_by`
-                        , `category`
-                        , `sub_category`
-                        , `title`
-                        , `content`
-                    ) VALUES (
-                        OLD.`entry_id`
-                        , OLD.`created`
-                        , OLD.`edited`
-                        , OLD.`published`
-                        , OLD.`is_draft`
-                        , OLD.`is_hidden`
-                        , OLD.`created_by`
-                        , OLD.`edited_by`
-                        , OLD.`category`
-                        , OLD.`sub_category`
-                        , OLD.`title`
-                        , OLD.`content`
-                    );
-                END;";
-        if (!$this->query_execute($sql)) return false;
-
-        return true;
     }
 
     // get table entries

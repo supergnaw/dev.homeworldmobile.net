@@ -44,7 +44,9 @@ class Nestbox
     protected $rowCount = null;
     protected $lastInsertId = null;
 
+    // settings
     private const SETTINGS_TABLE = 'nestbox_settings';
+    private array $settingNames;
 
 
     /**
@@ -859,11 +861,9 @@ class Nestbox
                     `setting_type` VARCHAR( 64 ) NOT NULL ,
                     `setting_value` VARCHAR( 128 ) NULL ,
                     PRIMARY KEY ( `setting_name` )
-                ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+                ) ENGINE = InnoDB DEFAULT CHARSET=UTF8MB4 COLLATE=utf8_unicode_ci;";
 
-        if (!$this->query_execute($sql)) return false;
-
-        return true;
+        return $this->query_execute($sql);
     }
 
     public function update_setting_values(array $settings): bool
@@ -875,7 +875,7 @@ class Nestbox
         return true;
     }
 
-    public function load_settings(string $package = null): array
+    public function load_settings(string $package = null, array $defaultSettings = []): array
     {
         $where = ($package) ? ['package_name' => $package] : [];
         try {
@@ -883,6 +883,18 @@ class Nestbox
         } catch (InvalidTableException) {
             $tableCreated = $this->create_settings_table();
             $settings = $this->select(table: self::SETTINGS_TABLE, where: $where);
+        }
+
+        $settings = $this->parse_settings($settings);
+
+        if (0 == len($defaultSettings)) {
+            $defaultSettings = $settings;
+        }
+
+        foreach ($defaultSettings as $key => $val) {
+            if (property_exists($this, $key)) {
+                $this->$key = (array_key_exists($key, $settings)) ? $settings[$key] : $defaultSettings[$key];
+            }
         }
 
         return $this->parse_settings($settings);
@@ -897,15 +909,16 @@ class Nestbox
         return $output;
     }
 
-    PRIVATE FUNCTION parse_setting_type(int | float | bool | string $setting): string
+    private function parse_setting_type(int | float | bool | array | string $setting): string
     {
         if (is_int($setting)) return "string";
         if (is_float($setting)) return "float";
         if (is_bool($setting)) return "boolean";
+        if (json_validate($setting)) return "array";
         return "string";
     }
 
-    private function setting_type_conversion(string $type, string $value): int | float | bool | string
+    private function setting_type_conversion(string $type, string $value): int | float | bool | array | string
     {
         if (str_starts_with(strtolower($type), "int")) {
             return intval($value);
@@ -917,6 +930,10 @@ class Nestbox
 
         if (str_starts_with(strtolower($type), "bool")) {
             return boolval($value);
+        }
+
+        if (str_starts_with(strtolower($type), ["array", "json"])) {
+            return json_decode($value, associative: true);
         }
 
         return $value;

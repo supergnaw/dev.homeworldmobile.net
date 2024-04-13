@@ -4,124 +4,100 @@ declare(strict_types=1);
 
 namespace Supergnaw\Nestbox\Lorikeet;
 
+use Supergnaw\Nestbox\Exception\InvalidTableException;
+use Supergnaw\Nestbox\Exception\NestboxException;
 use Supergnaw\Nestbox\Nestbox;
 
 class Lorikeet extends Nestbox
 {
-    // vars
-    protected string $image_save_directory = ".";
-    protected string $image_thumbnail_directory = ".";
-    protected bool $keep_aspect_ratio = true;
-    protected int $max_width = 0;
-    protected int $max_height = 0;
-    protected int $max_filesize_mb = 2;
-    protected bool $allow_bmp = true;
-    protected bool $allow_gif = true;
-    protected bool $allow_jpg = true;
-    protected bool $allow_png = true;
-    protected bool $allow_webp = true;
-    protected string $convert_to_filetype = "webp";
-    public array $errors = [];
+    // settings variables
+    public string $imageSaveDirectory;
+    public string $imageThumbnailDirectory;
+    public bool $keepAspectRatio;
+    public int $maxWidth;
+    public int $maxHeight;
+    public int $maxFilesizeBb;
+    public bool $allowBmp;
+    public bool $allowGif;
+    public bool $allowJpg;
+    public bool $allowPng;
+    public bool $allowWebp;
+    public string $convertToFiletype;
+    public string $virusTotalApi;
 
     // constructor
-    public function __construct(string $image_directory = null)
+    public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
-        // database functions
+        // call parent constructor
         parent::__construct();
-        // create class tables
-        // $thi
-        //// todo: use Nestbox->load_settings()s->create_lorikeet_tables(); instead
-        $this->load_settings();
-        $this->create_image_directory($image_directory);
-    }
 
-    private function create_lorikeet_tables(): bool
-    {
-        // check if entry table exists
-        if (!$this->valid_schema('lorikeet_images')) {
-            $sql = "CREATE TABLE IF NOT EXISTS `lorikeet_images` (
-                        `image_id` VARCHAR( 64 ) NOT NULL ,
-                        `image_title` VARCHAR( 128 ) NOT NULL ,
-                        `image_caption` VARCHAR( 256 ) NULL ,
-                        `edited` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT TIMESTAMP ,
-                        `tags` MEDIUMTEXT NOT NULL ,
-                        PRIMARY KEY ( `image_id` )
-                    ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-            if (!$this->query_execute($sql)) return false;
-        }
-
-        if (!$this->valid_schema('lorikeet_settings')) {
-            // todo: create nestbox master table for settings and use that instead of individual ones
-            // todo: add two columns: "module" and "datatype" so raw values can be stored and parsed properly
-            $sql = "CREATE TABLE IF NOT EXISTS `lorikeet_settings` (
-                        `setting_name` VARCHAR( 5 ) NOT NULL ,
-                        `setting_value` VARCHAR( 5 ) NOT NULL ,
-                        PRIMARY KEY ( `setting_name` )
-                    ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-            if (!$this->query_execute($sql)) return false;
-
-            $sql = "INSERT INTO `lorikeet_settings` ( `setting_name`, `setting_value` )
-                    VALUES
-                        ('image_save_directory', :image_save_directory),
-                        ('image_thumbnail_directory', :image_thumbnail_directory),
-                        ('keep_aspect_ratio', :keep_aspect_ratio),
-                        ('max_width', :max_width),
-                        ('max_height', :max_height),
-                        ('max_filesize_mb', :max_filesize_mb),
-                        ('allow_bmp', :allow_bmp),
-                        ('allow_gif', :allow_gif),
-                        ('allow_jpg', :allow_jpg),
-                        ('allow_png', :allow_png),
-                        ('allow_webp', :allow_webp),
-                        ('convert_to_filetype', :convert_to_filetype),
-                        ('virus_total_api', :virus_total_api)
-                    ;";
-            $params = [
-                "image_save_directory" => $this->image_save_directory,
-                "image_thumbnail_directory" => $this->image_thumbnail_directory,
-                "keep_aspect_ratio" => ($this->keep_aspect_ratio) ? "1" : "0",
-                "max_width" => "{$this->max_width}",
-                "max_height" => "{$this->max_height}",
-                "max_filesize_mb" => "{$this->max_filesize_mb}",
-                "allow_bmp" => ($this->allow_bmp) ? "1" : "0",
-                "allow_gif" => ($this->allow_gif) ? "1" : "0",
-                "allow_jpg" => ($this->allow_jpg) ? "1" : "0",
-                "allow_png" => ($this->allow_png) ? "1" : "0",
-                "allow_webp" => ($this->allow_webp) ? "1" : "0",
-                "convert_to_filetype" => $this->convert_to_filetype,
-                "virus_total_api" => ($this->virus_total_api),
-            ];
-            if (!$this->query_execute($sql, $params)) return false;
-        }
-
-        return true;
-    }
-
-    // todo: use Nestbox->load_settings() instead
-    private function load_settings(): bool
-    {
-        return true;
-    }
-
-    public function get_settings(): array
-    {
-        if (!$this->load_settings()) return [];
-        return [
-            "image_save_directory" => $this->image_save_directory,
-            "keep_aspect_ratio" => $this->keep_aspect_ratio,
-            "max_width" => $this->max_width,
-            "max_height" => $this->max_height,
-            "max_filesize_mb" => $this->max_filesize_mb,
-            "allow_bmp" => $this->allow_bmp,
-            "allow_gif" => $this->allow_gif,
-            "allow_jpg" => $this->allow_jpg,
-            "allow_png" => $this->allow_png,
-            "allow_webp" => $this->allow_webp,
-            "convert_to_filetype" => $this->convert_to_filetype,
+        // set default variables
+        $defaultSettings = [
+            "imageSaveDirectory" => ".",
+            "imageThumbnailDirectory" => ".",
+            "keepAspectRatio" => true,
+            "maxWidth" => 0,
+            "maxHeight" => 0,
+            "maxFilesizeBb" => 2,
+            "allowBmp" => true,
+            "allowGif" => true,
+            "allowJpg" => true,
+            "allowPng" => true,
+            "allowWebp" => true,
+            "convertToFiletype" => "webp",
+            "virusTotalApi" => "",
         ];
+
+        $this->load_settings(package: "lorikeet", defaultSettings: $defaultSettings);
+
+        $this->settingNames = array_keys($defaultSettings);
     }
 
-    private function create_save_directory(string $image_directory = null): bool
+    public function __invoke(string $host = null, string $user = null, string $pass = null, string $name = null)
+    {
+        $this->__construct($host, $user, $pass, $name);
+    }
+
+    public function __destruct()
+    {
+        // save settings
+        $this->save_settings(package: "lorikeet", settings: $this->settingNames);
+
+        // do the thing
+        parent::__destruct();
+    }
+
+    public function query_execute(string $query, array $params = [], bool $close = false): bool
+    {
+        try {
+            return parent::query_execute($query, $params, $close);
+        } catch (InvalidTableException) {
+            $this->create_tables();
+            return parent::query_execute($query, $params, $close);
+        }
+    }
+
+    public function create_tables(): void
+    {
+        $this->create_lorikeet_images_table();
+    }
+
+    public function create_lorikeet_images_table(): bool
+    {
+        $sql = "CREATE TABLE IF NOT EXISTS `lorikeet_images` (
+                    `image_id` VARCHAR( 64 ) NOT NULL ,
+                    `image_title` VARCHAR( 128 ) NOT NULL ,
+                    `image_caption` VARCHAR( 256 ) NULL ,
+                    `saved` NOT NULL DEFAULT CURRENT TIMESTAMP ,
+                    `edited` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT TIMESTAMP ,
+                    `tags` MEDIUMTEXT NOT NULL ,
+                    PRIMARY KEY ( `image_id` )
+                ) ENGINE = InnoDB DEFAULT CHARSET=UTF8MB4 COLLATE=utf8_unicode_ci;";
+
+        return $this->query_execute($sql);
+    }
+
+    public function create_save_directory(string $image_directory = null): bool
     {
         die($image_directory);
         return true;

@@ -1,9 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Supergnaw\Nestbox\Titmouse;
 
-use Supergnaw\Nestbox\Exception\InvalidColumnException;
 use Supergnaw\Nestbox\Exception\InvalidTableException;
 use Supergnaw\Nestbox\Exception\NestboxException;
 use Supergnaw\Nestbox\Nestbox;
@@ -26,10 +26,10 @@ class Titmouse extends Nestbox
     public string $hashColumn;
     public string $sessionKey;
 
-    public function __construct()
+    public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
     {
         // call parent constructor
-        parent::__construct();
+        parent::__construct($host, $user, $pass, $name);
 
         // set default variables
         $defaultSettings = [
@@ -41,16 +41,9 @@ class Titmouse extends Nestbox
             "sessionKey" => self::DEFAULT_SESSION_KEY
         ];
 
-        // load package settings
-        $settings = $this->load_settings("titmouse");
-        foreach ($defaultSettings as $name => $val) {
-            if (array_key_exists($name, array: $defaultSettings)) {
-                $this->$name = $val;
-            }
-        }
+        $this->load_settings(package: "titmouse", defaultSettings: $defaultSettings);
 
-        // create class tables
-        $this->create_titmouse_tables();
+        $this->settingNames = array_keys($defaultSettings);
     }
 
     public function __invoke(string $host = null, string $user = null, string $pass = null, string $name = null)
@@ -61,8 +54,7 @@ class Titmouse extends Nestbox
     public function __destruct()
     {
         // save settings
-        $settings = ["usersTable", "userColumn", "nameLength", "mailColumn", "hashColumn", "sessionKey", "permsTable"];
-        $this->save_settings("titmouse", $settings);
+        $this->save_settings(package: "lorikeet", settings: $this->settingNames);
 
         // do the thing
         parent::__destruct();
@@ -86,8 +78,8 @@ class Titmouse extends Nestbox
                     `last_login` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
                     `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
                     UNIQUE ( `{$this->mailColumn}` )
-                ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-            if (!$this->query_execute($sql)) return false;
+                ) ENGINE = InnoDB DEFAULT CHARSET=UTF8MB4 COLLATE=utf8_unicode_ci;";
+            return $this->query_execute($sql);
         }
 
         // add columns if missing from an existing table
@@ -132,50 +124,6 @@ class Titmouse extends Nestbox
         return true;
     }
 
-    // TODO: migrate to bullfinch
-    public function depricated_create_permission_table($permissionsTable): bool
-    {
-        $triggerName = "calculate_permission_value";
-
-        // check if permission table with trigger exists
-        if ($this->valid_trigger($permissionsTable, $triggerName)) return true;
-
-        $sql = "CREATE TABLE IF NOT EXISTS `{$permissionsTable}` (
-                    `permission_id` INT NOT NULL AUTO_INCREMENT ,
-                    `permission_value` INT NULL ,
-                    `permission_category` VARCHAR(31) NOT NULL , 
-                    `permission_name` VARCHAR(63) NOT NULL , 
-                    `permission_description` VARCHAR(255) NOT NULL , 
-                    PRIMARY KEY (`permission_id`)) ENGINE = InnoDB; 
-                ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-        if (!$this->query_execute($sql)) return false;
-        $this->set_permissions_table($permissionsTable);
-
-        $sql = "DELIMITER $$
-                DROP TRIGGER IF EXISTS `{$triggerName}`$$
-                CREATE DEFINER=`{$this->user}`@`{$this->pass}` TRIGGER `{$triggerName}`
-                BEFORE INSERT ON `{$permissionsTable}`
-                FOR EACH ROW BEGIN
-                    DECLARE calculated_perm_value INT DEFAULT 0;
-                    SELECT `auto_increment` INTO calculated_perm_value
-                    FROM `information_schema`.`tables`
-                    WHERE `table_name` = '{$this->users_table()}'
-                    AND `table_schema` = '{$this->name}';
-                    SET NEW.permission_value = POWER(2, calculated_perm_value - 1)
-                $$
-                END
-                DELIMITER ;";
-        $sql = "CREATE TRIGGER `calculate_permission_value`
-                BEFORE INSERT ON `{$permissionsTable}`
-                FOR EACH ROW
-                    SET NEW.permission_value = POWER(2, NEW.permission_id - 1);";
-
-        if (!$this->query_execute($sql)) return false;
-        if ($this->valid_trigger(table: $permissionsTable, trigger: $triggerName)) return true;
-
-        $this->query_execute("DROP TABLE `$permissionsTable`;");
-        return false;
-    }
 
     public function register_user(array $userData, string $password): bool
     {
