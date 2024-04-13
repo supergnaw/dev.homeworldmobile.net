@@ -562,7 +562,7 @@ if (true == false) {
                 `gas` INT(1),
                 `moons` INT(2),
                 `last_update` DATE
-           ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+           ) ENGINE = InnoDB DEFAULT CHARSET=UTF8MB4 COLLATE=utf8_unicode_ci;";
     $api->sql_exec($sql);
     $rows = [];
     foreach ($json as $r => $row) {

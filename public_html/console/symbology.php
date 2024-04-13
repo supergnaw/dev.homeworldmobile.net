@@ -11,7 +11,7 @@ if (!$nb->valid_schema('symbology')) {
                 `symbol_name` VARCHAR( 64 ) NOT NULL PRIMARY KEY ,
                 `symbol_regex` VARCHAR( 128 ) NOT NULL UNIQUE ,
                 `symbol_image` VARCHAR( 256 ) NOT NULL
-            ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+            ) ENGINE = InnoDB DEFAULT CHARSET=UTF8MB4 COLLATE=utf8_unicode_ci;";
     $nb->query_execute($sql);
     $nb->load_table_schema();
 }
