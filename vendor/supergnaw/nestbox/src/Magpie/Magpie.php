@@ -4,62 +4,14 @@ declare(strict_types=1);
 
 namespace Supergnaw\Nestbox\Magpie;
 
-use Supergnaw\Nestbox\Exception\InvalidTableException;
-use Supergnaw\Nestbox\Exception\NestboxException;
 use Supergnaw\Nestbox\Nestbox;
 
 class Magpie extends Nestbox
 {
+    final protected const string PACKAGE_NAME = 'magpie';
     // settings variables
-    public string $permissionsTable;
-    public string $rolesTable;
-    public string $permissionAssignmentsTable;
-    public string $userColumn;
-    public string $userGroup;
-
-    // constructor
-    public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
-    {
-        // call parent constructor
-        parent::__construct($host, $user, $pass, $name);
-
-        // set default variables
-        $defaultSettings = [
-            "permissiontsTable" => 'permissions',
-            "rolesTable" => 'roles',
-            "permissionAssignmentsTable" => 'permission_assignments',
-            "userColumn" => 'username',
-            "userGroup" => 'usergroup'
-        ];
-
-        $this->load_settings(package: "lorikeet", defaultSettings: $defaultSettings);
-
-        $this->settingNames = array_keys($defaultSettings);
-    }
-
-    public function __invoke(string $host = null, string $user = null, string $pass = null, string $name = null)
-    {
-        $this->__construct($host, $user, $pass, $name);
-    }
-
-    public function __destruct()
-    {
-        // save settings
-        $this->save_settings(package: "lorikeet", settings: $this->settingNames);
-
-        // do the thing
-        parent::__destruct();
-    }
-
-    public function query_execute(string $query, array $params = [], bool $close = false): bool
-    {
-        try {
-            return parent::query_execute($query, $params, $close);
-        } catch (InvalidTableException) {
-            $this->create_tables();
-            return parent::query_execute($query, $params, $close);
-        }
-    }
+    public string $magpieUsersTable = 'users';
+    public string $magpieUserColumn = 'username';
 
     public function create_tables(): void
     {
@@ -68,9 +20,9 @@ class Magpie extends Nestbox
         $this->create_permission_assignments_table();
     }
 
-    private function create_permissions_table(): bool
+    private function create_class_table_magpie_permissions(): bool
     {
-        $sql = "CREATE TABLE IF NOT EXISTS `{$this->permissionsTable}` (
+        $sql = "CREATE TABLE IF NOT EXISTS `magpie_permissions` (
                     `permission_id` INT NOT NULL AUTO_INCREMENT ,
                     `permission_name` VARCHAR(63) NOT NULL ,
                     `permission_description` VARCHAR(255) NOT NULL ,
@@ -80,14 +32,9 @@ class Magpie extends Nestbox
         return $this->query_execute(query: $sql);
     }
 
-    private function create_roles_table(): void
+    private function create_class_table_magpie_permission_assignments(): bool
     {
-        $sql = "";
-    }
-
-    private function create_permission_assignments_table(): bool
-    {
-        $sql = "CREATE TABLE IF NOT EXISTS `{$this->permissionAssignmentsTable}` (
+        $sql = "CREATE TABLE IF NOT EXISTS `magpie_permission_assignments` (
                     `assignment_id` INT NOT NULL AUTO_INCREMENT ,
                     `permission_id` INT NOT NULL ,
                     `user_id` VARCHAR( 125 ) NOT NULL ,
@@ -97,7 +44,12 @@ class Magpie extends Nestbox
         return $this->query_execute(query: $sql);
     }
 
-    private function create_role_assignments_table(): void
+    private function create_class_table_magpie_roles(): void
+    {
+        $sql = "";
+    }
+
+    private function create_class_table_magpie_role_assignments(): void
     {
 
     }

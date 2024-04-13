@@ -4,85 +4,27 @@ declare(strict_types=1);
 
 namespace Supergnaw\Nestbox\Lorikeet;
 
-use Supergnaw\Nestbox\Exception\InvalidTableException;
-use Supergnaw\Nestbox\Exception\NestboxException;
 use Supergnaw\Nestbox\Nestbox;
 
 class Lorikeet extends Nestbox
 {
+    final protected const string PACKAGE_NAME = 'lorikeet';
     // settings variables
-    public string $imageSaveDirectory;
-    public string $imageThumbnailDirectory;
-    public bool $keepAspectRatio;
-    public int $maxWidth;
-    public int $maxHeight;
-    public int $maxFilesizeBb;
-    public bool $allowBmp;
-    public bool $allowGif;
-    public bool $allowJpg;
-    public bool $allowPng;
-    public bool $allowWebp;
-    public string $convertToFiletype;
-    public string $virusTotalApi;
+    public string $lorikeetImageSaveDirectory = ".";
+    public string $lorikeetImageThumbnailDirectory = ".";
+    public bool $lorikeetKeepAspectRatio = true;
+    public int $lorikeetMaxWidth = 0;
+    public int $lorikeetMaxHeight = 0;
+    public int $lorikeetMaxFilesizeMb = 2;
+    public bool $lorikeetAllowBmp = true;
+    public bool $lorikeetAllowGif = true;
+    public bool $lorikeetAllowJpg = true;
+    public bool $lorikeetAllowPng = true;
+    public bool $lorikeetAllowWebp = true;
+    public string $lorikeetConvertToFiletype = "webp";
+    public string $lorikeetVirusTotalApiKey = "";
 
-    // constructor
-    public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
-    {
-        // call parent constructor
-        parent::__construct();
-
-        // set default variables
-        $defaultSettings = [
-            "imageSaveDirectory" => ".",
-            "imageThumbnailDirectory" => ".",
-            "keepAspectRatio" => true,
-            "maxWidth" => 0,
-            "maxHeight" => 0,
-            "maxFilesizeBb" => 2,
-            "allowBmp" => true,
-            "allowGif" => true,
-            "allowJpg" => true,
-            "allowPng" => true,
-            "allowWebp" => true,
-            "convertToFiletype" => "webp",
-            "virusTotalApi" => "",
-        ];
-
-        $this->load_settings(package: "lorikeet", defaultSettings: $defaultSettings);
-
-        $this->settingNames = array_keys($defaultSettings);
-    }
-
-    public function __invoke(string $host = null, string $user = null, string $pass = null, string $name = null)
-    {
-        $this->__construct($host, $user, $pass, $name);
-    }
-
-    public function __destruct()
-    {
-        // save settings
-        $this->save_settings(package: "lorikeet", settings: $this->settingNames);
-
-        // do the thing
-        parent::__destruct();
-    }
-
-    public function query_execute(string $query, array $params = [], bool $close = false): bool
-    {
-        try {
-            return parent::query_execute($query, $params, $close);
-        } catch (InvalidTableException) {
-            $this->create_tables();
-            return parent::query_execute($query, $params, $close);
-        }
-    }
-
-    public function create_tables(): void
-    {
-        $this->create_lorikeet_images_table();
-    }
-
-    public function create_lorikeet_images_table(): bool
+    public function create_class_table_lorikeet_images(): bool
     {
         $sql = "CREATE TABLE IF NOT EXISTS `lorikeet_images` (
                     `image_id` VARCHAR( 64 ) NOT NULL ,
@@ -105,6 +47,9 @@ class Lorikeet extends Nestbox
 
     public function change_save_directory(): bool
     {
+        // create new directory
+        // move files from old directory to new directory
+        // delete old files and directory
         return true;
     }
 
@@ -115,6 +60,9 @@ class Lorikeet extends Nestbox
 
     public function change_thumbnail_directory(): bool
     {
+        // create new directory
+        // move files from old directory to new directory
+        // delete old files and directory
         return true;
     }
 

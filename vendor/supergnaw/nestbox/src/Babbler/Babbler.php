@@ -4,55 +4,18 @@ declare(strict_types=1);
 
 namespace Supergnaw\Nestbox\Babbler;
 
-use Supergnaw\Nestbox\Exception\InvalidTableException;
-use Supergnaw\Nestbox\Exception\NestboxException;
 use Supergnaw\Nestbox\Nestbox;
 
 class Babbler extends Nestbox
 {
-    // settings variables
-    public int $authorSize;
-    public int $categorySize;
-    public int $suBcategorySize;
-    public int $titleSize;
-
-    // constructor
-    public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
-    {
-        // database functions
-        parent::__construct($host, $user, $pass, $name);
-
-        // set default variables
-        $defaultSettings = [
-            "authorSize" => 32,
-            "categorySize" => 64,
-            "subCategorySize" => 64,
-            "titleSize" => 255
-        ];
-
-        $this->load_settings(package: "lorikeet", defaultSettings: $defaultSettings);
-
-        $this->settingNames = array_keys($defaultSettings);
-    }
-
-    public function query_execute(string $query, array $params = [], bool $close = false): bool
-    {
-        try {
-            return parent::query_execute($query, $params, $close);
-        } catch (InvalidTableException) {
-            $this->create_tables();
-            return parent::query_execute($query, $params, $close);
-        }
-    }
-
-    public function create_tables(): void
-    {
-        $this->create_entry_table();
-        $this->create_history_table();
-    }
+    final protected const string PACKAGE_NAME = 'babbler';
+    public int $babblerAuthorSize = 32;
+    public int $babblerCategorySize = 64;
+    public int $babblerSubCategorySize = 64;
+    public int $babblerTitleSize = 255;
 
     // create entry table
-    public function create_entry_table(): bool
+    public function create_class_table_babbler_entries(): bool
     {
         // check if entry table exists
         if ($this->valid_schema('babbler_entries')) return true;
@@ -64,11 +27,11 @@ class Babbler extends Nestbox
                     `published` DATETIME NULL ,
                     `is_draft` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
                     `is_hidden` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
-                    `created_by` VARCHAR( {$this->authorSize} ) NOT NULL ,
-                    `edited_by` VARCHAR( {$this->authorSize} ) NOT NULL ,
-                    `category` VARCHAR( {$this->categorySize} ) NOT NULL ,
-                    `sub_category` VARCHAR( {$this->suBcategorySize} ) NOT NULL ,
-                    `title` VARCHAR( {$this->titleSize} ) NOT NULL ,
+                    `created_by` VARCHAR( {$this->babblerAuthorSize} ) NOT NULL ,
+                    `edited_by` VARCHAR( {$this->babblerAuthorSize} ) NOT NULL ,
+                    `category` VARCHAR( {$this->babblerCategorySize} ) NOT NULL ,
+                    `sub_category` VARCHAR( {$this->babblerSubCategorySize} ) NOT NULL ,
+                    `title` VARCHAR( {$this->babblerTitleSize} ) NOT NULL ,
                     `content` MEDIUMTEXT NOT NULL ,
                     PRIMARY KEY ( `entry_id` )
                 ) ENGINE = InnoDB DEFAULT CHARSET=UTF8MB4 COLLATE=utf8_unicode_ci;";
@@ -76,7 +39,7 @@ class Babbler extends Nestbox
     }
 
     // create history table and update trigger
-    public function create_history_table(): bool
+    public function create_class_table_babbler_history(): bool
     {
         // check if history table exists
         if ($this->valid_schema('babbler_history')) return true;
@@ -90,11 +53,11 @@ class Babbler extends Nestbox
                     `published` DATETIME NULL ,
                     `is_draft` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
                     `is_hidden` TINYINT( 1 ) NOT NULL DEFAULT 0 ,
-                    `created_by` VARCHAR( {$this->authorSize} ) NOT NULL ,
-                    `edited_by` VARCHAR( {$this->authorSize} ) NOT NULL ,
-                    `category` VARCHAR( {$this->categorySize} ) NOT NULL ,
-                    `sub_category` VARCHAR( {$this->suBcategorySize} ) NOT NULL ,
-                    `title` VARCHAR( {$this->titleSize} ) NOT NULL ,
+                    `created_by` VARCHAR( {$this->babblerAuthorSize} ) NOT NULL ,
+                    `edited_by` VARCHAR( {$this->babblerAuthorSize} ) NOT NULL ,
+                    `category` VARCHAR( {$this->babblerCategorySize} ) NOT NULL ,
+                    `sub_category` VARCHAR( {$this->babblerSubCategorySize} ) NOT NULL ,
+                    `title` VARCHAR( {$this->babblerTitleSize} ) NOT NULL ,
                     `content` MEDIUMTEXT NOT NULL ,
                     PRIMARY KEY ( `history_id` )
                 ) ENGINE = InnoDB DEFAULT CHARSET=UTF8MB4 COLLATE=utf8_unicode_ci;";
@@ -165,6 +128,7 @@ class Babbler extends Nestbox
                     );
                 END;";
 
+        // todo: check if trigger added and delete table if trigger creation fails
         return $this->query_execute($sql);
     }
 
@@ -322,18 +286,6 @@ class Babbler extends Nestbox
             $results[$key]["matches"] = "..." . preg_replace(pattern: $highlight, replacement: '<strong>$1</strong>', subject: $matches[0]) . "...";
         }
         return $results;
-    }
-
-    // find fuzzy title
-    public function search_fuzzy_title(string $title, int $distance = 2): array
-    {
-        // search for entry
-        $sql = "SELECT
-                    *
-                FROM `babbler_entries`
-                WHERE levenshtein(`title`, :title) <= :distance
-                -- ORDER BY `l_distance` ASC;";
-        return ($this->query_execute($sql, ['title' => $title, 'distance' => $distance])) ? $this->results : [];
     }
 
     // find exact title

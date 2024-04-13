@@ -4,70 +4,20 @@ declare(strict_types=1);
 
 namespace Supergnaw\Nestbox\Titmouse;
 
-use Supergnaw\Nestbox\Exception\InvalidTableException;
-use Supergnaw\Nestbox\Exception\NestboxException;
 use Supergnaw\Nestbox\Nestbox;
 
 class Titmouse extends Nestbox
 {
-    // static default values
-    private const DEFAULT_USERS_TABLE = 'users';
-    private const DEFAULT_USER_COLUMN = 'username';
-    private const DEFAULT_NAME_LENGTH = 64;
-    private const DEFAULT_MAIL_COLUMN = 'email';
-    private const DEFAULT_HASH_COLUMN = 'hashword';
-    private const DEFAULT_SESSION_KEY = 'user_data';
-
-    // setting variables
-    public string $usersTable;
-    public string $userColumn;
-    public int $nameLength;
-    public string $mailColumn;
-    public string $hashColumn;
-    public string $sessionKey;
-
-    public function __construct(string $host = null, string $user = null, string $pass = null, string $name = null)
-    {
-        // call parent constructor
-        parent::__construct($host, $user, $pass, $name);
-
-        // set default variables
-        $defaultSettings = [
-            "usersTable" => self::DEFAULT_USERS_TABLE,
-            "userColumn" => self::DEFAULT_USER_COLUMN,
-            "nameLength" => self::DEFAULT_NAME_LENGTH,
-            "mailColumn" => self::DEFAULT_MAIL_COLUMN,
-            "hashColumn" => self::DEFAULT_HASH_COLUMN,
-            "sessionKey" => self::DEFAULT_SESSION_KEY
-        ];
-
-        $this->load_settings(package: "titmouse", defaultSettings: $defaultSettings);
-
-        $this->settingNames = array_keys($defaultSettings);
-    }
-
-    public function __invoke(string $host = null, string $user = null, string $pass = null, string $name = null)
-    {
-        $this->__construct($host, $user, $pass, $name);
-    }
-
-    public function __destruct()
-    {
-        // save settings
-        $this->save_settings(package: "lorikeet", settings: $this->settingNames);
-
-        // do the thing
-        parent::__destruct();
-    }
-
-    // create titmouse tables
-    public function create_titmouse_tables(): void
-    {
-        $this->create_user_table();
-    }
+    final protected const string PACKAGE_NAME = 'titmouse';
+    public string $titmouseUsersTable = 'titmouse_users';
+    public string $titmouseUserColumn = 'username';
+    public int $titmouseNameLength = 64;
+    public string $titmouseMailColumn = 'email';
+    public string $titmouseHashColumn = 'hashword';
+    public string $titmouseSessionKey = 'user_data';
 
     // create user table
-    public function create_user_table(): bool
+    public function create_class_table_titmouse_users(): bool
     {
         // check if user table exists
         if (!$this->valid_schema($this->usersTable)) {
@@ -210,12 +160,6 @@ class Titmouse extends Nestbox
         }
     }
 
-    public function logout_user(): void
-    {
-        // clear out those session variables
-        unset($_SESSION[$this->sessionKey]);
-    }
-
     public function verify_email(): bool
     {
         return false;
@@ -235,5 +179,11 @@ class Titmouse extends Nestbox
         }
 
         return true;
+    }
+
+    public function logout_user(): void
+    {
+        // clear out those session variables
+        unset($_SESSION[$this->sessionKey]);
     }
 }
