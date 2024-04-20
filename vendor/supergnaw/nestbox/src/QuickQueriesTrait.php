@@ -5,165 +5,120 @@ declare(strict_types=1);
 namespace Supergnaw\Nestbox;
 
 use Supergnaw\Nestbox\Exception\EmptyParamsException;
-use Supergnaw\Nestbox\Exception\InvalidColumnException;
+use Supergnaw\Nestbox\Exception\InvalidSchemaSyntaxException;
 use Supergnaw\Nestbox\Exception\InvalidTableException;
 
 trait QuickQueriesTrait
 {
 
     /**
+     * Inserts one or more rows of data `$params`
+     *
      * @param string $table
      * @param array $params
      * @param bool $update
      * @return int
      */
-    public function insert(string $table, array $params, bool $update = true): int
+    public function insert(string $table, array $params, bool $update = true): int|bool
     {
         // verify table
-        if (!$this->valid_schema($table)) throw new InvalidTableException($table);
+        if (!$this::valid_schema_string($table)) throw new InvalidSchemaSyntaxException($table);
 
-        if (empty($params)) throw new EmptyParamsException("Cannot insert no values into table.");
+        // verify params
+        if (empty($params)) throw new EmptyParamsException("Cannot insert empty data into table.");
 
-        $multipleRows = false;
+        $columns = $this::compile_column_list($params);
 
-        // verify columns
-        foreach ($params as $col => $val) {
-            if (is_array($val)) {
-                // inserting multiple rows
-                foreach ($val as $c => $v) {
-                    if (!$this->valid_schema($table, $c)) throw new InvalidColumnException("$table.$col");
-                }
-                $multipleRows = true;
-            } else {
-                // inserting a single row
-                if (!$this->valid_schema($table, $col)) throw new InvalidColumnException("$table.$col");
-                $insertMode = "single";
-            }
-        }
+        $cols = implode("`, `", $columns);
 
-        // prepare variables
-        if ($multipleRows) {
-            $vars = [];
-            $p = [];
-            foreach ($params as $i => $row) {
-                $columns = array_keys($row);
-                $cols = (count($row) > 1) ? implode("`,`", $columns) : current($columns);
-                $vars[] = (count($row) > 1) ? implode("_{$i}, :", $columns) . "_{$i}" : current($columns);
-                foreach ($row as $c => $v) {
-                    $p["{$c}_{$i}"] = $v;
-                }
-            }
-            $vars = implode("),(:", $vars);
-        } else {
-            $columns = array_keys($params);
-            $cols = (count($params) > 1) ? implode("`,`", $columns) : current($columns);
-            $vars = (count($params) > 1) ? implode(", :", $columns) : current($columns);
-        }
+        list($named, $params) = $this::compile_values_list($params);
 
-        // create base query
-        $query = "INSERT INTO `$table` (`$cols`) VALUES (:$vars)";
+        $named = "( " . implode(" ), ( ", $named) . " )";
 
-        // add update
+        $sql = "INSERT INTO `$table` ( `$cols` ) VALUES $named";
+
+        // add updates
         if (true === $update) {
-            $updates = [];
-            $priKey = $this->table_primary_key($table);
+            $primaryKey = $this->table_primary_key($table);
 
-            if ($multipleRows) {
-                $updates = [];
-                foreach ($params[0] as $col => $val) {
-                    if ($col != $priKey) {
-                        $updates[] = "`{$table}`.`{$col}` = `new`.`{$col}`";
-                    }
-                }
-                $query .= " AS `new` ON DUPLICATE KEY UPDATE " . implode(",", $updates);
-            } else {
-                foreach ($params as $col => $val) {
-                    if ($col != $priKey) {
-                        $updates[] = "`{$col}` = :{$col}";
-                    }
-                }
-                $query .= " ON DUPLICATE KEY UPDATE " . implode(",", $updates);
-            }
+            $updates = $this::compile_update_list($table, $columns, $primaryKey);
+
+            $sql .= " AS `new` ON DUPLICATE KEY UPDATE " . implode(", ", $updates);
         }
-
-        $params = ($multipleRows) ? $p : $params;
 
         // execute query
-        if ($this->query_execute($query, $params)) {
-            return $this->row_count();
-        } else {
-            return 0;
-        }
+        if (!$this->query_execute($sql, $params)) return false;
+
+        return $this->row_count();
     }
 
     /**
+     * Updates rows in `$table` with `$params` that match `$where` conditions
+     *
      * @param string $table
      * @param array $params
      * @param array $where
      * @param string $conjunction
-     * @return int
+     * @return int|bool
      */
-    public function update(string $table, array $params, array $where, string $conjunction): int|bool
+    public function update(string $table, array $updates, array $where = [], string $conjunction = "AND"): int|bool
     {
-        if (!$table = $this->valid_schema_string($table)) throw new InvalidTableException($table);
+        if (!$this->valid_schema($table)) throw new InvalidTableException($table);
 
-        $params = $this->sanitize_paramaters($params);
-        $where = $this->sanitize_paramaters($where);
+        list($updates, $updateParams) = $this::compile_set_clause($updates);
 
-        $updates = $this->compile_paramaterized_fields($params, "", true);
-        $wheres = $this->compile_paramaterized_fields($where, $conjunction);
+        $sql = "UPDATE `{$table}` SET {$updates}";
 
-        if (!$this->query_execute("UPDATE `{$table}` SET {$updates} WHERE {$wheres};", $params)) return false;
+        list($where, $whereParams) = $this::compile_where_clause($sql, $where, $conjunction);
+
+        $sql .= (!$where) ? ";" : " WHERE $where;";
+
+        if (!$this->query_execute($sql, array_merge($updateParams, $whereParams))) return false;
 
         return $this->row_count();
     }
 
     /**
-     * @param string $table
-     * @param array $where
-     * @param $conjunction
-     * @return int
-     */
-    public function delete(string $table, array $where, $conjunction = "AND"): int|bool
-    {
-        if (!$table = $this->valid_schema_string($table)) throw new InvalidTableException($table);
-
-        $params = $this->sanitize_paramaters($where);
-        $wheres = $this->compile_paramaterized_fields($params, $conjunction);
-
-        if (!$this->query_execute("DELETE FROM `{$table}` WHERE {$wheres};", $params)) return false;
-
-        return $this->row_count();
-    }
-
-    /**
+     * Selects all rows in `$table` or only ones that match `$where` conditions
+     *
      * @param string $table
      * @param array $where
      * @param string $conjunction
-     * @return array
+     * @return array|bool
      */
     public function select(string $table, array $where = [], string $conjunction = "AND"): array|bool
     {
-        if (!$table = $this->valid_schema_string($table)) throw new InvalidTableException($table);
+        if (!$this->valid_schema($table)) throw new InvalidTableException($table);
 
-        $params = $this->sanitize_paramaters($where);
-        $wheres = $this->compile_paramaterized_fields($params, $conjunction);
+        $sql = "SELECT * FROM `$table`";
 
-        $sql = ($wheres) ? "SELECT * FROM `{$table}` WHERE {$wheres};" : "SELECT * FROM `{$table}`;";
+        list($where, $params) = $this::compile_where_clause($sql, $where, $conjunction);
 
-        if (!$this->query_execute($sql, $params)) return false;
+        $sql .= (!$where) ? ";" : " WHERE $where;";
 
         return $this->results();
     }
 
-    public function rename_table(string $oldTable, string $newTable): bool
+    /**
+     * Deletes rows that match `$where` conditions
+     *
+     * @param string $table
+     * @param array $where
+     * @param $conjunction
+     * @return int|bool
+     */
+    public function delete(string $table, array $where, string $conjunction = "AND", bool $deleteAll = false): int|bool
     {
-        if (!$this->valid_schema($oldTable)) throw new InvalidTableException($oldTable);
+        if (!$this->valid_schema($table)) throw new InvalidTableException($table);
 
-        if ($this->valid_schema($newTable)) throw new DuplicateTableException($newTable);
+        $sql = "DELETE FROM `$table`";
 
-        if (!$newTable = $this->valid_schema_string($newTable)) return false;
+        list($where, $params) = $this::compile_where_clause($sql, $where, $conjunction);
 
-        return $this->query_execute("RENAME TABLE `{$oldTable}` TO `{$newTable}`;");
+        $sql .= (!$where && $deleteAll) ? ";" : " WHERE $where;";
+
+        if (!$this->query_execute($sql, $params)) return false;
+
+        return $this->row_count();
     }
 }

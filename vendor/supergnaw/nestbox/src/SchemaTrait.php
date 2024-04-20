@@ -25,8 +25,6 @@ trait SchemaTrait
      */
     public function load_table_schema(): bool
     {
-        $params = array();
-
         $sql = "SELECT `TABLE_NAME`,`COLUMN_NAME`,`DATA_TYPE`
                 FROM `INFORMATION_SCHEMA`.`COLUMNS`
                 WHERE `TABLE_SCHEMA` = :database_name;";
@@ -51,7 +49,7 @@ trait SchemaTrait
     {
         $sql = "SELECT `TRIGGER_NAME`, `EVENT_OBJECT_TABLE`
                 FROM `INFORMATION_SCHEMA`.`TRIGGERS`
-                WHERE `TRIGGER_SCHEMA` = '{$this->name}';";
+                WHERE `TRIGGER_SCHEMA` = :database_name;";
 
         if (!$this->query_execute($sql, ['database_name' => $this->name])) return false;
 
@@ -77,18 +75,17 @@ trait SchemaTrait
     {
         if (empty($this->tableSchema)) $this->load_table_schema();
 
-        $table = $this->valid_schema_string($table);
-        $col = ($col = trim($col ?? "")) ? $this->valid_schema_string($col) : $col;
+        $table = $this::valid_schema_string($table);
+
+        $column = ($column = trim($column ?? "")) ? $this::valid_schema_string($column) : $column;
 
         // check table
-        if (!array_key_exists($table, $this->tableSchema)) {
-            if (empty($this->tableSchema)) $this->load_table_schema();
-            if (!array_key_exists($table, $this->tableSchema)) return false;
-        }
-        if (empty($col)) return true;
+        if (!array_key_exists($table, $this->tableSchema)) return false;
+        
+        if (empty($column)) return true;
 
         // check column
-        return array_key_exists($col, $this->tableSchema[$table]);
+        return array_key_exists($column, $this->tableSchema[$table]);
     }
 
     /**
@@ -136,7 +133,7 @@ trait SchemaTrait
         return in_array(needle: $trigger, haystack: $this->triggerSchema[$table] ?? []);
     }
 
-    public function valid_schema_string(string $string): string
+    static public function valid_schema_string(string $string): string
     {
         if (!preg_match(pattern: "/^\w+$/i", subject: trim($string), matches: $matches)) {
             throw new InvalidSchemaSyntaxException($string);
